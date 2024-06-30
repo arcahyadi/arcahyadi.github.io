@@ -21,7 +21,7 @@ repository               : "arcahyadi/arcahyadi.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profilepic.png"
+  avatar           : "profilepic.jpg"
   name             : "Aufa R Cahyadi"
   pronouns         : # example: "she/her"  
   bio              : "I like Backend and Networking"
