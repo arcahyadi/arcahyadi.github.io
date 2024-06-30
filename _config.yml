@@ -55,9 +55,9 @@ author:
   goodreads        : # Username
   google_plus      : # Username
   keybase          : # Username
-  instagram        : # Username
+  instagram        : "a.r.cahyadi"
   lastfm           : # Username
-  linkedin         : # Username
+  linkedin         : "arcahyadi07"
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
@@ -281,7 +281,7 @@ sass:
 permalink: /:categories/:title/
 # paginate: 5 # amount of posts to show
 # paginate_path: /page:num/
-timezone: America/Los_Angeles # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: Asia/Makassar # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
 # Plugins
