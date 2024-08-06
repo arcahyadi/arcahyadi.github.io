@@ -1,7 +1,8 @@
 ---
-title: "Portfolio item number 3"
-excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
+title: "DTS PROA"
+excerpt: "CCNA NETWORK ENGINEER Enterprise Networking, Security, and Automation"
 collection: portfolio
 ---
 
-Porto 3 tambah
+I attended the Network training as a result of the Government's collaboration with Cisco.
+<embed src="{{ site.baseurl }}/files/Enterprise Networking, Security, and Automation.pdf" type='application/pdf'> 
