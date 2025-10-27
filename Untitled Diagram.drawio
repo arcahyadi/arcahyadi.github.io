@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0" version="28.2.5">
+  <diagram name="Page-1" id="6cc4ZtcwL5D3J4RUstHy">
+    <mxGraphModel dx="1330" dy="1032" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-1" value="Mulai" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="312" y="20" width="98" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-2" value="Data dibuat/diubah &#xa; di Perangkat A &#xa; misal: Laptop Windows" style="rounded=1;arcSize=20;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="263" y="124" width="195" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-3" value="Perlu sinkronisasi &#xa; ke Perangkat B?" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="260" y="276" width="201" height="201" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-4" value="Selesai" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="204" y="623" width="109" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-5" value="Pilih Metode Manual" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="364" y="551" width="197" height="197" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-6" value="Proses Sinkronisasi Manual &#xa; 1. Salin data ke Flash Disk &#xa; 2. Pindah Flash Disk &#xa; 3.Salin data ke Perangkat B" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="180" y="847" width="257" height="126" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-7" value="Proses Sinkronisasi Manual &#xa; 1. Upload data ke Cloud Publik &#xa; 2. Pindah ke Perangkat B &#xa; 3. Download data dari Cloud Publik" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="487" y="823" width="260" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-8" value="Hasil: &#xa; Rentan Inkonsistensi Data &#xa; &amp;amp; Inefisiensi Waktu" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="209" y="1047" width="198" height="198" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-9" value="Hasil: &#xa; Rentan Risiko Privasi &#xa; &amp;amp; Keterbatasan Kapasitas" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="518" y="1047" width="198" height="198" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-10" value="Selesai" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="408" y="1295" width="109" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-11" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-1" target="jFB_ozptiDJEiEUuw7mE-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-12" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-2" target="jFB_ozptiDJEiEUuw7mE-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-13" value="Tidak" style="curved=1;startArrow=none;endArrow=block;exitX=0.13;exitY=1;entryX=0.51;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-3" target="jFB_ozptiDJEiEUuw7mE-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="259" y="514" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-14" value="Ya" style="curved=1;startArrow=none;endArrow=block;exitX=0.87;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-3" target="jFB_ozptiDJEiEUuw7mE-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="463" y="514" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-15" value="Ops. 1: Flash Disk" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.94;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-5" target="jFB_ozptiDJEiEUuw7mE-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="308" y="786" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-16" value="Ops. 2: Cloud Publik" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.94;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-5" target="jFB_ozptiDJEiEUuw7mE-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="617" y="786" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-17" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-6" target="jFB_ozptiDJEiEUuw7mE-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-18" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-7" target="jFB_ozptiDJEiEUuw7mE-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-19" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.16;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-8" target="jFB_ozptiDJEiEUuw7mE-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="308" y="1270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jFB_ozptiDJEiEUuw7mE-20" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=1;entryY=0.16;rounded=0;" edge="1" parent="1" source="jFB_ozptiDJEiEUuw7mE-9" target="jFB_ozptiDJEiEUuw7mE-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="617" y="1270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
