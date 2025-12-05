@@ -16,11 +16,15 @@ Education
 * Graduate 2022 : Politeknik Negeri Banjarmasin
   * Program : Associate's Degree of Informatics Engineering
 
-Work experience
+Work/Hobby experience
 ======
 * 2022 - Now : Programmer and SysAdmin
   * STIKES ISFI BANJARMASIN
   * Duties includes: Monitoring Network Infrastructure and Website
+* 2023 - Now : Homelab
+  * Building Media Entertaiment System (Jellyfin)
+  * Docker
+  * Many Things!!
 
 Skills
 ======
@@ -34,5 +38,4 @@ Skills
   * SQL
 * Server
   * Homelab (Proxmox, Docker)
-  * VPS
-  * Digitalocean/Cloudflare/GCP
+  * VPS (Digitalocean/Cloudflare/GCP)
