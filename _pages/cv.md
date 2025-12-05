@@ -27,8 +27,12 @@ Skills
 * Networking
   * Cisco
   * Mikrotik
+  * Unifi
 * Programming
   * PHP
   * GO
   * SQL
-* Skill 3
+* Server
+  * Homelab (Proxmox, Docker)
+  * VPS
+  * Digitalocean/Cloudflare/GCP
