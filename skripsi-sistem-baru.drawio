@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.8">
+  <diagram id="6a731a19-8d31-9384-78a2-239565b7b9f0" name="Page-1">
+    <mxGraphModel dx="1508" dy="1040" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="shape=mxgraph.flowchart.terminator;strokeWidth=2;gradientColor=none;gradientDirection=north;fontStyle=0;html=1;" value="Mulai" vertex="1">
+          <mxGeometry height="30" width="120" x="340" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7" edge="1" parent="1" source="2" style="fontStyle=1;strokeColor=#003366;strokeWidth=1;html=1;" target="PngO13IiV4YGRGFV6ID1-55">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-57" edge="1" parent="1" source="PngO13IiV4YGRGFV6ID1-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="PngO13IiV4YGRGFV6ID1-56" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-55" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Login Tailscale" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-59" edge="1" parent="1" source="PngO13IiV4YGRGFV6ID1-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.008;entryY=0.4;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="PngO13IiV4YGRGFV6ID1-55">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="290" />
+              <mxPoint x="520" y="144" />
+            </Array>
+            <mxPoint x="580" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-60" connectable="0" parent="PngO13IiV4YGRGFV6ID1-59" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Tidak" vertex="1">
+          <mxGeometry relative="1" x="-0.6702" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-63" edge="1" parent="1" source="PngO13IiV4YGRGFV6ID1-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="PngO13IiV4YGRGFV6ID1-62" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-64" connectable="0" parent="PngO13IiV4YGRGFV6ID1-63" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Yes" vertex="1">
+          <mxGeometry relative="1" x="-0.3333" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-56" parent="1" style="rhombus;whiteSpace=wrap;html=1;rounded=0;" value="Berhasil?" vertex="1">
+          <mxGeometry height="80" width="80" x="360" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-66" edge="1" parent="1" source="PngO13IiV4YGRGFV6ID1-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="PngO13IiV4YGRGFV6ID1-65" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-62" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Server Tailscale" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="PngO13IiV4YGRGFV6ID1-65" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Server Nextcloud" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="580" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
