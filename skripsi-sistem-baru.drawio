@@ -223,6 +223,98 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-7" parent="1" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="Start" vertex="1">
+          <mxGeometry height="39" width="60" x="406" y="2560" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-8" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Data dikumpulkan&#xa;Pengujian&#xa;misal Upload dan Viewing" vertex="1">
+          <mxGeometry height="102" width="244" x="314" y="2649" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-9" parent="1" style="rhombus;strokeWidth=2;whiteSpace=wrap;" value="Perlu sinkronisasi&#xa;ke Pengguna B?" vertex="1">
+          <mxGeometry height="201" width="201" x="335" y="2801" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-10" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Gagal" vertex="1">
+          <mxGeometry height="54" width="100" x="286" y="3148" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-11" parent="1" style="rhombus;strokeWidth=2;whiteSpace=wrap;" value="File berhasil masuk?" vertex="1">
+          <mxGeometry height="198" width="198" x="436" y="3076" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-12" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Proses Sinkronisasi Manual&#xa;1. Pilih file pada Cloud&#xa;2. Salin data ke Cloud Publik&#xa;3. Sinkronisasi ke Pengguna B" vertex="1">
+          <mxGeometry height="174" width="260" x="250" y="3348" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-13" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Proses Sinkronisasi Manual&#xa;1. Upload data ke Cloud Publik&#xa;2. Bagikan link Cloud Publik&#xa;3. Download data ke Cloud Publik" vertex="1">
+          <mxGeometry height="174" width="260" x="560" y="3348" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-14" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Hasil&#xa;Proses Sinkronisasi Data&#xa;Berhasil/Tidak" vertex="1">
+          <mxGeometry height="185" width="185" x="287" y="3572" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-15" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Hasil&#xa;Rata-rata Waktu Akses&#xa;Sesuai Kapasitas" vertex="1">
+          <mxGeometry height="175" width="175" x="603" y="3577" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-16" parent="1" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="End" vertex="1">
+          <mxGeometry height="39" width="51" x="510" y="3807" as="geometry" />
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-17" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-7" style="curved=1;startArrow=none;endArrow=block;exitX=0.49;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-18" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-8" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-9" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-19" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-9" style="curved=1;startArrow=none;endArrow=block;exitX=0.14;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-10" value="Tidak">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="336" y="3039" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-20" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-9" style="curved=1;startArrow=none;endArrow=block;exitX=0.86;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-11" value="Ya">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="535" y="3039" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-21" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-11" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.94;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-12" value="Opsi 1 Dari Cloud">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="3311" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-22" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-11" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.94;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-13" value="Opsi 2 Server Publik">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="3311" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-23" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-12" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-14" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-24" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-13" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-15" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-25" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-14" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=-0.01;entryY=0.32;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-16" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="3782" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OShCs4QSC3FU0K6VXMPM-26" edge="1" parent="1" source="OShCs4QSC3FU0K6VXMPM-15" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.99;entryY=0.32;rounded=0;" target="OShCs4QSC3FU0K6VXMPM-16" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="3782" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
