@@ -24,94 +24,20 @@ Ubiquiti offers dedicated hardware consoles (like Cloud Gateway and CloudKey), b
 - **Low latency** — the controller is on the same local network as the APs
 - **Cost-effective** — no need to buy a dedicated UniFi console if you already have a server
 
-Since I already run Proxmox, deploying UniFi OS in a VM was a natural choice.
-
-## System Requirements
-
-Before installing, make sure your system meets these requirements:
-
-| Component | Requirement |
-|-----------|-------------|
-| **OS** | Ubuntu 23.04+, Debian 12+, or any modern Linux distro with `systemd`, `libc 2.31+`, `podman 4.3.1+`, and `slirp4netns 1.2+` |
-| **CPU** | x86-64 Processor |
-| **RAM** | Minimum 2 GB |
-| **Storage** | At least 10 GB free space |
-| **Network** | 100 Mbps Wired Ethernet |
-
-UniFi OS also supports Windows 10+ (via WSL 2) and macOS Catalina 13.1.0+, but **Linux is the recommended platform** for production environments — and that's exactly what Proxmox provides.
-
-## Installation on Proxmox
-
-I run UniFi OS inside a **virtual machine** on my Proxmox node (`pve2`). Here's how I set it up:
-
-### 1. Create a VM on Proxmox
-
-I created a VM with the following specs:
-- **OS:** Debian 12 (Bookworm)
-- **CPU:** 2 cores
-- **RAM:** 2 GB
-- **Disk:** 16 GB
-- **Network:** Bridged to the management network
-
-### 2. Install the OS and Dependencies
-
-After installing Debian 12, I made sure the system had the required dependencies:
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y podman slirp4netns
-```
-
-Since UniFi OS uses **Podman** (a container runtime) under the hood, having `podman 4.3.1+` and `slirp4netns 1.2+` is essential.
-
-### 3. Download and Install UniFi OS Server
-
-Download the latest UniFi OS Server installer from the [official Ubiquiti Downloads page](https://www.ui.com/download/unifi):
-
-```bash
-# Download the .deb package from ui.com/download/unifi
-sudo dpkg -i unifi-os-server_*.deb
-```
-
-### 4. Complete the Setup Wizard
-
-Once installed, access the UniFi OS web interface:
-
-```
-https://<server-ip>:8443
-```
-
-The setup wizard will guide you through:
-- Creating or signing in with your **UI Account**
-- Configuring your first site
-- Enabling **UniFi Site Manager** for remote management and automatic backups
-
-### 5. Open Required Ports
-
-Make sure the following ports are accessible for device communication:
-
-| Port | Protocol | Purpose |
-|------|----------|---------|
-| 8443 | TCP | Web UI / Management |
-| 8080 | TCP | Device communication |
-| 3478 | UDP | STUN (required for device adoption) |
-| 6789 | TCP | Speed test |
-| 10001 | UDP | Device discovery |
-
 ## The Fleet: Access Points Under Management
 
 After setting up UniFi OS, I adopted all the access points across the campus. Here's what the fleet looks like:
 
-| Model | Quantity | Uplink | Status |
-|-------|----------|--------|--------|
-| **UAP-LR** | 1 | FE | ✅ Up to date |
-| **UAP-AC-Lite** | 4 | GbE | ✅ Up to date |
-| **U7 Lite** | 3 | GbE | ✅ Up to date |
-| **U6+** | 1 | GbE | ✅ Up to date |
-| **U6-LR** | 2 | GbE | ✅ Up to date |
-| **AC-LR** | 1 | — | ⚠️ Offline (spare) |
+| Model | Uplink | Status |
+|-------|----------|--------|
+| **UAP-LR** | FE | ✅ Up to date |
+| **UAP-AC-Lite** | GbE | ✅ Up to date |
+| **U7 Lite** | GbE | ✅ Up to date |
+| **U6+** | GbE | ✅ Up to date |
+| **U6-LR** | GbE | ✅ Up to date |
+| **AC-LR** | — | ⚠️ Offline (spare) |
 
-That's **12 access points** in total — a mix of legacy and modern WiFi 5/6/7 models, all managed from a single UniFi OS dashboard.
+This fleet is a mix of legacy and modern WiFi 5/6/7 models, all managed from a single UniFi OS dashboard.
 
 ### A Few Observations
 
