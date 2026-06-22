@@ -1,5 +1,5 @@
 ---
-title: "DTS PROA"
+title: "CCNA: Switching, Routing, and Wireless Essentials"
 excerpt: "CCNA NETWORK ENGINEER Switching, Routing, and Wireless Essentials"
 collection: portfolio
 ---

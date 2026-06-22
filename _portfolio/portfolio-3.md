@@ -1,5 +1,5 @@
 ---
-title: "DTS PROA"
+title: "CCNA: Enterprise Networking, Security, and Automation"
 excerpt: "CCNA NETWORK ENGINEER Enterprise Networking, Security, and Automation"
 collection: portfolio
 ---
