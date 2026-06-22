@@ -43,31 +43,31 @@ Here's what I'm currently running through Dockge — all containers are **active
 
 ### 🌐 OpenSpeedTest — Network Speed Testing
 
-[OpenSpeedTest](https://openspeedtest.com/) is a self-hosted speed test server. It lets me test network speeds between devices and my server without relying on external services like Speedtest.net.
+[OpenSpeedTest](https://github.com/openspeedtest/Docker-Image) is a self-hosted speed test server. It lets me test network speeds between devices and my server without relying on external services like Speedtest.net.
 
 **Why I use it:** When troubleshooting network issues across the campus, having a local speed test server gives accurate results without internet variables affecting the test. It's also great for verifying that network upgrades actually improved throughput.
 
 ### 📈 SpeedTrack — Speed Test History
 
-SpeedTrack works alongside OpenSpeedTest to **track and log speed test results over time**. Instead of running a test and forgetting the numbers, SpeedTrack keeps a historical record so I can spot trends and degradation.
+[SpeedTrack](https://github.com/alexjustesen/speedtest-tracker) works alongside OpenSpeedTest to **track and log speed test results over time**. Instead of running a test and forgetting the numbers, SpeedTrack keeps a historical record so I can spot trends and degradation.
 
 **Why I use it:** Being able to look back at network performance over weeks or months helps me identify patterns — like whether speeds drop during certain hours or after configuration changes.
 
 ### 🧰 OmniTools — All-in-One Utility Toolbox
 
-OmniTools is a self-hosted collection of various IT utilities and tools accessible from a web browser. It bundles handy tools like encoders/decoders, formatters, converters, and network utilities into a single interface.
+[OmniTools](https://github.com/iib0011/omni-tools) is a self-hosted collection of various IT utilities and tools accessible from a web browser. It bundles handy tools like encoders/decoders, formatters, converters, and network utilities into a single interface.
 
 **Why I use it:** Instead of searching for random online tools every time I need to encode a Base64 string or format JSON, I have everything in one place on my own server — fast, private, and always available.
 
 ### 📄 BentoPDF — PDF Generation
 
-BentoPDF is a tool for generating and converting PDF documents. It handles document conversion tasks right from my local server.
+[BentoPDF](https://github.com/nicholasgasior/bento-pdf) is a privacy-first, client-side PDF toolkit for manipulating, merging, splitting, and processing PDF files — all running locally in the browser via WebAssembly.
 
 **Why I use it:** Useful for automating document workflows and converting files without uploading them to third-party services. Keeps everything private and on-premise.
 
 ### 🎵 Yubal — YouTube Music Downloader
 
-Yubal is a self-hosted YouTube Music downloader. Paste a link, and it downloads the track with proper tags and organizes it into your library automatically.
+[Yubal](https://github.com/guillevc/yubal) is a self-hosted YouTube Music downloader. Paste a link, and it downloads the track with proper tags and organizes it into your library automatically.
 
 Key features:
 - **Scheduled sync** — automatically download new releases from your favorite artists
