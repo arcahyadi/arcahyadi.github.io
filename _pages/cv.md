@@ -19,9 +19,9 @@ Education
 Certifications
 ======
 * **DTS PROA** — CCNA Network Engineer
-  * Introduction to Networks
-  * Switching, Routing, and Wireless Essentials
-  * Enterprise Networking, Security, and Automation
+  * [Introduction to Networks](/portfolio/portfolio-1/)
+  * [Switching, Routing, and Wireless Essentials](/portfolio/portfolio-2/)
+  * [Enterprise Networking, Security, and Automation](/portfolio/portfolio-3/)
 
 Work Experience
 ======
