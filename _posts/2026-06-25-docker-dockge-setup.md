@@ -1,6 +1,6 @@
 ---
 title: 'My Docker Setup: Managing Containers with Dockge'
-date: 2026-06-22
+date: 2026-06-25
 permalink: /posts/2026/06/docker-dockge-setup/
 tags:
   - docker
@@ -9,7 +9,7 @@ tags:
   - dockge
 ---
 
-Docker is at the heart of my homelab. It makes spinning up new services incredibly easy — just pull an image, configure a compose file, and you're up and running. But managing multiple Docker Compose stacks from the command line can get tedious. That's where **Dockge** comes in.
+Docker is a containerization platform that makes spinning up new services incredibly easy — just pull an image, configure a compose file, and you're up and running. But managing multiple Docker Compose stacks from the command line can get tedious. That's where **Dockge** comes in.
 
 ## What is Dockge?
 
@@ -67,7 +67,7 @@ BentoPDF is a tool for generating and converting PDF documents. It handles docum
 
 ### 🎵 Yubal — YouTube Music Downloader
 
-[Yubal](https://github.com/yubal) is a self-hosted YouTube Music downloader. Paste a link, and it downloads the track with proper tags and organizes it into your library automatically.
+Yubal is a self-hosted YouTube Music downloader. Paste a link, and it downloads the track with proper tags and organizes it into your library automatically.
 
 Key features:
 - **Scheduled sync** — automatically download new releases from your favorite artists

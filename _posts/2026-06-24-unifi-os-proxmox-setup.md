@@ -1,6 +1,6 @@
 ---
 title: 'Self-Hosting UniFi OS on Proxmox to Manage Campus WiFi'
-date: 2026-06-22
+date: 2026-06-24
 permalink: /posts/2026/06/unifi-os-proxmox-setup/
 tags:
   - networking
