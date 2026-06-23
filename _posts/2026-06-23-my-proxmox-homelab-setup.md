@@ -15,7 +15,37 @@ One of my favorite things about being in tech is having a homelab. There's nothi
 
 My homelab runs on **two Proxmox VE nodes**: `pve` and `pve2`. Having two separate nodes gives me flexibility to separate workloads and experiment with different configurations without affecting my main services.
 
+## Homelab Topology
+
+Here's a visual overview of the full setup:
+
+<div style="overflow-x: auto; width: 100%; min-height: 520px;">
+<div class="mermaid">
+graph LR
+    PVE["🖥️ pve"]
+    PVE2["🖥️ pve2"]
+
+    PVE --> P100["📦 100 · n8n"]
+    PVE --> P101["📦 101 · pve-scripts-local"]
+    PVE --> P103["📦 103 · librenms"]
+    PVE --> P109["📦 109 · qbittorrent"]
+    PVE --> P110["📦 110 · nfs"]
+    PVE --> P111["📦 111 · docker"]
+
+    PVE2 --> P200["📦 100 · jellyfin"]
+    PVE2 --> P201["📦 101 · backup"]
+    PVE2 --> P202["📦 102 · alpine-it-tools"]
+    PVE2 --> P203["📦 103 · docker"]
+    PVE2 --> P204["🖥️ 104 · win10 VM"]
+    PVE2 --> P205["🖥️ 105 · kali VM"]
+    PVE2 --> P208["📦 108 · unifi-os-server"]
+    PVE2 --> P210["📦 110 · nfs2"]
+</div>
+</div>
+
+
 ### Node 1: `pve` — The Lightweight Workhorse
+
 
 This node runs mostly **LXC containers**, which are lightweight and perfect for services that don't need a full virtual machine.
 
