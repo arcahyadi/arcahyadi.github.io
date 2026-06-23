@@ -260,23 +260,7 @@ Beyond the core router, I also manage a **MikroTik CRS326-24G-2S+** — a 24-por
 
 ### Port Assignment & Status
 
-The 24 copper ports are assigned to different parts of the campus network. Here's the active port map:
-
-| Port | Label | Status | Speed |
-|---|---|---|---|
-| Port 1 | LAG Port | ✅ Link On | 1G |
-| Port 2 | Baleia | ❌ No Link | — |
-| Port 3 | Osce | ❌ No Link | — |
-| Port 4 | Dosen | ✅ Link On | 1G |
-| Port 5 | Port5 | ✅ Link On | 1G |
-| Port 9 | Port9 | ✅ Link On | 1G |
-| Port 16 | Port16 | ✅ Link On | 1G |
-| Port 20 | Port20 | ✅ Link On | 1G |
-| Port 21 | LAG Port | ✅ Link On | 1G |
-| Port 22 | LAG Port | ✅ Link On | 1G |
-| Port 23 | Ruang 3 atau 4 | ❌ No Link | — |
-| Port 24 | Gedung 6 can 5 | ✅ Link On | 1G |
-| SFP1–SFP2 | — | ❌ Disabled | — |
+The 24 copper ports are assigned to different parts of the campus network.
 
 Ports 1, 21, and 22 are marked as **LAG Ports** — these are part of the Link Aggregation Group that connects back to the CCR1016 router's bonded interface (`Bonding port 5-7`). This creates a multi-gigabit uplink between the switch and the router with redundancy.
 
