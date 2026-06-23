@@ -12,6 +12,7 @@ tags:
 Today I learned how to install and set up a self-hosted **RustDesk Server**. For those who might not know, RustDesk is an open-source alternative to remote desktop software like TeamViewer or AnyDesk.
 
 While you can use RustDesk's public servers for free, self-hosting your own server comes with several great benefits:
+
 - **Faster & more stable connection**: Especially if the server and the client are in the same region, or even on the same local network (LAN).
 - **Security & Privacy**: Your connection data is completely under your own control.
 - **No Limitations**: There are no time limits or annoying commercial pop-ups.
@@ -19,6 +20,7 @@ While you can use RustDesk's public servers for free, self-hosting your own serv
 ## Prerequisites
 
 To run a RustDesk Server using the installation script, you will need:
+
 - A server/VPS running a supported Linux distribution (Ubuntu, Debian, or CentOS are recommended).
 - `sudo` or `root` access to your server.
 - A static Public IP or a domain name pointing to your server's IP (for access from outside your network).
@@ -26,6 +28,7 @@ To run a RustDesk Server using the installation script, you will need:
 ## Port Forwarding
 
 Before running the installation, make sure the following ports are open on your firewall or router (Port Forwarding):
+
 - **TCP**: 21115, 21116, 21117, 21118, 21119
 - **UDP**: 21116
 

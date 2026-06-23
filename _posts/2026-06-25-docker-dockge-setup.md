@@ -70,6 +70,7 @@ Here's what I'm currently running through Dockge — all containers are **active
 [Yubal](https://github.com/guillevc/yubal) is a self-hosted YouTube Music downloader. Paste a link, and it downloads the track with proper tags and organizes it into your library automatically.
 
 Key features:
+
 - **Scheduled sync** — automatically download new releases from your favorite artists
 - **Smart deduplication** — no duplicate files cluttering your library
 - **Media server ready** — organized output that works perfectly with Jellyfin, Plex, or Navidrome

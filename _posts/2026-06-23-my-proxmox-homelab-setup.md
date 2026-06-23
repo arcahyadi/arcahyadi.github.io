@@ -29,6 +29,7 @@ This node runs mostly **LXC containers**, which are lightweight and perfect for 
 | 111 | **docker**          | LXC  | Docker host running various containerized services |
 
 **Storage on `pve`:**
+
 - `local`, `local-lvm` and `lvm-hdd2-pve` — standard Proxmox storage
 
 ### Node 2: `pve2` — The Heavy Lifter
@@ -47,6 +48,7 @@ This node handles heavier workloads with a mix of **LXC containers and full VMs*
 | 110 | **nfs2**            | CT   | Secondary NFS server for additional shared storage |
 
 **Storage on `pve2`:**
+
 - `local` and `local-lvm` — standard Proxmox storage
 - `data_zfs` — ZFS pool for data integrity and snapshots with RAID1 Configuration
 - `zfs-baru` — additional ZFS storage pool with RAID1 Configuration
