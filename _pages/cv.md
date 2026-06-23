@@ -67,11 +67,11 @@ Homelab Experience
 Skills
 ======
 * **Networking**
-  * Cisco (CCNA certified)
+  * Cisco
   * Mikrotik
   * Ubiquiti UniFi
-  * VPN (WireGuard, Tailscale)
-  * Network monitoring (LibreNMS, Uptime Kuma)
+  * VPN (WireGuard, Tailscale, OpenVPN)
+  * Network monitoring
 * **Programming**
   * PHP
   * Go
@@ -80,8 +80,6 @@ Skills
   * Proxmox VE (virtualization, LXC, VMs, ZFS)
   * Docker & Docker Compose (Dockge)
   * Linux server administration (Debian, Ubuntu)
-  * VPS management (DigitalOcean, Cloudflare, GCP)
+  * VPS management (DigitalOcean)
 * **Automation**
-  * n8n workflow automation
-  * Shell scripting
-  * CI/CD pipelines
+  * n8n workflow automation (and similar apps)
