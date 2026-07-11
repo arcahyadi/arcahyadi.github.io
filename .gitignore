@@ -20,4 +20,4 @@ package-lock.json
 .vscode/
 
 # Ignore files created by MacOS
-.DS_Store
+**/.DS_Store
