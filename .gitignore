@@ -18,6 +18,23 @@ package-lock.json
 
 # Ignore folders related to IDEs
 .vscode/
+.idea/
+
+# Ignore Ruby LSP tooling
+.ruby-lsp/
+
+# Ignore Jekyll cache and metadata
+.jekyll-cache/
+.jekyll-metadata
+
+# Ignore editor temp files
+*.swp
+*.swo
+*~
 
 # Ignore files created by MacOS
 **/.DS_Store
+Thumbs.db
+
+# Ignore Gemini agent config
+.agents/
