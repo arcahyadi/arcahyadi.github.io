@@ -6,17 +6,24 @@ import { Sun, Moon } from "lucide-react";
 import { HamburgerIcon, CloseIcon } from "../shared/icons";
 import { siteConfig } from "@/site.config";
 import { useTheme } from "@/components/ThemeProvider";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { nav } = siteConfig.header;
   const { site, author } = siteConfig;
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLocale();
   const isDark = theme === "dark";
   const handleThemeToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     toggleTheme({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
   };
+  // Localize nav labels while preserving hrefs (urls unchanged per requirement)
+  const nav = [
+    { label: t.nav.portfolio, href: "/portfolio" },
+    { label: t.nav.blogs, href: "/blogs" },
+    { label: t.nav.cv, href: "/cv" },
+  ];
 
   return (
     <section
