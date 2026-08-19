@@ -13,6 +13,10 @@ export function Header() {
   const { site, author } = siteConfig;
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
+  const handleThemeToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    toggleTheme({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+  };
 
   return (
     <section
@@ -60,7 +64,7 @@ export function Header() {
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           aria-pressed={isDark}
           title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-          onClick={toggleTheme}
+          onClick={handleThemeToggle}
           className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] hover:text-[var(--color-text-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] transition-colors"
         >
           <span className="sr-only">Toggle theme</span>
@@ -76,7 +80,7 @@ export function Header() {
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           aria-pressed={isDark}
           title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-          onClick={toggleTheme}
+          onClick={handleThemeToggle}
           className="w-10 h-10 flex items-center justify-center text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]"
         >
           <span className="sr-only">Toggle theme</span>

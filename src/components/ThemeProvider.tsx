@@ -31,7 +31,7 @@ function applyTheme(theme: Theme) {
 type ThemeContextValue = {
   theme: Theme;
   resolvedTheme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (origin?: { x: number; y: number }) => void;
   setTheme: (t: Theme) => void;
 };
 
@@ -90,8 +90,32 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const toggleTheme = useCallback((origin?: { x: number; y: number }) => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!origin || reduceMotion || typeof document.startViewTransition !== "function") {
+      setTheme(nextTheme);
+      return;
+    }
+
+    const root = document.documentElement;
+    const radius = Math.hypot(
+      Math.max(origin.x, window.innerWidth - origin.x),
+      Math.max(origin.y, window.innerHeight - origin.y),
+    );
+    root.style.setProperty("--theme-transition-x", `${origin.x}px`);
+    root.style.setProperty("--theme-transition-y", `${origin.y}px`);
+    root.style.setProperty("--theme-transition-radius", `${radius}px`);
+    root.classList.add("theme-transition");
+
+    const transition = document.startViewTransition(() => setTheme(nextTheme));
+    transition.finished.finally(() => {
+      root.classList.remove("theme-transition");
+      root.style.removeProperty("--theme-transition-x");
+      root.style.removeProperty("--theme-transition-y");
+      root.style.removeProperty("--theme-transition-radius");
+    });
   }, [theme, setTheme]);
 
   // avoid passing stale closure value directly
