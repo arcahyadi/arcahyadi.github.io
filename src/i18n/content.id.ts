@@ -311,9 +311,9 @@ Perangkat infrastruktur penting mendapat **static DHCP lease** agar selalu menda
 \`\`\`routeros
 /ip dhcp-server lease
 add address=10.10.0.100 mac-address=XX:XX:XX:XX:XX:75  # AP
-add address=10.10.0.110 comment="u7 biologi"            # U7 AP di gedung Biologi
-add address=10.10.7.10  comment=nfs2                    # Server NFS
-add address=10.10.2.147 mac-address=XX:XX:XX:XX:XX:B8  # Perangkat monitoring SNMP
+add address=10.10.0.110 comment="u7 biologi"            # U7 AP at Biology building
+add address=10.10.7.10  comment=nfs2                    # NFS server
+add address=10.10.2.147 mac-address=XX:XX:XX:XX:XX:B8  # SNMP monitoring device
 add address=10.10.1.91  comment="Mikrotik Switch"       # Managed Switch
 \`\`\`
 
@@ -328,7 +328,7 @@ Sebagian besar konfigurasi adalah **firewall address-list** bernama \`nice\`, be
 add address=8.215.0.0/16 list=nice
 add address=18.136.0.0/16 list=nice
 add address=34.101.0.0/16 list=nice
-# ... ribuan entri lainnya
+# ... thousands more entries
 \`\`\`
 
 ---
@@ -354,20 +354,20 @@ set ftp      disabled=yes
 set telnet   disabled=yes
 set api      disabled=yes
 set api-ssl  disabled=yes
-set winbox   address=10.10.0.0/21,10.20.30.0/24  # Batasi ke LAN + WireGuard
-set www      port=16100                             # Pindah HTTP ke port non-standar
+set winbox   address=10.10.0.0/21,10.20.30.0/24  # Restrict to LAN + WireGuard
+set www      port=16100                             # Move HTTP to non-standard port
 
 /ip ssh
 set host-key-size=8192 strong-crypto=yes
 
 /ip neighbor discovery-settings
-set discover-interface-list=none  # Nonaktifkan CDP/LLDP
+set discover-interface-list=none  # Disable CDP/LLDP discovery
 
 /ipv6 settings
-set disable-ipv6=yes
+set disable-ipv6=yes  # IPv6 disabled (not yet deployed on campus)
 
 /ip cloud
-set ddns-enabled=yes ddns-update-interval=10m
+set ddns-enabled=yes ddns-update-interval=10m  # MikroTik DDNS for remote access
 \`\`\`
 
 - **FTP, Telnet, API dinonaktifkan** — hanya SSH, WinBox, dan WebFig (port kustom) yang diizinkan.
@@ -384,7 +384,7 @@ set ddns-enabled=yes ddns-update-interval=10m
 set enabled=yes contact="ISFI IT" location="ISFI BJM"
 
 /snmp community
-set [ find default=yes ] addresses=10.10.2.147/32  # Batasi ke host LibreNMS saja
+set [ find default=yes ] addresses=10.10.2.147/32  # Restrict to LibreNMS host only
 \`\`\`
 
 ---
@@ -401,11 +401,21 @@ Selain core router, saya juga mengelola **MikroTik CRS326-24G-2S+** — switch 2
 | **Uptime** | 20 hari |
 | **DHCP Fallback** | Enabled |
 
-Port 1, 21, 22 ditandai **LAG Ports** — bagian Link Aggregation Group ke interface bonded CCR1016. Port 24 adalah downlink ke **Gedung 6**, Port 23 melayani ruang kelas. Label deskriptif mempercepat troubleshooting.
+### Penempatan Port & Status
 
-### Mengapa SwOS?
+Ke-24 port tembaga ditetapkan untuk bagian berbeda di jaringan kampus.
 
-SwOS lebih ringan, sederhana untuk L2 switching dengan UI web yang bersih — cukup untuk kebutuhan switching tanpa fitur penuh RouterOS.
+Port 1, 21, dan 22 ditandai **LAG Ports** — bagian dari Link Aggregation Group yang terhubung kembali ke interface bonded CCR1016 (\`Bonding port 5-7\`). Ini menciptakan uplink multi-gigabit antara switch dan router dengan redundansi.
+
+Port 24 adalah downlink ke **Gedung 6** (Building 6), dan Port 23 melayani area ruang kelas (Ruang 3 atau 4). Label port deskriptif seperti ini membuat troubleshooting jauh lebih cepat — ketika ada yang menelepon mengatakan "tidak ada internet di ruang dosen," saya bisa langsung memeriksa Port 4 ("Dosen") di dashboard SwOS.
+
+### Mengapa SwOS Dibanding RouterOS?
+
+CRS326 dapat menjalankan SwOS atau RouterOS. Untuk deployment ini, SwOS adalah pilihan yang lebih baik karena:
+
+- **Kesederhanaan** — SwOS dibuat khusus untuk switching Layer 2 dengan UI web yang bersih. Tidak perlu fitur penuh RouterOS ketika yang dibutuhkan hanya switching.
+- **Overhead resource lebih rendah** — SwOS lebih ringan dan menyisakan lebih banyak CPU/memori untuk packet switching.
+- **Manajemen port yang mudah** — Antarmuka SwOS memudahkan melihat status port, menetapkan VLAN, atau mengonfigurasi LAG dari browser mana pun.
 
 ---
 
@@ -1066,7 +1076,7 @@ sudo -v ; curl https://rclone.org/install.sh | sudo bash
 Atau manual:
 
 \`\`\`bash
-# Download versi terbaru
+# Download the latest version
 curl -O https://downloads.rclone.org/current/rclone-current-linux-amd64.zip
 
 # Extract
@@ -1381,21 +1391,35 @@ log() {
 
 log "========== Backup started =========="
 
+# Back up each directory
 for DIR in "\${BACKUP_DIRS[@]}"; do
     if [ -d "$DIR" ]; then
-        log "Backing up $DIR..."
-        rclone copy "$DIR" "$RCLONE_REMOTE:$(basename "$DIR")" --progress --log-file="$LOG_FILE" --log-level INFO
+        DEST_NAME=$(basename "$DIR")
+        log "Backing up: $DIR -> $RCLONE_REMOTE:$DEST_NAME"
+
+        rclone copy "$DIR" "$RCLONE_REMOTE:$DEST_NAME" \\
+            --log-file="$LOG_FILE" \\
+            --log-level INFO \\
+            --transfers 4 \\
+            --checkers 8 \\
+            --contimeout 60s \\
+            --timeout 300s \\
+            --retries 3 \\
+            --low-level-retries 10 \\
+            --stats 1m
+
         if [ $? -eq 0 ]; then
-            log "Success: $DIR"
+            log "✅ Success: $DIR"
         else
-            log "Failed: $DIR"
+            log "❌ Failed: $DIR"
         fi
     else
-        log "Skipped (not found): $DIR"
+        log "⚠️ Directory not found: $DIR"
     fi
 done
 
 log "========== Backup finished =========="
+log ""
 \`\`\`
 
 Jadikan executable:

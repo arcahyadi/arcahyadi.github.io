@@ -105,6 +105,8 @@ export type Dictionary = {
     toggleMenuSr: string;
     openMenuLabel: string;
     closeMenuLabel: string;
+    navAriaLabel: string;
+    navMobileAriaLabel: string;
   };
   common: {
     selected: string;
@@ -250,6 +252,8 @@ export const translations: Record<Locale, Dictionary> = {
       toggleMenuSr: "Toggle menu",
       openMenuLabel: "Open menu",
       closeMenuLabel: "Close menu",
+      navAriaLabel: "Primary navigation",
+      navMobileAriaLabel: "Mobile primary navigation",
     },
     common: {
       selected: "selected",
@@ -393,6 +397,8 @@ export const translations: Record<Locale, Dictionary> = {
       toggleMenuSr: "Buka/tutup menu",
       openMenuLabel: "Buka menu",
       closeMenuLabel: "Tutup menu",
+      navAriaLabel: "Navigasi utama",
+      navMobileAriaLabel: "Navigasi utama seluler",
     },
     common: {
       selected: "dipilih",
