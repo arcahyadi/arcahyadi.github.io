@@ -5,12 +5,22 @@ import { siteConfig } from "@/site.config";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 type Status = "idle" | "loading" | "success" | "error";
+type ErrorCode = "not_configured" | "fallback" | "connection" | null;
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorCode, setErrorCode] = useState<ErrorCode>(null);
   const { t } = useLocale();
   const cf = t.contactForm;
+
+  const errorMessage =
+    errorCode === "not_configured"
+      ? cf.errorNotConfigured
+      : errorCode === "connection"
+        ? cf.errorConnection
+        : errorCode === "fallback"
+          ? cf.errorFallback
+          : "";
 
   const accessKey = (siteConfig.home.contact as { web3formsKey?: string }).web3formsKey || "";
 
@@ -20,18 +30,19 @@ export function ContactForm() {
     e.preventDefault();
     if (!isConfigured) {
       setStatus("error");
-      setErrorMsg(cf.errorNotConfigured);
+      setErrorCode("not_configured");
       return;
     }
     const form = e.currentTarget;
     const data = new FormData(form);
     if (data.get("botcheck")) {
       setStatus("success");
+      setErrorCode(null);
       form.reset();
       return;
     }
     setStatus("loading");
-    setErrorMsg("");
+    setErrorCode(null);
 
     data.set("access_key", accessKey);
     data.set("subject", `New message from ${data.get("name") || "arcahyadi.me"}`);
@@ -42,17 +53,19 @@ export function ContactForm() {
         method: "POST",
         body: data,
       });
-      const json = await res.json();
+      const json: { success?: boolean; message?: string } = await res.json();
       if (json.success) {
         setStatus("success");
+        setErrorCode(null);
         form.reset();
       } else {
         setStatus("error");
-        setErrorMsg(json.message || cf.errorFallback);
+        // Do not surface raw external API message (untranslated); map to neutral localized code
+        setErrorCode("fallback");
       }
     } catch {
       setStatus("error");
-      setErrorMsg(cf.errorConnection);
+      setErrorCode("connection");
     }
   }
 
@@ -124,7 +137,7 @@ export function ContactForm() {
         ) : null}
         {status === "error" ? (
           <p role="alert" className="text-sm text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 rounded px-3 py-2 bg-red-50 dark:bg-red-950/30">
-            {errorMsg}
+            {errorMessage}
           </p>
         ) : null}
       </form>

@@ -3,8 +3,16 @@
 // user-visible prose (title, excerpt, content, cv fields) is translated. Technical terms
 // (MikroTik, RouterOS, WireGuard, Proxmox, etc.) and facts are preserved verbatim.
 
+import type { blogs } from "@/content/blogs";
+import type { portfolio } from "@/content/portfolio";
+
+export type BlogSlug = (typeof blogs)[number]["slug"];
+export type PortfolioSlug = (typeof portfolio)[number]["slug"];
+
+export type LocalizedContent = { title: string; excerpt: string; content: string };
+
 // Portfolio overrides: keyed by slug, only translated fields
-export const portfolioIdBySlug: Record<string, { title: string; excerpt: string; content: string }> = {
+export const portfolioIdBySlug = {
   "institution-campus-network-upgrade": {
     title: "Institution — Upgrade Sistem Jaringan Kampus",
     excerpt:
@@ -67,11 +75,11 @@ Kursus ini berfokus pada teknologi switching dan operasi router yang mendukung j
 
 Kursus ini menjelaskan arsitektur dan pertimbangan terkait perancangan, pengamanan, pengoperasian, dan troubleshooting jaringan enterprise. Membahas teknologi WAN, mekanisme QoS untuk akses remote yang aman, serta pengenalan software-defined networking, virtualisasi, dan konsep otomasi yang mendukung digitalisasi jaringan.`,
   },
-};
+} as const satisfies Record<PortfolioSlug, LocalizedContent>;
 
 // Blogs overrides: keyed by slug, only translated fields
 // Preserve: slug, date, tags, code fences, links, markdown structure, technical terminology
-export const blogsIdBySlug: Record<string, { title: string; excerpt: string; content: string }> = {
+export const blogsIdBySlug = {
   "mikrotik-ccr-campus-config": {
     title: "Failover multi-WAN dan link aggregation di RouterOS",
     excerpt:
@@ -457,13 +465,76 @@ Berikut yang saya jalankan via Dockge — semua container **aktif**:
 
 ### 🔄 n8n — Otomasi Workflow
 
-(nama, tautan, dan tag dipertahankan; narasi diterjemahkan)
+[n8n](https://n8n.io/) adalah platform otomasi workflow yang powerful — anggap saja sebagai alternatif self-hosted untuk Zapier atau Make. Saya pakai untuk mengotomasi tugas berulang dan menghubungkan layanan yang berbeda.
 
-### Penerapan
+**Kenapa saya pakai:** Otomasi adalah salah satu passion saya. n8n memungkinkan saya membangun workflow kompleks secara visual, menghubungkan API, database, dan layanan tanpa menulis boilerplate code untuk setiap integrasi.
 
-Semua stack dikelola via Dockge di node Proxmox. File \`docker-compose.yml\` disimpan terpusat dan dapat diedit langsung dari UI. Workflow update: pull image terbaru → recreate container → cek status di dashboard Dockge.
+### 🌐 OpenSpeedTest — Uji Kecepatan Jaringan
 
-Jika kamu menjalankan banyak layanan Docker, Dockge sangat membantu menjaga kerapian tanpa kompleksitas berlebih.`,
+[OpenSpeedTest](https://github.com/openspeedtest/Docker-Image) adalah server uji kecepatan self-hosted. Memungkinkan saya menguji kecepatan jaringan antar perangkat dan server tanpa bergantung layanan eksternal seperti Speedtest.net.
+
+**Kenapa saya pakai:** Saat troubleshooting masalah jaringan di kampus, memiliki server uji kecepatan lokal memberikan hasil yang akurat tanpa variabel internet yang memengaruhi tes. Juga bagus untuk memverifikasi bahwa upgrade jaringan benar-benar meningkatkan throughput.
+
+### 📈 SpeedTrack — Riwayat Uji Kecepatan
+
+[SpeedTrack](https://github.com/alexjustesen/speedtest-tracker) bekerja bersama OpenSpeedTest untuk **melacak dan mencatat hasil uji kecepatan dari waktu ke waktu**. Alih-alih menjalankan tes dan melupakan angkanya, SpeedTrack menyimpan rekam historis sehingga saya bisa melihat tren dan degradasi.
+
+**Kenapa saya pakai:** Mampu melihat kembali performa jaringan selama berminggu-minggu atau berbulan-bulan membantu saya mengidentifikasi pola — seperti apakah kecepatan turun di jam tertentu atau setelah perubahan konfigurasi.
+
+### 🧰 OmniTools — Toolbox Utilitas Lengkap
+
+[OmniTools](https://github.com/iib0011/omni-tools) adalah koleksi self-hosted dari berbagai utilitas dan perkakas IT yang dapat diakses dari browser web. Menggabungkan perkakas praktis seperti encoder/decoder, formatter, converter, dan utilitas jaringan ke dalam satu antarmuka.
+
+**Kenapa saya pakai:** Alih-alih mencari perkakas online acak setiap kali perlu encode string Base64 atau format JSON, saya punya semuanya di satu tempat di server sendiri — cepat, privat, dan selalu tersedia.
+
+### 📄 BentoPDF — Generasi PDF
+
+[BentoPDF](https://github.com/nicholasgasior/bento-pdf) adalah toolkit PDF yang mengutamakan privasi, berjalan sisi klien untuk memanipulasi, menggabungkan, memisahkan, dan memproses file PDF — semuanya berjalan lokal di browser via WebAssembly.
+
+**Kenapa saya pakai:** Berguna untuk mengotomasi workflow dokumen dan mengkonversi file tanpa mengunggahnya ke layanan pihak ketiga. Menjaga semuanya privat dan on-premise.
+
+### 🎵 Yubal — Pengunduh YouTube Music
+
+[Yubal](https://github.com/guillevc/yubal) adalah pengunduh YouTube Music self-hosted. Tempel tautan, dan ia mengunduh trek dengan tag yang tepat dan mengorganisirnya ke library secara otomatis.
+
+Fitur utama:
+
+- **Scheduled sync** — otomatis mengunduh rilis baru dari artis favoritmu
+- **Smart deduplication** — tidak ada file duplikat yang mengacaukan library
+- **Media server ready** — output terorganisir yang bekerja sempurna dengan Jellyfin, Plex, atau Navidrome
+- **Browser extension** — unduh langsung dari YouTube Music dengan satu klik
+
+**Kenapa saya pakai:** Dikombinasikan dengan Jellyfin di node Proxmox saya, Yubal memberi saya setup streaming musik self-hosted yang lengkap. Saya tempel tautan, Yubal mengunduh dan memberi tag, dan ia muncul di media server — tidak perlu langganan.
+
+## Kenapa Dockge Dibanding Portainer?
+
+Saya pernah memakai Portainer sebelumnya, dan meski powerful, rasanya berlebihan untuk use case saya. Inilah kenapa saya memilih Dockge:
+
+| Feature | Dockge | Portainer |
+|---------|--------|-----------|
+| **Focus** | Docker Compose only | Full Docker management |
+| **Complexity** | Simple and lightweight | Feature-rich but heavier |
+| **Compose editing** | Native YAML editor | Limited compose support |
+| **Resource usage** | Minimal | Higher |
+| **Learning curve** | Almost none | Moderate |
+
+Dockge melakukan satu hal dan melakukannya dengan baik — mengelola stack Docker Compose dengan antarmuka yang indah. Untuk homelab saya, itulah yang tepat dibutuhkan.
+
+## Tips Memulai dengan Dockge
+
+Jika kamu ingin mencoba Dockge sendiri, berikut beberapa tips:
+
+1. **Install Dockge sendiri via Docker** — hanya satu file compose untuk memulai
+2. **Organisir stack-mu** — beri setiap stack nama yang jelas dan deskriptif
+3. **Gunakan environment variables** — simpan data sensitif seperti password dan API key di file \`.env\`
+4. **Set restart policies** — gunakan \`restart: unless-stopped\` agar container bertahan setelah reboot
+5. **Jaga file compose tetap bersih** — Dockge menyimpan semua file compose di direktori terpusat, membuat backup jadi mudah
+
+## Penutup
+
+Docker + Dockge telah menjadi game-changer untuk homelab saya. Kombinasi fleksibilitas Docker dengan antarmuka manajemen Dockge yang bersih berarti saya menghabiskan lebih sedikit waktu untuk perawatan dan lebih banyak waktu benar-benar memakai layanan saya.
+
+Apakah kamu baru memulai dengan Docker atau mencari cara yang lebih baik untuk mengelola stack yang sudah ada, saya sangat merekomendasikan untuk mencoba Dockge. Ringan, intuitif, dan membuat self-hosting jauh lebih menyenangkan. 🐳`,
   },
   "digitalocean-droplet-spaces-setup": {
     title: "Panduan Lengkap Setup Droplet dan Spaces Object Storage di DigitalOcean",
@@ -489,15 +560,47 @@ Di tulisan ini saya berbagi panduan langkah demi langkah membuat Droplet dan men
 6. **Pilih Metode Autentikasi (Penting!):**
    - **SSH Key:** Sangat direkomendasikan. Jauh lebih aman daripada password.
    - **Password:** Lebih mudah tapi rentan *brute-force*. Jika dipilih, pakai password sangat kuat.
-7. **Opsi Tambahan (Opsional):** Backup, monitoring, VPC, dll.
+7. **Pilih Opsi Tambahan (Opsional):** Kamu bisa centang *Enable Backups*, *Monitoring*, atau *IPv6* sesuai kebutuhan.
+8. **Pilih Hostname:** Masukkan \`Hostname\` yang dikenali untuk Droplet-mu (mis. \`web-server-01\`).
+9. **Klik "Create Droplet":** Tunggu sekitar semenit, dan Public IP Droplet-mu akan muncul. Kamu kini bisa login via SSH!
 
-Semua nama region, paket, dan langkah dipertahankan; hanya narasi yang diterjemahkan. Tautan dan opsi autentikasi dipertahankan verbatim.
+---
 
-## 2. Spaces Object Storage
+## 2. Cara Membuat Spaces Object Storage
 
-Spaces adalah object storage kompatibel S3. Cocok untuk menyimpan aset statis, backup, dan file media. Konfigurasi via S3 API key dan endpoint region. Implementasi klien tetap memakai endpoint DigitalOcean (mis. \`sgp1.digitaloceanspaces.com\`).
+Spaces adalah layanan *Object Storage* yang sempurna untuk menyimpan aset statis seperti gambar, video, file backup, atau file website statis. Spaces sangat terjangkau (mulai $5/bulan untuk 250GB) dan menyertakan *Content Delivery Network* (CDN) bawaan.
 
-Dokumentasi langkah Spaces dan best practice backup dirangkum tanpa mengubah perintah, nama endpoint, atau opsi harga.`,
+**Langkah:**
+
+1. **Klik tombol "Create":** Di kanan atas dashboard, klik **Create**, lalu pilih **Spaces**.
+2. **Pilih Region:** Sekali lagi, pilih lokasi terdekat dengan pengguna (mis. **Singapore**). Sangat direkomendasikan untuk memilih region yang sama dengan Droplet-mu jika keduanya akan saling berkomunikasi, memastikan kecepatan transfer yang lebih cepat.
+3. **Konfigurasi CDN (Content Delivery Network):**
+   - Secara default, CDN diaktifkan. Ini bagus untuk mempercepat waktu loading aset bagi pengunjung dari negara berbeda.
+   - Kamu juga bisa menambahkan **Custom Subdomain** (mis. \`cdn.yourdomain.com\`) jika kamu mengelola DNS di DigitalOcean.
+4. **Pilih Nama Space (Bucket):**
+   - Nama ini harus unik secara global karena akan menjadi bagian dari URL (mis. \`my-awesome-assets\`).
+5. **Pilih Project:** Tetapkan Space ini ke project yang sesuai.
+6. **Klik "Create a Space":** Space-mu akan langsung dibuat dan siap digunakan.
+
+---
+
+## 3. Menghasilkan Access Key untuk Spaces (Penting)
+
+Karena Spaces kompatibel dengan Amazon S3 API, kamu bisa memakai berbagai perkakas S3 (seperti S3cmd, rclone, atau AWS SDK) untuk mengelolanya. Untuk itu, kamu butuh **Access Key** dan **Secret Key**.
+
+1. Di menu sebelah kiri, klik bagian **API**.
+2. Pilih tab **Spaces Keys**.
+3. Klik tombol **Generate New Key**.
+4. Beri nama deskriptif pada key (mis. \`App Backup Key\`).
+5. Dua kode akan muncul: **Key** dan **Secret**.
+   > [!WARNING]
+   > Segera salin dan simpan **Secret Key** di lokasi yang aman! Kode ini hanya ditampilkan sekali. Jika hilang, kamu harus membuat pasangan key baru.
+
+## Kesimpulan
+
+DigitalOcean membuat provisioning infrastruktur cloud menjadi sangat sederhana. Dengan Droplet, kamu punya kontrol penuh atas server (VPS), dan dengan Spaces, kamu bisa menyimpan ribuan file statis dengan harga yang sangat terjangkau tanpa menghabiskan disk utama Droplet.
+
+Mengkombinasikan kedua layanan ini memberikan fondasi yang kokoh untuk deploy aplikasi web modern! 🚀`,
   },
   "rclone-encrypted-backup-google-drive": {
     title: "Backup Terenkripsi ke Google Drive dengan Rclone",
@@ -543,18 +646,432 @@ curl -O https://downloads.rclone.org/current/rclone-current-linux-amd64.zip
 
 # Extract
 unzip rclone-current-linux-amd64.zip
+cd rclone-*-linux-amd64
+
+# Copy the binary to /usr/bin
+sudo cp rclone /usr/bin/
+sudo chmod 755 /usr/bin/rclone
+
+# Verify the installation
+rclone version
 \`\`\`
 
-## 2. Konfigurasi Google Drive & Crypt
+## 2. Konfigurasi Google Drive Remote
 
-Langkah konfigurasi \`rclone config\` untuk remote Google Drive dan remote \`crypt\` tetap dipertahankan verbatim (nama remote, opsi enkripsi, dan perintah cron tidak diterjemahkan). Narasi penjelas diterjemahkan ke Indonesia, sedangkan perintah, URL, dan istilah teknis (rclone, crypt, FUSE, cron) dipertahankan.
-
-Setelah setup, kamu bisa menjalankan:
+Jalankan wizard konfigurasi interaktif:
 
 \`\`\`bash
-rclone sync /data/path gdrive-crypt:backup --progress --log-file rclone.log
+rclone config
 \`\`\`
 
-Dan menjadwalkan via \`cron\` untuk backup otomatis harian.`,
+Ikuti langkah berikut:
+
+\`\`\`
+No remotes found, make a new one?
+n) New remote
+q) Quit config
+n/s/q> n
+
+Enter name for new remote.
+name> gdrive
+
+Option Storage.
+Type of storage to configure.
+Choose a number from below, or type in your own value.
+...
+18 / Google Drive
+   \\ (drive)
+...
+Storage> drive
+
+Option client_id.
+Google Application Client Id
+Leave blank normally.
+client_id>
+
+Option client_secret.
+OAuth Client Secret.
+Leave blank normally.
+client_secret>
+
+Option scope.
+Scope that rclone should use when requesting access from drive.
+Choose a number from below, or type in your own value.
+ 1 / Full access all files, excluding Application Data Folder.
+   \\ (drive)
+...
+scope> 1
+
+Option service_account_file.
+Service Account Credentials JSON file path.
+Leave blank normally.
+service_account_file>
+
+Edit advanced config?
+y) Yes
+n) No (default)
+y/n> n
+
+Use web browser to automatically authenticate rclone with remote?
+y) Yes (default)
+n) No
+y/n>
+\`\`\`
+
+### Autentikasi di Server Headless
+
+Jika kamu mengkonfigurasi Rclone di server tanpa browser (headless), pilih \`n\` pada prompt di atas. Rclone kemudian akan menampilkan perintah yang perlu kamu jalankan di mesin lokal yang memiliki browser:
+
+\`\`\`
+Option config_token.
+For this to work, you will need rclone available on a machine that has
+a web browser available.
+
+For more help and alternate methods see: https://rclone.org/remote_setup/
+
+Execute the following on the machine with the web browser (same rclone
+version recommended):
+
+\trclone authorize "drive" "eyJ...token..."
+
+Then paste the result.
+config_token>
+\`\`\`
+
+Berikut cara menyelesaikan prosesnya:
+
+1. **Di mesin lokal** (dengan browser), install Rclone juga
+2. Jalankan perintah \`rclone authorize\` yang ditampilkan di output
+3. Jendela browser akan terbuka — login ke akun Google-mu dan beri izin
+4. Salin token yang muncul di terminal lokal-mu
+5. Tempel token tersebut kembali ke prompt server
+
+Setelah autentikasi berhasil:
+
+\`\`\`
+Configure this as a Shared Drive (Team Drive)?
+y) Yes
+n) No (default)
+y/n> n
+
+Keep this "gdrive" remote?
+y) Yes this is OK (default)
+e) Edit this remote
+d) Delete this remote
+y/e/d> y
+\`\`\`
+
+Verifikasi koneksi:
+
+\`\`\`bash
+rclone lsd gdrive:
+\`\`\`
+
+Ini akan menampilkan daftar folder di Google Drive-mu.
+
+## 3. Setup Enkripsi (Crypt Remote)
+
+Ini adalah bagian paling penting — kita akan membuat remote baru yang secara transparan mengenkripsi semua file sebelum diunggah ke Google Drive.
+
+Jalankan wizard config lagi:
+
+\`\`\`bash
+rclone config
+\`\`\`
+
+\`\`\`
+n) New remote
+n/s/q> n
+
+Enter name for new remote.
+name> gdrive-crypt
+
+Option Storage.
+Type of storage to configure.
+Choose a number from below, or type in your own value.
+...
+14 / Encrypt/Decrypt a remote
+   \\ (crypt)
+...
+Storage> crypt
+
+Option remote.
+Remote to encrypt/decrypt.
+Normally should contain a ':' and a path, e.g. "myremote:path/to/dir",
+"myremote:bucket" or maybe "myremote:" (not recommended).
+remote> gdrive:backup-encrypted
+
+Option filename_encryption.
+How to encrypt the filenames.
+Choose a number from below, or type in your own value.
+ 1 / Encrypt the filenames.
+   \\ (standard)
+ 2 / Very simple filename obfuscation.
+   \\ (obfuscate)
+ 3 / Don't encrypt the file names.
+   \\ (off)
+filename_encryption> standard
+
+Option directory_name_encryption.
+Option to either encrypt directory names or leave them intact.
+Choose a number from below, or type in your own value.
+ 1 / Encrypt directory names.
+   \\ (true)
+ 2 / Don't encrypt directory names, leave them intact.
+   \\ (false)
+directory_name_encryption> true
+
+Option password.
+Password or pass phrase for encryption.
+y) Yes, type in my own password
+g) Generate random password
+y/g> y
+Enter the password: ********
+Confirm the password: ********
+
+Option password2.
+Password or pass phrase for salt.
+y) Yes, type in my own password
+g) Generate random password
+n) No, leave this optional password blank (default)
+y/g/n> y
+Enter the password: ********
+Confirm the password: ********
+\`\`\`
+
+> [!CAUTION]
+> **Simpan kedua password di tempat yang sangat aman!** Jika kamu kehilangan password tersebut, file terenkripsi **tidak dapat didekripsi** dan data akan hilang selamanya. Saya merekomendasikan memakai password manager seperti Bitwarden atau KeePassXC.
+
+Setelah setup selesai:
+
+\`\`\`
+Keep this "gdrive-crypt" remote?
+y) Yes this is OK (default)
+y/e/d> y
+\`\`\`
+
+### Cara Kerja Enkripsi Rclone
+
+Berikut alur data melalui remote crypt:
+
+\`\`\`
+Local Files ──► Rclone Crypt (encrypt) ──► Google Drive
+                                           (encrypted files)
+
+Google Drive ──► Rclone Crypt (decrypt) ──► Local Files
+(encrypted files)                          (original files)
+\`\`\`
+
+- **Nama file** dienkripsi dan tidak terbaca di Google Drive
+- **Isi file** dienkripsi memakai NaCl SecretBox (XSalsa20 + Poly1305)
+- **Struktur direktori** juga terenkripsi (jika \`directory_name_encryption\` diaktifkan)
+
+## 4. Menggunakan Rclone untuk Backup
+
+### Mengunggah (Backup) File
+
+Untuk mengunggah file ke Google Drive dengan enkripsi:
+
+\`\`\`bash
+# Copy files/folders to cloud (automatically encrypted)
+rclone copy /path/to/local/data gdrive-crypt: --progress
+
+# Example: back up /home/user/documents
+rclone copy /home/user/documents gdrive-crypt:documents --progress
+\`\`\`
+
+### Sync (One-Way Mirror)
+
+Sync membuat remote menjadi mirror persis dari direktori lokal — file yang dihapus secara lokal juga akan dihapus di remote:
+
+\`\`\`bash
+rclone sync /path/to/local/data gdrive-crypt: --progress
+\`\`\`
+
+> [!WARNING]
+> Hati-hati dengan \`sync\`! File yang ada di remote tapi tidak ada secara lokal akan **dihapus**. Gunakan \`copy\` jika kamu hanya ingin menambah file baru tanpa menghapus yang lama.
+
+### Mengunduh (Restore) File
+
+Untuk memulihkan file dari backup:
+
+\`\`\`bash
+# Download all files (automatically decrypted)
+rclone copy gdrive-crypt: /path/to/restore/ --progress
+
+# Download a specific folder
+rclone copy gdrive-crypt:documents /home/user/restore/documents --progress
+\`\`\`
+
+### Melihat File Terenkripsi vs. Terdekripsi
+
+\`\`\`bash
+# View files on Google Drive (encrypted names)
+rclone ls gdrive:backup-encrypted
+
+# Example output:
+# 2948723 v05u42a5fkh5b2s0r91cbo4im0/7gdcp5...
+
+# View files through the crypt remote (decrypted names)
+rclone ls gdrive-crypt:
+
+# Example output:
+# 2948723 documents/important-notes.txt
+\`\`\`
+
+## 5. Mengotomasi Backup dengan Cron
+
+Untuk menjalankan backup otomatis, kita bisa memakai skrip shell sederhana yang dikombinasikan dengan cron job.
+
+### Membuat Skrip Backup
+
+\`\`\`bash
+sudo nano /usr/local/bin/backup-gdrive.sh
+\`\`\`
+
+Isi skrip:
+
+\`\`\`bash
+#!/bin/bash
+
+# ============================================
+# Rclone Encrypted Backup Script
+# ============================================
+
+# Configuration
+RCLONE_REMOTE="gdrive-crypt"
+BACKUP_DIRS=(
+    "/home/user/documents"
+    "/home/user/projects"
+    "/etc/nginx"
+    "/opt/docker-compose"
+)
+LOG_FILE="/var/log/rclone-backup.log"
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Logging function
+log() {
+    echo "[$DATE] $1" | tee -a "$LOG_FILE"
+}
+
+log "========== Backup started =========="
+
+for DIR in "\${BACKUP_DIRS[@]}"; do
+    if [ -d "$DIR" ]; then
+        log "Backing up $DIR..."
+        rclone copy "$DIR" "$RCLONE_REMOTE:$(basename "$DIR")" --progress --log-file="$LOG_FILE" --log-level INFO
+        if [ $? -eq 0 ]; then
+            log "Success: $DIR"
+        else
+            log "Failed: $DIR"
+        fi
+    else
+        log "Skipped (not found): $DIR"
+    fi
+done
+
+log "========== Backup finished =========="
+\`\`\`
+
+Jadikan executable:
+
+\`\`\`bash
+sudo chmod +x /usr/local/bin/backup-gdrive.sh
+\`\`\`
+
+### Setup Cron Job
+
+Buka editor crontab:
+
+\`\`\`bash
+crontab -e
+\`\`\`
+
+Tambahkan jadwal backup (contoh: setiap hari jam 2 pagi):
+
+\`\`\`cron
+# Encrypted backup to Google Drive every day at 02:00
+0 2 * * * /usr/local/bin/backup-gdrive.sh
+\`\`\`
+
+Contoh jadwal lain:
+
+\`\`\`cron
+# Every 6 hours
+0 */6 * * * /usr/local/bin/backup-gdrive.sh
+
+# Every Sunday at 3 AM
+0 3 * * 0 /usr/local/bin/backup-gdrive.sh
+
+# First day of every month at 1 AM
+0 1 1 * * /usr/local/bin/backup-gdrive.sh
+\`\`\`
+
+## 6. Tips dan Best Practice
+
+### Batasi Bandwidth
+
+Jika server-mu memiliki bandwidth terbatas, throttle kecepatan upload:
+
+\`\`\`bash
+# Limit upload to 5 Mbps
+rclone copy /data gdrive-crypt: --bwlimit 5M
+\`\`\`
+
+### Abaikan File yang Tidak Perlu
+
+Lewati file yang tidak perlu di-backup:
+
+\`\`\`bash
+rclone copy /data gdrive-crypt: \\
+    --exclude "*.tmp" \\
+    --exclude "*.log" \\
+    --exclude "node_modules/**" \\
+    --exclude ".cache/**"
+\`\`\`
+
+### Dry Run (Simulasi)
+
+Selalu simulasikan sebelum menjalankan sync untuk melihat apa yang akan berubah:
+
+\`\`\`bash
+rclone sync /data gdrive-crypt: --dry-run --progress
+\`\`\`
+
+### Verifikasi Integritas File
+
+Pastikan file yang diunggah tidak korup:
+
+\`\`\`bash
+rclone check /path/to/local/data gdrive-crypt: --one-way
+\`\`\`
+
+### Backup Konfigurasi Rclone Sendiri
+
+Jangan lupa backup file config Rclone itu sendiri:
+
+\`\`\`bash
+# Default config location
+cat ~/.config/rclone/rclone.conf
+
+# Back up to a safe location (e.g., an encrypted USB drive)
+cp ~/.config/rclone/rclone.conf /media/usb-drive/rclone-config-backup.conf
+\`\`\`
+
+> [!IMPORTANT]
+> File \`rclone.conf\` berisi password enkripsi-mu (meski sudah di-obfuscate). Pastikan file ini disimpan dengan aman dan jangan pernah di-commit ke repository publik!
+
+## Kesimpulan
+
+Dengan kombinasi **Rclone + Google Drive + Crypt**, kamu mendapatkan solusi backup cloud yang:
+
+- ✅ **Gratis** — memanfaatkan 15GB storage gratis Google Drive
+- ✅ **Aman** — file dienkripsi end-to-end sebelum meninggalkan server
+- ✅ **Otomatis** — cron job menjalankan backup tanpa intervensi manual
+- ✅ **Terverifikasi** — integritas file dapat diperiksa kapan saja
+
+Google tidak dapat membaca file-mu karena semuanya terenkripsi sebelum diunggah. Bahkan jika seseorang mendapatkan akses ke akun Google-mu, mereka hanya akan melihat file dengan nama acak dan isi yang tidak terbaca.
+
+Selamat membackup — dan ingat: **backup yang belum pernah di-test restore bukanlah backup yang nyata!** 🔐`,
   },
-};
+} as const satisfies Record<BlogSlug, LocalizedContent>;

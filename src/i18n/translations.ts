@@ -97,6 +97,26 @@ export type Dictionary = {
     errorConnection: string;
     web3formsHint: string;
   };
+  header: {
+    homeAriaLabel: string;
+    themeLightLabel: string;
+    themeDarkLabel: string;
+    toggleThemeSr: string;
+    toggleMenuSr: string;
+    openMenuLabel: string;
+    closeMenuLabel: string;
+  };
+  common: {
+    selected: string;
+  };
+  markdown: {
+    mermaidLabel: string;
+  };
+  notFound: {
+    title: string;
+    subtitle: string;
+    backHome: string;
+  };
 };
 
 export const translations: Record<Locale, Dictionary> = {
@@ -222,6 +242,26 @@ export const translations: Record<Locale, Dictionary> = {
       web3formsHint:
         "Form is ready but needs a Web3Forms Access Key. Sign up for free at web3forms.com then set home.contact.web3formsKey in src/site.config.ts. Alternative without signup: change fetch URL to https://formsubmit.co/arcahyadi.dev@gmail.com.",
     },
+    header: {
+      homeAriaLabel: "Home",
+      themeLightLabel: "Switch to light mode",
+      themeDarkLabel: "Switch to dark mode",
+      toggleThemeSr: "Toggle theme",
+      toggleMenuSr: "Toggle menu",
+      openMenuLabel: "Open menu",
+      closeMenuLabel: "Close menu",
+    },
+    common: {
+      selected: "selected",
+    },
+    markdown: {
+      mermaidLabel: "diagram · mermaid",
+    },
+    notFound: {
+      title: "Page not found",
+      subtitle: "The page you are looking for does not exist.",
+      backHome: "← Back to home",
+    },
   },
   id: {
     site: {
@@ -344,6 +384,26 @@ export const translations: Record<Locale, Dictionary> = {
       errorConnection: "Gagal koneksi. Coba lagi atau email langsung.",
       web3formsHint:
         "Form siap tapi butuh Web3Forms Access Key. Daftar gratis di web3forms.com lalu isi home.contact.web3formsKey di src/site.config.ts. Alternatif tanpa daftar: ganti fetch URL ke https://formsubmit.co/arcahyadi.dev@gmail.com.",
+    },
+    header: {
+      homeAriaLabel: "Beranda",
+      themeLightLabel: "Ganti ke mode terang",
+      themeDarkLabel: "Ganti ke mode gelap",
+      toggleThemeSr: "Ganti tema",
+      toggleMenuSr: "Buka/tutup menu",
+      openMenuLabel: "Buka menu",
+      closeMenuLabel: "Tutup menu",
+    },
+    common: {
+      selected: "dipilih",
+    },
+    markdown: {
+      mermaidLabel: "diagram · mermaid",
+    },
+    notFound: {
+      title: "Halaman tidak ditemukan",
+      subtitle: "Halaman yang kamu cari tidak tersedia.",
+      backHome: "← Kembali ke beranda",
     },
   },
 };

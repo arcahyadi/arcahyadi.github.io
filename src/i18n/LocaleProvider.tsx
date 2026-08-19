@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { defaultLocale, htmlLang, isLocale, STORAGE_KEY, type Locale } from "./config";
 import { translations, type Dictionary } from "./translations";
 import { getLocalizedBlogs, getLocalizedPortfolio, getLocalizedCV } from "./content-helpers";
@@ -19,32 +19,32 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
+/** Lazy initializer reads persisted locale so first render already matches pre-paint lang. */
+function getInitialLocale(): Locale {
+  if (typeof window === "undefined") return defaultLocale;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (isLocale(stored)) return stored;
+    // also check cookie (set by setLocale)
+    const cookieMatch = document.cookie.match(/(?:^|; )locale=([^;]*)/);
+    const cookieVal = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+    if (isLocale(cookieVal)) return cookieVal;
+  } catch {
+    // private mode
+  }
+  return defaultLocale;
+}
+
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-  const hydrated = useRef(false);
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
 
-  // Read persisted locale on mount (client only)
-  useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(STORAGE_KEY);
-    } catch {
-      // ignore (private mode, etc) — fallback to default
-    }
-    if (isLocale(stored)) {
-      // avoid calling setState during effect without guard? it's fine
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLocaleState(stored);
-      document.documentElement.lang = htmlLang[stored];
-    } else {
-      document.documentElement.lang = htmlLang[defaultLocale];
-    }
-    hydrated.current = true;
-  }, []);
+  // Keep <html lang> in sync with actually rendered content; also re-apply after dev StrictMode remount.
+  useLayoutEffect(() => {
+    document.documentElement.lang = htmlLang[locale];
+  }, [locale]);
 
-  // Sync html lang on locale change (after hydration)
   useEffect(() => {
-    if (!hydrated.current) return;
+    // Ensure lang is correct on mount (covers pre-paint script + hydration)
     document.documentElement.lang = htmlLang[locale];
   }, [locale]);
 
@@ -55,7 +55,6 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    // best-effort cookie for potential SSR later (static export ignores it, but harmless)
     try {
       document.cookie = `${STORAGE_KEY}=${next}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
@@ -68,6 +67,13 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const blogs = useMemo(() => getLocalizedBlogs(locale, blogsRaw), [locale]);
   const portfolio = useMemo(() => getLocalizedPortfolio(locale, portfolioRaw), [locale]);
   const cv = useMemo(() => getLocalizedCV(locale, cvRaw), [locale]);
+
+  // Update document title/description per locale when translation available (client-only, static export safe)
+  useEffect(() => {
+    document.title = t.site.title;
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", t.site.description);
+  }, [t.site.title, t.site.description]);
 
   const value: LocaleContextValue = useMemo(
     () => ({ locale, setLocale, t, blogs, portfolio, cv }),

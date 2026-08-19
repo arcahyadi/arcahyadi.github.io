@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronDownIcon } from "./sites/opencode-2d59a23a/shared/icons";
 import { locales, localeLabels, type Locale } from "@/i18n/config";
 import { useLocale } from "@/i18n/LocaleProvider";
@@ -10,6 +10,22 @@ export function LanguagePicker() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const focusItem = useCallback((index: number) => {
+    const items = listRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]');
+    if (!items || items.length === 0) return;
+    const clamped = ((index % items.length) + items.length) % items.length;
+    items[clamped]?.focus();
+  }, []);
+
+  const focusSelectedOrFirst = useCallback(() => {
+    const items = listRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]');
+    if (!items || items.length === 0) return;
+    const selectedIndex = Array.from(items).findIndex((el) => el.getAttribute("aria-checked") === "true");
+    const target = selectedIndex >= 0 ? selectedIndex : 0;
+    items[target]?.focus();
+  }, []);
 
   // Close on outside click
   useEffect(() => {
@@ -20,28 +36,19 @@ export function LanguagePicker() {
     return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
-  // Close on Escape; roving handled via native buttons
+  // Focus selected item when menu opens
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape" && open) {
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
+    if (!open) return;
+    // next frame so DOM is mounted
+    const id = requestAnimationFrame(() => focusSelectedOrFirst());
+    return () => cancelAnimationFrame(id);
+  }, [open, focusSelectedOrFirst, locale]);
 
   const labelledById = "language-picker-label";
   const menuId = "language-picker-menu";
 
   return (
-    <span
-      className="relative inline-block"
-      ref={ref}
-      data-component="language-picker"
-    >
-      {/* Visually hidden label relationship not needed: button has aria-label+visible label */}
+    <span className="relative inline-block" ref={ref} data-component="language-picker">
       <span id={labelledById} className="sr-only">
         {t.legal.languagePickerAriaLabel}
       </span>
@@ -58,12 +65,18 @@ export function LanguagePicker() {
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            setOpen(true);
-            // focus first item next tick
-            requestAnimationFrame(() => {
-              const first = document.querySelector<HTMLButtonElement>(`#${menuId} [role="menuitem"]`);
-              first?.focus();
-            });
+            if (!open) setOpen(true);
+            else focusSelectedOrFirst();
+          }
+          if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (!open) setOpen(true);
+            else focusSelectedOrFirst();
+          }
+          if (e.key === "Escape" && open) {
+            e.preventDefault();
+            setOpen(false);
+            triggerRef.current?.focus();
           }
         }}
         className="flex items-center gap-2 text-[var(--color-text-weak)] hover:text-[var(--color-text)] cursor-pointer text-sm bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded px-1 -mx-1"
@@ -77,6 +90,7 @@ export function LanguagePicker() {
       {open ? (
         <div
           id={menuId}
+          ref={listRef}
           role="menu"
           aria-labelledby={labelledById}
           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 max-h-60 overflow-y-auto bg-[var(--color-background)] border border-[var(--color-border-weak)] rounded-[6px] shadow-lg py-1.5 z-50"
@@ -89,31 +103,44 @@ export function LanguagePicker() {
                 type="button"
                 role="menuitemradio"
                 aria-checked={selected}
-                aria-label={`${localeLabels[code]}${selected ? " (selected)" : ""}`}
+                aria-label={`${localeLabels[code]}${selected ? ` (${t.common.selected})` : ""}`}
                 onClick={() => {
                   setLocale(code as Locale);
                   setOpen(false);
                   triggerRef.current?.focus();
                 }}
                 onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setLocale(code as Locale);
+                    setOpen(false);
+                    triggerRef.current?.focus();
+                  }
                   if (e.key === "Escape") {
+                    e.preventDefault();
                     setOpen(false);
                     triggerRef.current?.focus();
                   }
                   if (e.key === "ArrowDown" || e.key === "ArrowUp") {
                     e.preventDefault();
-                    const items = Array.from(document.querySelectorAll<HTMLButtonElement>(`#${menuId} [role="menuitemradio"]`));
+                    const items = Array.from(
+                      listRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]') ?? []
+                    );
                     const idx = items.indexOf(e.currentTarget as HTMLButtonElement);
-                    const next = e.key === "ArrowDown" ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
-                    items[next]?.focus();
+                    const next = e.key === "ArrowDown" ? idx + 1 : idx - 1;
+                    focusItem(next);
                   }
                   if (e.key === "Home") {
                     e.preventDefault();
-                    document.querySelector<HTMLButtonElement>(`#${menuId} [role="menuitemradio"]:first-child`)?.focus();
+                    focusItem(0);
                   }
                   if (e.key === "End") {
                     e.preventDefault();
-                    document.querySelector<HTMLButtonElement>(`#${menuId} [role="menuitemradio"]:last-child`)?.focus();
+                    const items = listRef.current?.querySelectorAll('[role="menuitemradio"]');
+                    focusItem((items?.length ?? 1) - 1);
+                  }
+                  if (e.key === "Tab") {
+                    setOpen(false);
                   }
                 }}
                 className={`w-full text-left px-4 py-1.5 text-xs hover:bg-[var(--color-background-weak)] cursor-pointer transition-colors focus-visible:outline-none focus-visible:bg-[var(--color-background-weak)] focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[var(--color-border)] ${
