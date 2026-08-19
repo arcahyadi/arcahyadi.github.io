@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronDownIcon } from "./sites/opencode-2d59a23a/shared/icons";
-import { locales, localeLabels, type Locale } from "@/i18n/config";
+import { locales, localeLabels } from "@/i18n/config";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 export function LanguagePicker() {
@@ -30,7 +30,7 @@ export function LanguagePicker() {
   // Close on outside click
   useEffect(() => {
     function onDown(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && e.target instanceof Node && !ref.current.contains(e.target)) setOpen(false);
     }
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -105,14 +105,14 @@ export function LanguagePicker() {
                 aria-checked={selected}
                 aria-label={`${localeLabels[code]}${selected ? ` (${t.common.selected})` : ""}`}
                 onClick={() => {
-                  setLocale(code as Locale);
+                  setLocale(code);
                   setOpen(false);
                   triggerRef.current?.focus();
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    setLocale(code as Locale);
+                    setLocale(code);
                     setOpen(false);
                     triggerRef.current?.focus();
                   }
@@ -126,7 +126,7 @@ export function LanguagePicker() {
                     const items = Array.from(
                       listRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]') ?? []
                     );
-                    const idx = items.indexOf(e.currentTarget as HTMLButtonElement);
+                    const idx = items.indexOf(e.currentTarget);
                     const next = e.key === "ArrowDown" ? idx + 1 : idx - 1;
                     focusItem(next);
                   }

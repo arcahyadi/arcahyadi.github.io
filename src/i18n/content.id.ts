@@ -9,7 +9,36 @@ import type { portfolio } from "@/content/portfolio";
 export type BlogSlug = (typeof blogs)[number]["slug"];
 export type PortfolioSlug = (typeof portfolio)[number]["slug"];
 
-export type LocalizedContent = { title: string; excerpt: string; content: string };
+export type LocalizedContent = {
+  readonly title: string;
+  readonly excerpt: string;
+  readonly content: string;
+};
+
+export type LocalizedCVFields = {
+  readonly headline: string;
+  readonly summary: string;
+  readonly education: readonly {
+    readonly degree: string;
+    readonly school: string;
+    readonly year: string;
+    readonly details: string;
+  }[];
+  readonly experience: readonly {
+    readonly role: string;
+    readonly org: string;
+    readonly period: string;
+    readonly bullets: readonly string[];
+  }[];
+  readonly skills: {
+    readonly networking: readonly string[];
+    readonly programming: readonly string[];
+    readonly infra: readonly string[];
+    readonly automation: readonly string[];
+  };
+  readonly certifications: readonly string[];
+  readonly interests: readonly string[];
+};
 
 export const cvId = {
   headline: "Teknisi Jaringan · SysAdmin · Programmer",
@@ -91,16 +120,7 @@ export const cvId = {
     "AI & LLM Lokal — AI yang mengutamakan privasi di perangkat sendiri",
     "Otomasi Workflow — membuat komputer mengerjakan hal membosankan",
   ],
-} as const satisfies {
-  headline: string;
-  summary: string;
-  pdfLabel: string;
-  education: readonly { degree: string; school: string; year: string; details: string }[];
-  experience: readonly { role: string; org: string; period: string; bullets: readonly string[] }[];
-  skills: { networking: readonly string[]; programming: readonly string[]; infra: readonly string[]; automation: readonly string[] };
-  certifications: readonly string[];
-  interests: readonly string[];
-};
+} as const satisfies LocalizedCVFields & { readonly pdfLabel: string };
 
 // Portfolio overrides: keyed by slug, only translated fields
 export const portfolioIdBySlug = {
@@ -252,7 +272,7 @@ add interface=wg-sg-droplet endpoint-address=203.0.113.10 endpoint-port=51363 \\
 add address=10.20.30.2/24 interface=wg-sg-droplet
 \`\`\`
 
-Tunnel ini dipakai untuk manajemen jarak jauh yang aman. Akses admin WinBox juga dibatasi ke subnet WireGuard (\`10.20.30.0/24\`) bersama LAN internal.
+Tunnel ini dipakai untuk manajemen jarak jauh yang aman dan, bila diperlukan, untuk merutekan trafik tertentu melalui Singapura. Akses admin WinBox juga dibatasi ke subnet WireGuard (\`10.20.30.0/24\`) bersama LAN internal.
 
 ---
 
@@ -286,7 +306,9 @@ add name=dhcp_pool0 ranges=10.10.1.2-10.10.7.254
 add address=10.10.0.0/21 dns-server=10.10.0.1 gateway=10.10.0.1 ntp-server=10.10.0.1
 \`\`\`
 
-Kampus memakai subnet \`/21\` (\`10.10.0.0/21\`), memberi 2046 IP yang dapat dipakai — cukup untuk seluruh komunitas kampus bersamaan. Router juga bertindak sebagai **server DNS** dan **server NTP**.
+Kampus memakai subnet \`/21\` (\`10.10.0.0/21\`), memberi 2046 alamat IP yang dapat dipakai — cukup untuk seluruh komunitas kampus yang terhubung secara bersamaan.
+
+Router juga bertindak sebagai **server DNS** dan **server NTP** untuk jaringan internal.
 
 ### Akun Pengguna
 
@@ -317,6 +339,8 @@ add address=10.10.2.147 mac-address=XX:XX:XX:XX:XX:B8  # SNMP monitoring device
 add address=10.10.1.91  comment="Mikrotik Switch"       # Managed Switch
 \`\`\`
 
+Access point Ubiquiti U7 dan server NFS dipasangkan ke alamat IP tertentu agar sistem monitoring dan reservasi DHCP tetap stabil, bahkan setelah router reboot.
+
 ---
 
 ## 6. Daftar Firewall Address List (\`nice.rsc\`)
@@ -331,6 +355,8 @@ add address=34.101.0.0/16 list=nice
 # ... thousands more entries
 \`\`\`
 
+Daftar ini dipakai untuk policy-based routing — trafik tertentu yang menuju IP "nice" dapat dirutekan secara berbeda, misalnya melewati aturan firewall tertentu atau diarahkan melalui ISP tertentu.
+
 ---
 
 ## 7. Backup Otomatis ke NAS via SFTP
@@ -342,11 +368,21 @@ Saya menyiapkan skrip backup otomatis setiap **2 hari** yang mengunggah file \`.
 add name=Schedule-Backup-2Hari interval=2d on-event=script1 start-time=13:20:00
 \`\`\`
 
-Skrip melakukan: membuat nama file berdasar nama router dan tanggal, membuat \`.backup\` dan \`.rsc\`, menunggu 10 detik, upload keduanya ke \`10.10.1.48\` via **SFTP**, lalu mencatat log.
+Skrip (\`script1\`) melakukan langkah berikut:
+
+1. Membuat nama file berdasarkan nama router dan tanggal saat ini (misalnya \`CCR_2026-06-21\`).
+2. Membuat file biner \`.backup\` dan export teks \`.rsc\`.
+3. Menunggu 10 detik agar kedua file selesai ditulis.
+4. Mengunggah kedua file ke \`10.10.1.48\` (NAS) melalui **SFTP**.
+5. Mencatat keberhasilan atau kegagalan setiap langkah ke log.
+
+Inilah file \`.rsc\` yang sedang saya bahas! File yang saya analisis (\`CCR_2026-06-21.rsc\`) dibuat dan otomatis dikirim ke NAS kami pada pukul 13:20 tanggal 21 Juni 2026.
 
 ---
 
 ## 8. Penguatan Keamanan
+
+Beberapa langkah pengamanan diterapkan:
 
 \`\`\`routeros
 /ip service
@@ -370,14 +406,17 @@ set disable-ipv6=yes  # IPv6 disabled (not yet deployed on campus)
 set ddns-enabled=yes ddns-update-interval=10m  # MikroTik DDNS for remote access
 \`\`\`
 
-- **FTP, Telnet, API dinonaktifkan** — hanya SSH, WinBox, dan WebFig (port kustom) yang diizinkan.
-- **Akses WinBox dibatasi** ke LAN internal dan tunnel WireGuard.
-- **Kripto SSH kuat** 8192-bit.
-- **Neighbour discovery dimatikan**.
+Keputusan keamanan utama:
+- **FTP, Telnet, dan API dinonaktifkan** — hanya SSH, WinBox, dan WebFig pada port kustom yang diizinkan.
+- **Akses WinBox dibatasi** hanya ke LAN internal (\`10.10.0.0/21\`) dan tunnel VPN WireGuard.
+- **Kriptografi SSH kuat** memakai host key 8192-bit.
+- **Neighbour discovery dinonaktifkan** agar informasi topologi tidak bocor.
 
 ---
 
 ## 9. SNMP untuk Monitoring
+
+SNMP diaktifkan untuk integrasi dengan sistem monitoring **LibreNMS** kami:
 
 \`\`\`routeros
 /snmp
@@ -387,11 +426,15 @@ set enabled=yes contact="ISFI IT" location="ISFI BJM"
 set [ find default=yes ] addresses=10.10.2.147/32  # Restrict to LibreNMS host only
 \`\`\`
 
+Akses SNMP dikunci ke satu host (\`10.10.2.147\`), yaitu server LibreNMS yang berjalan di homelab Proxmox kami — perangkat lain di jaringan tidak dapat melakukan polling data SNMP.
+
 ---
 
 ## 10. Managed Switch: MikroTik CRS326-24G-2S+ (SwOS)
 
-Selain core router, saya juga mengelola **MikroTik CRS326-24G-2S+** — switch 24 port Gigabit dengan 2 slot SFP+, menjalankan **SwOS**.
+Selain core router, saya juga mengelola **MikroTik CRS326-24G-2S+** — managed switch Gigabit 24 port dengan 2 slot SFP+, yang menjalankan **SwOS** (Switch OS), sistem operasi web ringan MikroTik yang dirancang khusus untuk switching.
+
+**Detail perangkat:**
 
 | Properti | Nilai |
 |---|---|
@@ -421,15 +464,16 @@ CRS326 dapat menjalankan SwOS atau RouterOS. Untuk deployment ini, SwOS adalah p
 
 ## Ringkasan
 
-Kombinasi CCR1016 + CRS326 menangani:
+Kombinasi CCR1016 + CRS326 ini menangani tanggung jawab yang sangat besar untuk jaringan kampus kami:
+
 - **Failover Multi-WAN** 3 ISP dengan health check gateway
 - **Autentikasi Hotspot** untuk ratusan mahasiswa, dosen, staf
 - **Manajemen bandwidth** via rate limit per profil
 - **VPN WireGuard** ke cloud untuk akses aman
 - **Backup konfigurasi otomatis** ke NAS via SFTP tiap 2 hari
 - **Monitoring SNMP** terintegrasi LibreNMS
-- **Link aggregation** antara router dan switch
-- **Managed switching** via CRS326 dengan label port deskriptif
+- **Link aggregation** antara router CCR1016 dan switch CRS326 untuk ketahanan jaringan internal
+- **Managed switching** via CRS326-24G-2S+ dengan label deskriptif per port
 - **Rata-rata klien Hotspot**: 50–150, **Puncak**: hingga 300 pengguna
 
 Mengelola jaringan skala ini selalu jadi pengalaman belajar. Kombinasi fleksibilitas MikroTik dan tenaga CCR adalah pilihan tepat untuk kampus. 🌐`,
@@ -507,54 +551,58 @@ graph LR
 
 ### Node 1: \`pve\` — Pekerja Ringan
 
-Node ini menjalankan kebanyakan **LXC container** yang ringan:
+Node ini terutama menjalankan **LXC container**, yang ringan dan cocok untuk layanan yang tidak membutuhkan virtual machine penuh.
 
 | ID  | Nama                | Tipe | Deskripsi |
 |-----|---------------------|------|-------------|
-| 100 | **n8n**             | LXC  | Platform otomasi workflow — menghubungkan layanan dan mengotomasi tugas |
-| 101 | **pve-scripts-local** | LXC | Skrip lokal untuk manajemen Proxmox |
-| 103 | **librenms**        | LXC  | Sistem monitoring jaringan |
+| 100 | **n8n**             | LXC  | Platform otomasi workflow — saya pakai untuk mengotomasi tugas berulang dan menghubungkan berbagai layanan |
+| 101 | **pve-scripts-local** | LXC | Skrip lokal untuk manajemen dan pemeliharaan Proxmox |
+| 103 | **librenms**        | LXC  | Sistem monitoring jaringan — mengawasi seluruh perangkat dan memberi peringatan jika ada yang down |
 | 109 | **qbittorrent**     | LXC  | Klien torrent untuk download ISO Linux 😄 |
-| 110 | **nfs**             | LXC  | Server file NFS untuk shared storage |
-| 111 | **docker**          | LXC  | Host Docker untuk layanan terkontainerisasi |
+| 110 | **nfs**             | LXC  | Server file NFS untuk shared storage di seluruh jaringan |
+| 111 | **docker**          | LXC  | Host Docker yang menjalankan berbagai layanan terkontainerisasi |
 
 **Storage di \`pve\`:**
 
-- \`local\`, \`local-lvm\` dan \`lvm-hdd2-pve\`
+- \`local\`, \`local-lvm\`, dan \`lvm-hdd2-pve\` — storage standar Proxmox
 
 ### Node 2: \`pve2\` — Pekerja Berat
 
-Menangani workload berat dengan campuran **LXC dan VM penuh**.
+Node ini menangani workload yang lebih berat dengan campuran **LXC container dan VM penuh**.
 
 | ID  | Nama                | Tipe | Deskripsi |
 |-----|---------------------|------|-------------|
-| 100 | **jellyfin**        | CT   | Server media — Netflix pribadi |
-| 101 | **backup**          | CT   | Layanan backup |
-| 102 | **alpine-it-tools** | CT   | Container Alpine ringan penuh perkakas IT |
-| 103 | **docker**          | CT   | Host Docker tambahan |
-| 104 | **win10**           | VM   | VM Windows 10 |
-| 105 | **kali**            | VM   | Kali Linux untuk security testing |
-| 108 | **unifi-os-server** | CT   | UniFi Network controller |
-| 110 | **nfs2**            | CT   | Server NFS sekunder |
+| 100 | **jellyfin**        | CT   | Server media — Netflix pribadi saya untuk streaming film dan acara di rumah |
+| 101 | **backup**          | CT   | Layanan backup agar seluruh data aman dan dapat dipulihkan |
+| 102 | **alpine-it-tools** | CT   | Container ringan berbasis Alpine yang berisi perkakas IT untuk troubleshooting |
+| 103 | **docker**          | CT   | Host Docker lain untuk layanan terkontainerisasi tambahan |
+| 104 | **win10**           | VM   | Virtual machine Windows 10 untuk saat saya membutuhkan perkakas khusus Windows |
+| 105 | **kali**            | VM   | Kali Linux untuk pengujian keamanan dan belajar penetration testing |
+| 108 | **unifi-os-server** | CT   | UniFi Network controller untuk mengelola perangkat jaringan Ubiquiti saya |
+| 110 | **nfs2**            | CT   | Server NFS sekunder untuk shared storage tambahan |
 
 **Storage di \`pve2\`:**
 
-- \`local\` dan \`local-lvm\`
-- \`data_zfs\` — pool ZFS dengan RAID1
-- \`zfs-baru\` — pool ZFS tambahan dengan RAID1
+- \`local\` dan \`local-lvm\` — storage standar Proxmox
+- \`data_zfs\` — pool ZFS untuk integritas data dan snapshot dengan konfigurasi RAID1
+- \`zfs-baru\` — pool storage ZFS tambahan dengan konfigurasi RAID1
 
 Kedua node berbagi zona SDN \`localnetwork\` untuk networking internal antar VM/container.
 
 ## Mengapa Layanan Ini?
 
-- 🎬 **Jellyfin** — server media pribadi tanpa langganan
-- 📊 **LibreNMS** — visibilitas penuh kesehatan jaringan
-- 🔄 **n8n** — otomasi workflow tanpa banyak kode manual
-- 🐳 **Docker** — fleksibilitas spin up layanan baru cepat
-- 📡 **UniFi Controller** — manajemen AP/switch terpusat
-- 🔐 **Kali Linux** — latihan security dan penetration testing
+Setiap layanan di homelab saya memiliki tujuan tertentu:
+
+- 🎬 **Jellyfin** — Saya senang memiliki server media sendiri. Tanpa langganan dan tanpa pembatasan; konten saya tersedia di mana saja dalam jaringan saya
+- 📊 **LibreNMS** — Sebagai orang yang bekerja dengan infrastruktur jaringan, monitoring itu penting. LibreNMS memberi visibilitas penuh terhadap kesehatan jaringan saya
+- 🔄 **n8n** — Otomasi adalah salah satu passion saya. n8n memungkinkan saya membuat workflow yang menghubungkan layanan dan mengotomasi tugas tanpa menulis kode untuk setiap hal kecil
+- 🐳 **Docker** — Host Docker khusus di kedua node memberi fleksibilitas untuk menjalankan layanan baru dengan cepat
+- 📡 **UniFi Controller** — Mengelola access point dan switch Ubiquiti dari dashboard terpusat membuat pengelolaan jaringan jauh lebih mudah
+- 🔐 **Kali Linux** — Keamanan itu penting, dan VM Kali yang selalu siap memungkinkan saya berlatih serta menguji perkakas keamanan kapan saja
 
 ## Strategi Storage
+
+Saya memakai kombinasi **LVM** dan **ZFS** untuk storage:
 
 - **LVM** untuk storage utama Proxmox dan disk VM
 - **ZFS** untuk integritas data dengan checksumming, snapshot, dan kompresi
@@ -597,14 +645,14 @@ Untuk menjalankan RustDesk Server via skrip instalasi, kamu butuh:
 
 ## Port Forwarding
 
-Pastikan port berikut terbuka di firewall/router:
+Sebelum menjalankan instalasi, pastikan port berikut terbuka pada firewall atau router melalui Port Forwarding:
 
 - **TCP**: 21115, 21116, 21117, 21118, 21119
 - **UDP**: 21116
 
 ## Instalasi via Skrip
 
-Cara termudah adalah memakai skrip komunitas. Skrip ini otomatis mengunduh rilis terbaru, menyiapkan layanan \`systemd\` (\`hbbs\` dan \`hbbr\`), dan mengonfigurasi firewall bila perlu.
+Cara termudah untuk memasang RustDesk pada server Linux bare-metal atau VM adalah memakai skrip instalasi populer yang dipelihara komunitas. Skrip ini otomatis mengunduh rilis terbaru, menyiapkan layanan \`systemd\` yang diperlukan (\`hbbs\` dan \`hbbr\`), serta mengonfigurasi firewall bila diperlukan.
 
 1. SSH ke server.
 2. Unduh skrip instalasi:
@@ -625,13 +673,17 @@ chmod +x install.sh
 ./install.sh
 \`\`\`
 
-Selama instalasi, skrip mungkin meminta IP publik atau domain server. Ikuti petunjuk di layar. Skrip akan mengonfigurasi \`systemd\` agar komponen server RustDesk (\`hbbs\` dan \`hbbr\`) start otomatis saat boot.
+Selama instalasi, skrip mungkin meminta IP publik atau domain server. Ikuti petunjuk di layar.
+
+Skrip akan otomatis mengonfigurasi \`systemd\` agar komponen server RustDesk (\`hbbs\` dan \`hbbr\`) dijalankan saat boot.
 
 ## Mengambil Public Key
 
-Untuk memastikan klien terhubung aman, server menghasilkan pasangan kunci (Private & Public) saat instalasi. Kamu perlu mengambil **Public Key** untuk diisi di aplikasi klien. Biasanya file ada di \`/opt/rustdesk/id_ed25519.pub\`.
+Untuk memastikan klien terhubung dengan aman, server menghasilkan pasangan kunci (Private & Public) saat instalasi.
 
-Jalankan:
+Kamu perlu mengambil **Public Key** ini untuk dimasukkan ke aplikasi klien. Jika memakai skrip di atas, file kunci biasanya tersimpan di \`/opt/rustdesk/id_ed25519.pub\` atau direktori tempat RustDesk dipasang.
+
+Jalankan perintah berikut untuk melihat Public Key:
 
 \`\`\`bash
 cat /opt/rustdesk/id_ed25519.pub
@@ -641,7 +693,7 @@ Salin string yang muncul untuk langkah berikutnya.
 
 ## Konfigurasi Aplikasi Klien
 
-Setelah server berjalan, arahkan aplikasi RustDesk ke server barumu:
+Setelah server berjalan, langkah terakhir adalah mengarahkan aplikasi RustDesk pada komputer atau ponsel ke server baru kita:
 
 1. Buka aplikasi **RustDesk**.
 2. Masuk ke **Settings** -> **Network**.
@@ -690,6 +742,8 @@ Arsitektur Unified Memory M4 sangat berperan pada performa LLM. Karena CPU dan G
 
 ## Instalasi
 
+Proses instalasinya sederhana:
+
 1. **Download LM Studio** dari [lmstudio.ai](https://lmstudio.ai).
    - Pilih build **macOS (Apple Silicon)** untuk akselerasi hardware native.
 
@@ -703,7 +757,7 @@ Arsitektur Unified Memory M4 sangat berperan pada performa LLM. Karena CPU dan G
 
 ## Model yang Diuji
 
-Via tab **Discover**, saya mengunduh dan mengevaluasi:
+Menggunakan tab **Discover** bawaan, saya mengunduh dan mengevaluasi model-model berikut, yang semuanya terlihat di library model lokal saya:
 
 ### Gemma 4 (Google)
 
@@ -1047,7 +1101,7 @@ Di tulisan ini saya akan memandu setup lengkap: install Rclone, konfigurasi Goog
 
 ## Apa itu Rclone?
 
-[Rclone](https://rclone.org/) adalah perkakas command-line open-source untuk mengelola file di cloud storage. Mendukung 40+ penyedia cloud termasuk Google Drive, OneDrive, Dropbox, Amazon S3, dan lainnya. Sering disebut "rsync untuk cloud," Rclone sangat fleksibel dan powerful.
+[Rclone](https://rclone.org/) adalah perkakas command-line open-source untuk mengelola file di cloud storage. Mendukung lebih dari 40 penyedia cloud termasuk Google Drive, OneDrive, Dropbox, Amazon S3, dan lainnya. Sering disebut "rsync untuk cloud," Rclone sangat fleksibel dan powerful.
 
 Fitur utama:
 

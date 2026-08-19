@@ -1,91 +1,199 @@
 #!/usr/bin/env tsx
-// Deterministic parity validation: slug coverage, headings/blocks, URLs, fence count/lang, executable fence equality
+// Structural EN/ID parity checks. Translation quality still requires human review.
 import { blogs } from "../src/content/blogs";
 import { portfolio } from "../src/content/portfolio";
-import { blogsIdBySlug, portfolioIdBySlug } from "../src/i18n/content.id";
+import {
+  blogsIdBySlug,
+  portfolioIdBySlug,
+  type LocalizedContent,
+} from "../src/i18n/content.id";
 
-function fences(s: string) {
-  return [...s.matchAll(/```(\w*)\n([\s\S]*?)```/g)].map((m) => ({ lang: m[1] || "", body: m[2] }));
+type Fence = { readonly lang: string; readonly body: string };
+
+function fences(value: string): Fence[] {
+  return [...value.matchAll(/```([^\n]*)\n([\s\S]*?)```/g)].map((match) => ({
+    lang: match[1].trim(),
+    body: match[2],
+  }));
 }
-function headings(s: string) {
-  return [...s.matchAll(/^#{1,6}\s.+$/gm)].map((m) => m[0].trim());
+
+function withoutFences(value: string): string {
+  return value.replace(/```[^\n]*\n[\s\S]*?```/g, "\n\n<FENCE>\n\n");
 }
-function urls(s: string) {
-  return [...new Set([...s.matchAll(/https?:\/\/[^\s\)"\]]+/g)].map((m) => m[0]))].sort();
+
+function blockSignature(value: string): string[] {
+  return withoutFences(value)
+    .trim()
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const lines = block.split("\n").map((line) => line.trim()).filter(Boolean);
+      if (block === "<FENCE>") return "FENCE";
+      const heading = /^(#{1,6})\s/.exec(lines[0]);
+      if (heading) return `H${heading[1].length}`;
+      if (lines.every((line) => /^[-*_]{3,}$/.test(line))) return "HR";
+      if (lines.every((line) => /^[-*+]\s/.test(line))) return `UL:${lines.length}`;
+      if (lines.every((line) => /^\d+\.\s/.test(line))) return `OL:${lines.length}`;
+      const unorderedItems = lines.filter((line) => /^[-*+]\s/.test(line)).length;
+      if (unorderedItems > 0 && unorderedItems === lines.length - 1) return `P+UL:${unorderedItems}`;
+      const orderedItems = lines.filter((line) => /^\d+\.\s/.test(line)).length;
+      if (orderedItems > 0 && orderedItems === lines.length - 1) return `P+OL:${orderedItems}`;
+      if (lines.length >= 2 && lines.every((line) => line.startsWith("|"))) {
+        const columns = lines[0].split("|").filter((cell) => cell.trim()).length;
+        return `TABLE:${lines.length}:${columns}`;
+      }
+      if (lines.every((line) => line.startsWith(">"))) return `QUOTE:${lines.length}`;
+      if (lines.every((line) => /^<[^>]+>/.test(line))) return `HTML:${lines.length}`;
+      return "P";
+    });
+}
+
+function blocks(value: string): string[] {
+  return withoutFences(value)
+    .trim()
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+}
+
+function urls(value: string): string[] {
+  return [...value.matchAll(/https?:\/\/[^\s)"\]]+/g)].map((match) => match[0]).sort();
+}
+
+function inlineCode(value: string): string[] {
+  return [...withoutFences(value).matchAll(/`([^`\n]+)`/g)].map((match) => match[1]).sort();
+}
+
+function numericFacts(value: string): string[] {
+  const prose = withoutFences(value)
+    .replace(/https?:\/\/[^\s)"\]]+/g, " ")
+    .replace(/`[^`\n]+`/g, " ");
+  return [...prose.matchAll(/\d+(?:[.:/-]\d+)*(?:\+|%|[A-Za-z]+)?/g)]
+    .map((match) => match[0])
+    .sort();
+}
+
+function firstDifference(left: string, right: string): number {
+  let index = 0;
+  while (index < Math.min(left.length, right.length) && left[index] === right[index]) index++;
+  return index;
+}
+
+function sameMultiset(
+  label: string,
+  kind: string,
+  left: readonly string[],
+  right: readonly string[],
+): void {
+  if (JSON.stringify(left) !== JSON.stringify(right)) {
+    fail(`${label} ${kind} differ\n  EN=${JSON.stringify(left)}\n  ID=${JSON.stringify(right)}`);
+  }
 }
 
 let failures = 0;
-function fail(msg: string) {
-  console.error(`FAIL: ${msg}`);
+
+function fail(message: string): void {
+  console.error(`FAIL: ${message}`);
   failures++;
 }
 
-console.log("=== Parity validation ===");
-console.log(`EN blogs: ${blogs.length}, ID blogs: ${Object.keys(blogsIdBySlug).length}`);
-console.log(`EN portfolio: ${portfolio.length}, ID portfolio: ${Object.keys(portfolioIdBySlug).length}`);
-
-for (const b of blogs) {
-  const id = (blogsIdBySlug as Record<string, { content: string }>)[b.slug];
-  if (!id) {
-    fail(`blog missing ID slug: ${b.slug}`);
-    continue;
+function validateEntry(label: string, en: LocalizedContent, id: LocalizedContent): void {
+  const localizedEntries: readonly (readonly [string, LocalizedContent])[] = [
+    ["EN", en],
+    ["ID", id],
+  ];
+  for (const [locale, entry] of localizedEntries) {
+    if (!entry.title.trim()) fail(`${label} ${locale} title is empty`);
+    if (!entry.excerpt.trim()) fail(`${label} ${locale} excerpt is empty`);
+    if (!entry.content.trim()) fail(`${label} ${locale} content is empty`);
   }
-  const enF = fences(b.content);
-  const idF = fences(id.content);
-  if (enF.length !== idF.length) fail(`blog ${b.slug} fence count EN=${enF.length} ID=${idF.length}`);
-  for (let i = 0; i < Math.max(enF.length, idF.length); i++) {
-    const e = enF[i], f = idF[i];
-    if (!e || !f) {
-      fail(`blog ${b.slug} fence ${i} missing`);
-      continue;
+
+  const enFences = fences(en.content);
+  const idFences = fences(id.content);
+  if (enFences.length !== idFences.length) {
+    fail(`${label} fence count EN=${enFences.length} ID=${idFences.length}`);
+  }
+  for (let index = 0; index < Math.max(enFences.length, idFences.length); index++) {
+    const enFence = enFences[index];
+    const idFence = idFences[index];
+    if (!enFence || !idFence) continue;
+    if (enFence.lang !== idFence.lang) {
+      fail(`${label} fence ${index + 1} language EN=${enFence.lang} ID=${idFence.lang}`);
     }
-    if (e.lang !== f.lang) fail(`blog ${b.slug} fence ${i} lang EN=${e.lang} ID=${f.lang}`);
-    // Executable fences must be byte-for-byte identical (commands/options would break if translated)
-    const executableLangs = new Set(["bash", "routeros", "cron", "python"]);
-    if (executableLangs.has(e.lang) || e.lang === "") {
-      if (e.body !== f.body) {
-        let di = 0;
-        while (di < Math.min(e.body.length, f.body.length) && e.body[di] === f.body[di]) di++;
+    if (enFence.body !== idFence.body) {
+      const difference = firstDifference(enFence.body, idFence.body);
+      fail(
+        `${label} fence ${index + 1} body differs at character ${difference}` +
+          `\n  EN=${JSON.stringify(enFence.body.slice(difference, difference + 80))}` +
+          `\n  ID=${JSON.stringify(idFence.body.slice(difference, difference + 80))}`,
+      );
+    }
+  }
+
+  const enSignature = blockSignature(en.content);
+  const idSignature = blockSignature(id.content);
+  if (JSON.stringify(enSignature) !== JSON.stringify(idSignature)) {
+    fail(
+      `${label} block structure differs` +
+        `\n  EN=${JSON.stringify(enSignature)}` +
+        `\n  ID=${JSON.stringify(idSignature)}`,
+    );
+  } else {
+    const enBlocks = blocks(en.content);
+    const idBlocks = blocks(id.content);
+    for (let index = 0; index < enBlocks.length; index++) {
+      const kind = enSignature[index];
+      if (["FENCE", "HR"].includes(kind) || /^H[1-6]$/.test(kind) || kind.startsWith("TABLE")) continue;
+      const enLength = enBlocks[index].replace(/\s/g, "").length;
+      const idLength = idBlocks[index].replace(/\s/g, "").length;
+      if (enLength >= 120 && idLength / enLength < 0.52) {
         fail(
-          `blog ${b.slug} fence ${i} lang=${e.lang || "(none)"} body diff at ${di} EN=${JSON.stringify(e.body.slice(di, di + 60))} ID=${JSON.stringify(f.body.slice(di, di + 60))}`
+          `${label} block ${index + 1} is suspiciously short ` +
+            `(type=${kind}, EN=${enLength}, ID=${idLength}, ratio=${(idLength / enLength).toFixed(2)})`,
         );
       }
     }
   }
-  const enH = headings(b.content), idH = headings(id.content);
-  if (enH.length !== idH.length) fail(`blog ${b.slug} heading count EN=${enH.length} ID=${idH.length}`);
-  const enU = urls(b.content), idU = urls(id.content);
-  if (JSON.stringify(enU) !== JSON.stringify(idU)) fail(`blog ${b.slug} URL set EN=${JSON.stringify(enU)} ID=${JSON.stringify(idU)}`);
+
+  sameMultiset(label, "URL multiset", urls(en.content), urls(id.content));
+  sameMultiset(label, "inline-code multiset", inlineCode(en.content), inlineCode(id.content));
+  sameMultiset(label, "numeric-fact multiset", numericFacts(en.content), numericFacts(id.content));
 }
 
-for (const p of portfolio) {
-  const id = (portfolioIdBySlug as Record<string, { content: string }>)[p.slug];
-  if (!id) {
-    fail(`portfolio missing ID slug: ${p.slug}`);
-    continue;
-  }
-  const enF = fences(p.content), idF = fences(id.content);
-  if (enF.length !== idF.length) fail(`portfolio ${p.slug} fence count EN=${enF.length} ID=${idF.length}`);
-  for (let i = 0; i < Math.max(enF.length, idF.length); i++) {
-    const e = enF[i], f = idF[i];
-    if (!e || !f) continue;
-    if (e.lang !== f.lang) fail(`portfolio ${p.slug} fence ${i} lang EN=${e.lang} ID=${f.lang}`);
-    if (e.body !== f.body) fail(`portfolio ${p.slug} fence ${i} body diff`);
-  }
-  const enU = urls(p.content), idU = urls(id.content);
-  if (JSON.stringify(enU) !== JSON.stringify(idU)) fail(`portfolio ${p.slug} URL set EN=${JSON.stringify(enU)} ID=${JSON.stringify(idU)}`);
+console.log("=== EN/ID content parity validation ===");
+console.log(`Blogs: EN=${blogs.length}, ID=${Object.keys(blogsIdBySlug).length}`);
+console.log(`Portfolio: EN=${portfolio.length}, ID=${Object.keys(portfolioIdBySlug).length}`);
+
+if (blogs.length !== Object.keys(blogsIdBySlug).length) {
+  fail(`blog entry count differs EN=${blogs.length} ID=${Object.keys(blogsIdBySlug).length}`);
+}
+if (portfolio.length !== Object.keys(portfolioIdBySlug).length) {
+  fail(`portfolio entry count differs EN=${portfolio.length} ID=${Object.keys(portfolioIdBySlug).length}`);
 }
 
-// Strict slug coverage: every EN slug must have ID
-const missingBlogs = blogs.map((b) => b.slug).filter((s) => !(s in blogsIdBySlug));
-const missingPortfolio = portfolio.map((p) => p.slug).filter((s) => !(s in portfolioIdBySlug));
+for (const blog of blogs) {
+  const id = blogsIdBySlug[blog.slug];
+  validateEntry(`blog ${blog.slug}`, blog, id);
+}
+
+for (const item of portfolio) {
+  const id = portfolioIdBySlug[item.slug];
+  validateEntry(`portfolio ${item.slug}`, item, id);
+}
+
+const missingBlogs = blogs.map((blog) => blog.slug).filter((slug) => !(slug in blogsIdBySlug));
+const missingPortfolio = portfolio.map((item) => item.slug).filter((slug) => !(slug in portfolioIdBySlug));
 if (missingBlogs.length) fail(`missing blog translations: ${missingBlogs.join(", ")}`);
 if (missingPortfolio.length) fail(`missing portfolio translations: ${missingPortfolio.join(", ")}`);
 
-if (failures === 0) {
-  console.log("PASS: all 9 blogs and 5 portfolio entries parity verified (fences, headings, URLs)");
-  process.exit(0);
-} else {
+if (failures > 0) {
   console.error(`\n${failures} parity failure(s)`);
   process.exit(1);
 }
+
+console.log(
+  `PASS: ${blogs.length} blogs and ${portfolio.length} portfolio entries verified ` +
+    "(slug coverage, non-empty fields, block structure, all fences, URL/inline-code/numeric multisets, length guard).",
+);
+console.log("NOTE: semantic faithfulness is reviewed manually; deterministic checks cannot prove translation quality.");

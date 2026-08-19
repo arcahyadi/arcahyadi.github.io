@@ -1,18 +1,38 @@
 // src/i18n/content-helpers.ts — merge raw content with locale overrides (strict parity)
 import type { Locale } from "./config";
-import { blogsIdBySlug, cvId, portfolioIdBySlug, type BlogSlug, type PortfolioSlug, type LocalizedContent } from "./content.id";
+import {
+  blogsIdBySlug,
+  cvId,
+  portfolioIdBySlug,
+  type BlogSlug,
+  type LocalizedContent,
+  type LocalizedCVFields,
+  type PortfolioSlug,
+} from "./content.id";
 
-type BlogRaw = (typeof import("@/content/blogs").blogs)[number];
-type PortfolioRaw = (typeof import("@/content/portfolio").portfolio)[number];
-type CVRaw = typeof import("@/content/cv").cv;
+export type LocalizedBlog = LocalizedContent & {
+  readonly slug: BlogSlug;
+  readonly date: string;
+  readonly tags: readonly string[];
+};
 
-export type LocalizedBlog = Omit<BlogRaw, "title" | "excerpt" | "content"> & LocalizedContent;
-export type LocalizedPortfolio = Omit<PortfolioRaw, "title" | "excerpt" | "content"> & LocalizedContent;
+export type LocalizedPortfolio = LocalizedContent & {
+  readonly slug: PortfolioSlug;
+  readonly date: string;
+  readonly tags: readonly string[];
+  readonly image: string;
+  readonly links: {
+    readonly github: string;
+    readonly demo: string;
+  };
+};
 
-export function getLocalizedBlogs(locale: Locale, raw: readonly BlogRaw[]): readonly LocalizedBlog[] {
-  if (locale === "en") return raw as readonly LocalizedBlog[];
+export type LocalizedCV = LocalizedCVFields & { readonly pdfUrl: string };
+
+export function getLocalizedBlogs(locale: Locale, raw: readonly LocalizedBlog[]): readonly LocalizedBlog[] {
+  if (locale === "en") return raw;
   return raw.map((b) => {
-    const override = blogsIdBySlug[b.slug as BlogSlug];
+    const override = blogsIdBySlug[b.slug];
     return {
       ...b,
       title: override.title,
@@ -22,10 +42,10 @@ export function getLocalizedBlogs(locale: Locale, raw: readonly BlogRaw[]): read
   });
 }
 
-export function getLocalizedPortfolio(locale: Locale, raw: readonly PortfolioRaw[]): readonly LocalizedPortfolio[] {
-  if (locale === "en") return raw as readonly LocalizedPortfolio[];
+export function getLocalizedPortfolio(locale: Locale, raw: readonly LocalizedPortfolio[]): readonly LocalizedPortfolio[] {
+  if (locale === "en") return raw;
   return raw.map((p) => {
-    const override = portfolioIdBySlug[p.slug as PortfolioSlug];
+    const override = portfolioIdBySlug[p.slug];
     return {
       ...p,
       title: override.title,
@@ -35,18 +55,8 @@ export function getLocalizedPortfolio(locale: Locale, raw: readonly PortfolioRaw
   });
 }
 
-export type LocalizedCV = Omit<CVRaw, "headline" | "summary" | "education" | "experience" | "skills" | "certifications" | "interests"> & {
-  headline: (typeof cvId)["headline"];
-  summary: (typeof cvId)["summary"];
-  education: (typeof cvId)["education"];
-  experience: (typeof cvId)["experience"];
-  skills: (typeof cvId)["skills"];
-  certifications: (typeof cvId)["certifications"];
-  interests: (typeof cvId)["interests"];
-};
-
-export function getLocalizedCV(locale: Locale, raw: CVRaw): LocalizedCV {
-  if (locale === "en") return raw as unknown as LocalizedCV;
+export function getLocalizedCV(locale: Locale, raw: LocalizedCV): LocalizedCV {
+  if (locale === "en") return raw;
   return {
     ...raw,
     headline: cvId.headline,
@@ -60,18 +70,18 @@ export function getLocalizedCV(locale: Locale, raw: CVRaw): LocalizedCV {
 }
 
 // Parity validation — reflects strict Record parity (every EN slug has an ID entry).
-// For build-safe runtime checks, use scripts/validate-parity.ts for fence/heading/URL depth.
+// Use scripts/validate-parity.ts for deterministic structure and technical-fact checks.
 export function getContentParityReport(
-  blogsRaw: readonly BlogRaw[],
-  portfolioRaw: readonly PortfolioRaw[]
+  blogsRaw: readonly LocalizedBlog[],
+  portfolioRaw: readonly LocalizedPortfolio[]
 ): {
   missingBlogSlugs: BlogSlug[];
   missingPortfolioSlugs: PortfolioSlug[];
   blogCount: { en: number; id: number };
   portfolioCount: { en: number; id: number };
 } {
-  const blogSlugs = blogsRaw.map((b) => b.slug as BlogSlug);
-  const portfolioSlugs = portfolioRaw.map((p) => p.slug as PortfolioSlug);
+  const blogSlugs = blogsRaw.map((b) => b.slug);
+  const portfolioSlugs = portfolioRaw.map((p) => p.slug);
   return {
     missingBlogSlugs: blogSlugs.filter((s) => !(s in blogsIdBySlug)),
     missingPortfolioSlugs: portfolioSlugs.filter((s) => !(s in portfolioIdBySlug)),
