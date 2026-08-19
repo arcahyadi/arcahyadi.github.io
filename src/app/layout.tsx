@@ -3,6 +3,7 @@ import { IBM_Plex_Mono } from "next/font/google";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
@@ -45,7 +46,9 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] font-mono antialiased selection:bg-[var(--color-background-interactive)] selection:text-[var(--color-text-strong)]">
-        <ThemeProvider>{children}</ThemeProvider>
+        <LocaleProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
