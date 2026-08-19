@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 export type Theme = "light" | "dark";
 
@@ -11,9 +11,20 @@ function getSystemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function getStoredTheme(): Theme | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored === "light" || stored === "dark" ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
   root.classList.toggle("dark", theme === "dark");
+  root.classList.toggle("light", theme === "light");
   root.setAttribute("data-theme", theme);
 }
 
@@ -28,15 +39,9 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-      if (stored === "light" || stored === "dark") return stored;
-    } catch {
-      // ignore
-    }
-    return getSystemTheme();
+    return getStoredTheme() ?? getSystemTheme();
   });
+  const hasPreference = useRef(getStoredTheme() !== null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -46,19 +51,36 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
 
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const applySystemTheme = () => {
+      if (hasPreference.current) return;
+      const systemTheme: Theme = media.matches ? "dark" : "light";
+      setThemeState(systemTheme);
+      applyTheme(systemTheme);
+    };
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && (e.newValue === "light" || e.newValue === "dark")) {
-        setThemeState(e.newValue);
-        applyTheme(e.newValue);
+      if (e.key !== STORAGE_KEY) return;
+      const stored = e.newValue === "light" || e.newValue === "dark" ? e.newValue : null;
+      hasPreference.current = stored !== null;
+      if (stored) {
+        setThemeState(stored);
+        applyTheme(stored);
+      } else {
+        applySystemTheme();
       }
     };
+    media.addEventListener("change", applySystemTheme);
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    return () => {
+      media.removeEventListener("change", applySystemTheme);
+      window.removeEventListener("storage", onStorage);
+    };
     // theme intentionally not in deps: initial sync only
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
+    hasPreference.current = true;
     setThemeState(t);
     applyTheme(t);
     try {
