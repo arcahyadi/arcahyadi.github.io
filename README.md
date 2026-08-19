@@ -2,7 +2,7 @@
 
 Template website personal / akademik berbasis **Next.js 16 + React 19 + Tailwind 4 + TypeScript**, desain bold mono ala [opencode.ai](https://opencode.ai) tapi kontennya akademik ala [academicpages.github.io](https://academicpages.github.io) / [arcahyadi.me](https://arcahyadi.me).
 
-Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/ID** siap pakai (accessible, static-export compatible, tanpa perubahan URL).
+Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/ID** siap pakai, dilengkapi kontrol keyboard dan atribut ARIA, kompatibel dengan static export, dan tidak mengubah URL.
 
 **Live structure:** Landing personal `/` + `Portfolio` + `Blogs` + `CV`. Edit konten cukup 1 file TypeScript per koleksi, hot-reload langsung. Header kiri sekarang **teks Your Name** dari config (klik balik ke `/`), avatar hero/sidebar dari `public/avatar.jpg`.
 
@@ -14,8 +14,8 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 
 - `src/i18n/config.ts` — daftar locale (`en`, `id`), tipe `Locale`, label, `htmlLang`, `STORAGE_KEY="locale"`, helper `isLocale`. Default `en`.
 - `src/i18n/translations.ts` — dictionary type-safe `Dictionary` untuk semua string UI (nav, hero, What I do, featured titles, stack, contact, listing pages, detail fallbacks, CV section headings, ContactForm, header aria including `navAriaLabel`/`navMobileAriaLabel`, mermaid label, 404). `translations.en`/`.id` adalah source of truth; komponen tidak hard-code string.
-- `src/i18n/content.id.ts` — override terjemahan konten publik per `slug` (portfolio/blogs) dan `cv` (headline, summary, education/experience/skills/interests). Properti invarian dipertahankan di `en`: `slug`, `date`, `tags`, `links`/`image`, semua code fence body/URL/fakta dan struktur heading dipertahankan verbatim; hanya prosa user-visible yang diterjemahkan. Semua 9 blog dan 5 portfolio memiliki entri `Record<Slug, LocalizedContent>` yang lengkap; TypeScript memaksa kelengkapan karena helper memakai strict `Record` (bukan `Partial`).
-- `src/i18n/content-helpers.ts` — `getLocalizedBlogs/Portfolio/CV(locale, raw)` menggabungkan data mentah `src/content/*` dengan override `id`. Karena parity dijamin strict `Record<BlogSlug, LocalizedContent>` / `Record<PortfolioSlug, LocalizedContent>` (lihat `content.id.ts`), tidak ada fallback `Partial` — setiap slug wajib ada terjemahan, dan setiap `LocalizedContent` bertipe kompatibel tanpa `any` atau assertion tersembunyi. Tersedia `getContentParityReport()` untuk check slug coverage; validasi mendalam (fence, heading, URL) ada di `scripts/validate-parity.ts`.
+- `src/i18n/content.id.ts` — override terjemahan konten publik per `slug` (portfolio/blogs) dan `cv` (headline, summary, education/experience/skills/interests). Properti invarian dipertahankan di `en`: `slug`, `date`, `tags`, `links`/`image`, seluruh code fence, URL, inline code, fakta numerik, dan struktur blok. Semua 9 blog dan 5 portfolio memiliki entri `Record<Slug, LocalizedContent>` yang lengkap; TypeScript memaksa kelengkapan karena helper memakai strict `Record` (bukan `Partial`).
+- `src/i18n/content-helpers.ts` — `getLocalizedBlogs/Portfolio/CV(locale, raw)` menggabungkan data mentah `src/content/*` dengan override `id`. Karena parity dijamin strict `Record<BlogSlug, LocalizedContent>` / `Record<PortfolioSlug, LocalizedContent>` (lihat `content.id.ts`), tidak ada fallback `Partial` — setiap slug wajib ada terjemahan. Helper tidak memakai `any` maupun type assertion untuk memaksa kompatibilitas. Tersedia `getContentParityReport()` untuk cek slug coverage; validasi struktural ada di `scripts/validate-parity.ts`.
 - `src/i18n/LocaleProvider.tsx` — context client (`LocaleProvider`, `useLocale`) yang menyediakan `locale`, `setLocale`, `t`, `blogs`, `portfolio`, `cv`. **Hydration-safe:** state awal selalu `en` agar cocok dengan HTML export (`<html lang="en">`) dan render server, lalu locale tersimpan (localStorage/cookie) diterapkan di `useEffect` setelah hydration. Ini menghindari mismatch hydration; pengunjung dengan `id` tersimpan akan melihat switch EN→ID client-side setelah mount. Persistensi di `localStorage` + `document.cookie` (`SameSite=Lax, max-age 1y`) dengan `try/catch` untuk private mode. `useEffect` sinkronisasi `document.documentElement.lang` (`en`/`id`) agar selaras dengan locale yang dirender, dan effect terpisah update live DOM metadata (`document.title` + `meta[name="description"]` + `meta[property="og:title/description"]` + `meta[name="twitter:title/description"]`). Build-time metadata (Crawler-visible, `layout.tsx` `metadata`) tetap English karena single static URL; live DOM metadata mengikuti locale terpilih. Provider membungkus `ThemeProvider`.
 - `src/components/LanguagePicker.tsx` — kontrol bahasa yang accessible di `LegalSection` (selalu tampil). Aksesibilitas: `aria-label`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `role="menu"` + `role="menuitemradio"` + `aria-checked` konsisten, `aria-label` opsi memakai string terjemahan `common.selected` ("selected"/"dipilih"), label terlihat + checkmark untuk state terpilih, keyboard (Enter/Space/ArrowDown/ArrowUp buka dan fokus ke opsi terpilih atau pertama, ArrowUp/Down roving di dalam menu, Home/End, Enter/Space pilih, Escape tutup + kembalikan fokus ke trigger, Tab tutup), outside-click tutup, visible focus ring `focus-visible:ring-2` di trigger dan `focus-visible:ring-1` di menuitem.
 - `src/components/Markdown.tsx` — label mermaid dari `t.markdown.mermaidLabel`; `Header.tsx` — dua landmark nav dengan `aria-label` lokal (`t.header.navAriaLabel` desktop dan `t.header.navMobileAriaLabel` mobile, bukan duplikat "Primary"), `aria-label` Home, theme toggle, mobile menu semuanya dari `t.header`; `ContactForm.tsx` — error memakai kode netral (`not_configured`/`fallback`/`connection`) yang dirender via `t.contactForm` terkait; `src/app/not-found.tsx` — halaman 404 lokal (`Page not found` / `Halaman tidak ditemukan`) dengan CTA `backHome`.
@@ -30,7 +30,7 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 1. **String UI (nav/label/judul section/form/CV heading/header aria termasuk `navAriaLabel`/`navMobileAriaLabel`/mermaid/404):** edit `src/i18n/translations.ts` — ubah `en` dan `id` di `Dictionary` yang sama. Type-check memastikan kedua locale ada. Jangan hard-code string di komponen; semua baca dari `useLocale().t` (mis. `t.header.homeAriaLabel`, `t.header.navAriaLabel`, `t.markdown.mermaidLabel`, `t.notFound.title`).
 2. **Konten publik (blog/portfolio/cv prose):**
    - `en` tetap di `src/content/blogs.ts` / `portfolio.ts` / `cv.ts` (fakta, link, slug, tanggal, code fence body, tag tidak boleh diubah saat menerjemahkan; command/options/URL di dalam fence harus verbatim).
-   - `id` hanya di `src/i18n/content.id.ts` (`blogsIdBySlug[slug]`, `portfolioIdBySlug[slug]`, `cvId`). Strict: setiap slug EN wajib punya entri ID (`Record<Slug, LocalizedContent>`); menambah post baru di `src/content/*` tanpa entri ID akan type error. Validasi mendalam (fence count/lang/body, heading, URL) via `npm run validate:parity` atau `npx tsx scripts/validate-parity.ts`.
+   - `id` hanya di `src/i18n/content.id.ts` (`blogsIdBySlug[slug]`, `portfolioIdBySlug[slug]`, `cvId`). Strict: setiap slug EN wajib punya entri ID (`Record<Slug, LocalizedContent>`); menambah post baru di `src/content/*` tanpa entri ID akan type error. Jalankan `npm run validate:parity` untuk memeriksa kelengkapan field, struktur blok/list, seluruh code fence secara byte-for-byte, URL, inline code, fakta numerik, dan blok terjemahan yang terlalu pendek. Pemeriksaan ini tidak dapat membuktikan kualitas semantik, jadi terjemahan tetap perlu review manusia.
 3. **Menambah locale baru (mis. `ja`):**
    - `src/i18n/config.ts`: tambah ke `locales`, `localeLabels`, `localeNativeNames`, `htmlLang`, dan `isLocale`.
    - `src/i18n/translations.ts`: tambah key baru di `translations` (copy `en` lalu terjemahkan — type error akan menandai field yang belum diisi).
@@ -49,9 +49,9 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 
 ```bash
 npm run lint              # harus 0 error
-npx tsc --noEmit          # harus 0 error, tanpa `any` di content-helpers
-npm run validate:parity   # deterministik: 9 blog + 5 portfolio, cek slug, fences (count/lang/body verbatim), headings, URLs
-npm run build             # static export ke out/ — Next melaporkan 6 route groups (/, /blogs, /blogs/[slug], /cv, /portfolio, /portfolio/[slug], /_not-found) dengan 20 halaman prerender (1 home + 1 blogs listing + 9 blog detail + 1 portfolio listing + 5 portfolio detail + 1 cv + 1 _not-found + 1 404 alias) → 21 file HTML di out/ (trailingSlash: true menghasilkan /route/index.html; alias /404.html + /_not-found/index.html)
+npx tsc --noEmit          # harus 0 error; content-helpers tanpa `any` atau type assertion
+npm run validate:parity   # deterministik: 9 blog + 5 portfolio; cek slug, field, blok/list, seluruh fence, URL, inline code, angka, length guard
+npm run build             # static export: 7 entri route, 20 halaman statis, 21 file HTML di out/ (termasuk alias 404)
 # Manual:
 # - Buka /, /blogs, /blogs/<slug>, /portfolio, /portfolio/<slug>, /cv di EN lalu switch ke ID — semua string & post berubah, URL tetap.
 # - Reload di ID — bahasa bertahan (localStorage + cookie + html lang) setelah mount (hydration-safe: EN sesaat lalu ID).
@@ -59,6 +59,7 @@ npm run build             # static export ke out/ — Next melaporkan 6 route gr
 # - Kunjungi /not-found-test atau URL tidak ada — tampil 404 lokal (ID/EN sesuai locale).
 # - Hapus localStorage "locale" + cookie locale → reload → kembali EN.
 # - Inspector: <html lang> ganti en↔id saat switch; document.title + og:* + twitter:* ikut locale (live DOM).
+# Catatan: lint/type/parity/build bersifat otomatis; screen reader/assistive technology tetap perlu diuji manual di browser dan perangkat target.
 ```
 
 ---
@@ -85,12 +86,12 @@ Edit file apapun di `src/` — browser auto-reload.
 | Command | Deskripsi |
 |---------|-----------|
 | `npm run dev` | Dev server (Turbopack) di `http://localhost:3000` |
-| `npm run build` | Build static export ke folder `out/` — 6 route groups dengan 20 halaman prerender → 21 file HTML (lihat Validasi) |
+| `npm run build` | Build static export ke `out/` — 7 entri route, 20 halaman statis, 21 file HTML termasuk alias 404 (lihat Validasi) |
 | `npm run start` | Preview production (kalau tidak pakai `output: export`) |
 | `npm run lint` | ESLint |
-| `npm run validate:parity` | Validasi parity EN/ID deterministik (slug, fences, headings, URLs) |
+| `npm run validate:parity` | Validasi parity EN/ID deterministik (slug/field, struktur blok, seluruh fence, URL, inline code, angka, length guard) |
 
-> Build default = **static export** (`next.config.ts: output: "export"`). Hasilnya folder `out/` siap upload ke GitHub Pages / hosting statis lain. Tidak butuh Node server. Next melaporkan jumlah route groups dan halaman prerender; jumlah file HTML di `out/` sedikit lebih banyak karena `trailingSlash: true` (setiap route jadi `index.html` di subfolder) plus alias `/404.html`.
+> Build default = **static export** (`next.config.ts: output: "export"`). Hasilnya folder `out/` siap upload ke GitHub Pages / hosting statis lain. Tidak butuh Node server. Next menampilkan 7 entri route dan menghasilkan 20 halaman statis; terdapat 21 file HTML karena `trailingSlash: true` membuat `index.html` per route dan export juga menyediakan alias `/404.html`.
 
 ---
 
@@ -274,7 +275,7 @@ src/
     content-helpers.ts    # getLocalized* (strict, tanpa any) + getContentParityReport (slug coverage)
     LocaleProvider.tsx    # hydration-safe: EN initial + effect apply persisted locale + lang sync + live DOM metadata (title, description, og/twitter)
   scripts/
-    validate-parity.ts    # deterministik: cek slug, fences (count/lang/body verbatim), headings, URLs untuk 9+5
+    validate-parity.ts    # cek slug/field, struktur blok, seluruh fence, URL, inline code, angka, dan length guard untuk 9+5
   app/
     page.tsx              # landing / (HomeHero, WhatIDo, Featured, Stack, Contact)
     layout.tsx            # font mono + metadata (build-time EN via site.title) + inline theme script (no locale prepaint)

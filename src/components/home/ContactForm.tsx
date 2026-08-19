@@ -22,7 +22,7 @@ export function ContactForm() {
           ? cf.errorFallback
           : "";
 
-  const accessKey = (siteConfig.home.contact as { web3formsKey?: string }).web3formsKey || "";
+  const accessKey: string = siteConfig.home.contact.web3formsKey || "";
 
   const isConfigured = accessKey && accessKey !== "YOUR_WEB3FORMS_ACCESS_KEY";
 

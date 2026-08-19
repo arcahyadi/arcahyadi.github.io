@@ -42,19 +42,19 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     let next: Locale | null = null;
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (isLocale(stored) && stored !== defaultLocale) {
+      if (isLocale(stored)) {
         next = stored;
       } else {
         const cookieMatch = document.cookie.match(/(?:^|; )locale=([^;]*)/);
         const cookieVal = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
-        if (isLocale(cookieVal) && cookieVal !== defaultLocale) {
+        if (isLocale(cookieVal)) {
           next = cookieVal;
         }
       }
     } catch {
       // private mode or no storage
     }
-    if (next) setLocaleState(next); // eslint-disable-line react-hooks/set-state-in-effect -- hydration: apply persisted locale after mount to match static export
+    if (next && next !== defaultLocale) setLocaleState(next); // eslint-disable-line react-hooks/set-state-in-effect -- hydration: apply persisted locale after mount to match static export
   }, []);
 
   // Keep <html lang> in sync with the actually rendered locale.

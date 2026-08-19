@@ -9,7 +9,36 @@ import type { portfolio } from "@/content/portfolio";
 export type BlogSlug = (typeof blogs)[number]["slug"];
 export type PortfolioSlug = (typeof portfolio)[number]["slug"];
 
-export type LocalizedContent = { title: string; excerpt: string; content: string };
+export type LocalizedContent = {
+  readonly title: string;
+  readonly excerpt: string;
+  readonly content: string;
+};
+
+export type LocalizedCVFields = {
+  readonly headline: string;
+  readonly summary: string;
+  readonly education: readonly {
+    readonly degree: string;
+    readonly school: string;
+    readonly year: string;
+    readonly details: string;
+  }[];
+  readonly experience: readonly {
+    readonly role: string;
+    readonly org: string;
+    readonly period: string;
+    readonly bullets: readonly string[];
+  }[];
+  readonly skills: {
+    readonly networking: readonly string[];
+    readonly programming: readonly string[];
+    readonly infra: readonly string[];
+    readonly automation: readonly string[];
+  };
+  readonly certifications: readonly string[];
+  readonly interests: readonly string[];
+};
 
 // Portfolio overrides: keyed by slug, only translated fields
 export const portfolioIdBySlug = {
@@ -257,14 +286,14 @@ Untuk menjalankan RustDesk Server via skrip instalasi, kamu butuh:
 
 ## Port Forwarding
 
-Pastikan port berikut terbuka di firewall/router:
+Sebelum menjalankan instalasi, pastikan port berikut terbuka pada firewall atau router melalui Port Forwarding:
 
 - **TCP**: 21115, 21116, 21117, 21118, 21119
 - **UDP**: 21116
 
 ## Instalasi via Skrip
 
-Cara termudah adalah memakai skrip komunitas. Skrip ini otomatis mengunduh rilis terbaru, menyiapkan layanan \`systemd\` (\`hbbs\` dan \`hbbr\`), dan mengonfigurasi firewall bila perlu.
+Cara termudah untuk memasang RustDesk pada server Linux bare-metal atau VM adalah memakai skrip instalasi populer yang dipelihara komunitas. Skrip ini otomatis mengunduh rilis terbaru, menyiapkan layanan \`systemd\` yang diperlukan (\`hbbs\` dan \`hbbr\`), serta mengonfigurasi firewall bila diperlukan.
 
 1. SSH ke server.
 2. Unduh skrip instalasi:
@@ -285,13 +314,17 @@ chmod +x install.sh
 ./install.sh
 \`\`\`
 
-Selama instalasi, skrip mungkin meminta IP publik atau domain server. Ikuti petunjuk di layar. Skrip akan mengonfigurasi \`systemd\` agar komponen server RustDesk (\`hbbs\` dan \`hbbr\`) start otomatis saat boot.
+Selama instalasi, skrip mungkin meminta IP publik atau domain server. Ikuti petunjuk di layar.
+
+Skrip akan otomatis mengonfigurasi \`systemd\` agar komponen server RustDesk (\`hbbs\` dan \`hbbr\`) dijalankan saat boot.
 
 ## Mengambil Public Key
 
-Untuk memastikan klien terhubung aman, server menghasilkan pasangan kunci (Private & Public) saat instalasi. Kamu perlu mengambil **Public Key** untuk diisi di aplikasi klien. Biasanya file ada di \`/opt/rustdesk/id_ed25519.pub\`.
+Untuk memastikan klien terhubung dengan aman, server menghasilkan pasangan kunci (Private & Public) saat instalasi.
 
-Jalankan:
+Kamu perlu mengambil **Public Key** ini untuk dimasukkan ke aplikasi klien. Jika memakai skrip di atas, file kunci biasanya tersimpan di \`/opt/rustdesk/id_ed25519.pub\` atau direktori tempat RustDesk dipasang.
+
+Jalankan perintah berikut untuk melihat Public Key:
 
 \`\`\`bash
 cat /opt/rustdesk/id_ed25519.pub
@@ -301,7 +334,7 @@ Salin string yang muncul untuk langkah berikutnya.
 
 ## Konfigurasi Aplikasi Klien
 
-Setelah server berjalan, arahkan aplikasi RustDesk ke server barumu:
+Setelah server berjalan, langkah terakhir adalah mengarahkan aplikasi RustDesk pada komputer atau ponsel ke server baru kita:
 
 1. Buka aplikasi **RustDesk**.
 2. Masuk ke **Settings** -> **Network**.
@@ -612,7 +645,7 @@ Di tulisan ini saya akan memandu setup lengkap: install Rclone, konfigurasi Goog
 
 ## Apa itu Rclone?
 
-[Rclone](https://rclone.org/) adalah perkakas command-line open-source untuk mengelola file di cloud storage. Mendukung 40+ penyedia cloud termasuk Google Drive, OneDrive, Dropbox, Amazon S3, dan lainnya. Sering disebut "rsync untuk cloud," Rclone sangat fleksibel dan powerful.
+[Rclone](https://rclone.org/) adalah perkakas command-line open-source untuk mengelola file di cloud storage. Mendukung lebih dari 40 penyedia cloud termasuk Google Drive, OneDrive, Dropbox, Amazon S3, dan lainnya. Sering disebut "rsync untuk cloud," Rclone sangat fleksibel dan powerful.
 
 Fitur utama:
 

@@ -56,9 +56,8 @@ export function Header() {
         <button
           type="button"
           data-component="theme-toggle"
-          aria-label={isDark ? t.header.themeDarkLabel : t.header.themeLightLabel}
-          aria-pressed={isDark}
-          title={isDark ? t.header.themeDarkLabel : t.header.themeLightLabel}
+          aria-label={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
+          title={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
           onClick={handleThemeToggle}
           className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] hover:text-[var(--color-text-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] transition-colors"
         >
@@ -72,9 +71,8 @@ export function Header() {
         <button
           type="button"
           data-component="theme-toggle"
-          aria-label={isDark ? t.header.themeDarkLabel : t.header.themeLightLabel}
-          aria-pressed={isDark}
-          title={isDark ? t.header.themeDarkLabel : t.header.themeLightLabel}
+          aria-label={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
+          title={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
           onClick={handleThemeToggle}
           className="w-10 h-10 flex items-center justify-center text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]"
         >
