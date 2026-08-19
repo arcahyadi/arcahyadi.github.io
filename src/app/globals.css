@@ -42,27 +42,25 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: hsl(0, 9%, 7%);
-    --color-background-weak: hsl(0, 6%, 10%);
-    --color-background-weak-hover: hsl(0, 6%, 15%);
-    --color-background-strong: hsl(0, 15%, 94%);
-    --color-background-strong-hover: hsl(0, 15%, 97%);
-    --color-background-interactive: hsl(62, 100%, 90%);
-    --color-background-interactive-weaker: hsl(60, 20%, 8%);
+html.dark {
+  --color-background: hsl(0, 9%, 7%);
+  --color-background-weak: hsl(0, 6%, 10%);
+  --color-background-weak-hover: hsl(0, 6%, 15%);
+  --color-background-strong: hsl(0, 15%, 94%);
+  --color-background-strong-hover: hsl(0, 15%, 97%);
+  --color-background-interactive: hsl(62, 100%, 90%);
+  --color-background-interactive-weaker: hsl(60, 20%, 8%);
 
-    --color-text: hsl(0, 4%, 71%);
-    --color-text-weak: hsl(0, 2%, 49%);
-    --color-text-weaker: hsl(0, 3%, 28%);
-    --color-text-strong: hsl(0, 15%, 94%);
-    --color-text-inverted: hsl(0, 9%, 7%);
+  --color-text: hsl(0, 4%, 71%);
+  --color-text-weak: hsl(0, 2%, 49%);
+  --color-text-weaker: hsl(0, 3%, 28%);
+  --color-text-strong: hsl(0, 15%, 94%);
+  --color-text-inverted: hsl(0, 9%, 7%);
 
-    --color-border: hsl(0, 3%, 28%);
-    --color-border-weak: hsl(0, 4%, 23%);
+  --color-border: hsl(0, 3%, 28%);
+  --color-border-weak: hsl(0, 4%, 23%);
 
-    --color-icon: hsl(10, 3%, 43%);
-  }
+  --color-icon: hsl(10, 3%, 43%);
 }
 
 body {
@@ -76,9 +74,7 @@ body {
   color: var(--color-text-strong);
 }
 
-@media (prefers-color-scheme: dark) {
-  ::selection {
-    background: var(--color-background-interactive);
-    color: var(--color-text-inverted);
-  }
+html.dark ::selection {
+  background: var(--color-background-interactive);
+  color: var(--color-text-inverted);
 }
