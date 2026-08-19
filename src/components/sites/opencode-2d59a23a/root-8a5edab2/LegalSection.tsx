@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/site.config";
-import { LanguagePicker } from "@/components/LanguagePicker";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 export function LegalSection() {
@@ -41,8 +40,6 @@ export function LegalSection() {
           </Link>
         </span>
       ))}
-
-      <LanguagePicker />
     </div>
   );
 }

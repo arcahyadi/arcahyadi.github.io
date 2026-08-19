@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Sun, Moon } from "lucide-react";
 import { HamburgerIcon, CloseIcon } from "../shared/icons";
 import { siteConfig } from "@/site.config";
+import { LanguagePicker } from "@/components/LanguagePicker";
 import { useTheme } from "@/components/ThemeProvider";
 import { useLocale } from "@/i18n/LocaleProvider";
 
@@ -53,17 +54,20 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <button
-          type="button"
-          data-component="theme-toggle"
-          aria-label={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
-          title={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
-          onClick={handleThemeToggle}
-          className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] hover:text-[var(--color-text-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] transition-colors"
-        >
-          <span className="sr-only">{t.header.toggleThemeSr}</span>
-          {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            data-component="theme-toggle"
+            aria-label={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
+            title={isDark ? t.header.themeLightLabel : t.header.themeDarkLabel}
+            onClick={handleThemeToggle}
+            className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] hover:text-[var(--color-text-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] transition-colors"
+          >
+            <span className="sr-only">{t.header.toggleThemeSr}</span>
+            {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
+          </button>
+          <LanguagePicker />
+        </div>
       </div>
 
       {/* Mobile: Theme Toggle + Nav Toggle */}
@@ -79,6 +83,7 @@ export function Header() {
           <span className="sr-only">{t.header.toggleThemeSr}</span>
           {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
         </button>
+        <LanguagePicker />
         <button
           type="button"
           data-component="nav-mobile-toggle"
