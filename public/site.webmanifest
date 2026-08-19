@@ -1,0 +1,11 @@
+{
+  "name": "Aufa R Cahyadi",
+  "short_name": "Aufa",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [],
+  "theme_color": "#080808",
+  "background_color": "#080808",
+  "display": "standalone"
+}
