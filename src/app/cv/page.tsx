@@ -1,10 +1,13 @@
-import { siteConfig } from "@/site.config";
+"use client";
+
 import { AcademicShell } from "@/components/academic/AcademicShell";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 export default function CVPage() {
-  const { cv } = siteConfig;
+  const { cv, t } = useLocale();
+  const labels = t.cvPage;
   return (
-    <AcademicShell withSidebar={false} title="CV" subtitle={cv.headline}>
+    <AcademicShell withSidebar={false} title={labels.title} subtitle={cv.headline}>
       <div className="flex flex-col gap-10">
         <p className="text-[var(--color-text)] leading-relaxed text-sm md:text-[15px]">{cv.summary}</p>
 
@@ -13,15 +16,14 @@ export default function CVPage() {
             href={cv.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-fit items-center gap-2 px-5 py-2.5 bg-[var(--color-background-strong)] hover:bg-[var(--color-background-strong-hover)] text-[var(--color-text-inverted)] rounded font-medium text-sm no-underline transition-colors"
+            className="inline-flex w-fit items-center gap-2 px-5 py-2.5 bg-[var(--color-background-strong)] hover:bg-[var(--color-background-strong-hover)] text-[var(--color-text-inverted)] rounded font-medium text-sm no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]"
           >
-            Download CV (PDF)
+            {labels.download}
           </a>
         ) : null}
 
-        {/* Education */}
         <section>
-          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">Education</h2>
+          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">{labels.education}</h2>
           <div className="grid gap-4">
             {cv.education.map((e) => (
               <div key={e.degree} className="flex flex-col gap-1">
@@ -36,9 +38,8 @@ export default function CVPage() {
           </div>
         </section>
 
-        {/* Experience */}
         <section>
-          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">Experience</h2>
+          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">{labels.experience}</h2>
           <div className="grid gap-6">
             {cv.experience.map((job) => (
               <div key={job.role + job.org} className="flex flex-col gap-2">
@@ -58,20 +59,18 @@ export default function CVPage() {
           </div>
         </section>
 
-        {/* Skills */}
         <section>
-          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">Skills</h2>
+          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">{labels.skills}</h2>
           <div className="grid gap-3 text-sm">
-            <p><strong className="text-[var(--color-text-strong)]">Programming:</strong> <span className="text-[var(--color-text)]">{cv.skills.programming.join(" · ")}</span></p>
-            <p><strong className="text-[var(--color-text-strong)]">Networking:</strong> <span className="text-[var(--color-text)]">{cv.skills.networking.join(" · ")}</span></p>
-            <p><strong className="text-[var(--color-text-strong)]">Infra:</strong> <span className="text-[var(--color-text)]">{cv.skills.infra.join(" · ")}</span></p>
-            <p><strong className="text-[var(--color-text-strong)]">Automation:</strong> <span className="text-[var(--color-text)]">{cv.skills.automation.join(" · ")}</span></p>
+            <p><strong className="text-[var(--color-text-strong)]">{labels.skillsLabels.programming}</strong> <span className="text-[var(--color-text)]">{cv.skills.programming.join(" · ")}</span></p>
+            <p><strong className="text-[var(--color-text-strong)]">{labels.skillsLabels.networking}</strong> <span className="text-[var(--color-text)]">{cv.skills.networking.join(" · ")}</span></p>
+            <p><strong className="text-[var(--color-text-strong)]">{labels.skillsLabels.infra}</strong> <span className="text-[var(--color-text)]">{cv.skills.infra.join(" · ")}</span></p>
+            <p><strong className="text-[var(--color-text-strong)]">{labels.skillsLabels.automation}</strong> <span className="text-[var(--color-text)]">{cv.skills.automation.join(" · ")}</span></p>
           </div>
         </section>
 
-        {/* Certifications */}
         <section>
-          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">Certifications</h2>
+          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">{labels.certifications}</h2>
           <ul className="list-disc pl-5 flex flex-col gap-1 text-sm text-[var(--color-text)]">
             {cv.certifications.map((c) => (
               <li key={c}>{c}</li>
@@ -79,9 +78,8 @@ export default function CVPage() {
           </ul>
         </section>
 
-        {/* Interests */}
         <section>
-          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">Interests</h2>
+          <h2 className="text-[14px] font-bold tracking-widest uppercase text-[var(--color-text-strong)] mb-4 border-b border-[var(--color-border-weak)] pb-2">{labels.interests}</h2>
           <div className="flex flex-wrap gap-2">
             {cv.interests.map((i) => (
               <span key={i} className="text-xs font-mono px-2.5 py-1.5 rounded-full bg-[var(--color-background-weak)] text-[var(--color-text)] border border-[var(--color-border-weak)]">

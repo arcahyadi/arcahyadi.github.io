@@ -68,8 +68,9 @@ export const siteConfig = {
       { label: "Blogs", href: "/blogs" },
       { label: "CV", href: "/cv" },
     ],
-    // kosongkan untuk sembunyikan picker bahasa. Isi [{name:"English",code:"en"}] kalau mau tampil.
-    languages: [],
+    // Languages are managed via src/i18n (LegalSection renders LanguagePicker directly).
+    // Keeping shape for backwards compat / docs; UI no longer reads this list.
+    languages: [{ name: "English", code: "en" }, { name: "Indonesia", code: "id" }],
     defaultLanguage: "English",
   },
 
