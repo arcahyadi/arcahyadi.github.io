@@ -39,7 +39,7 @@ export function Header() {
 
       {/* Desktop Nav + Theme Toggle */}
       <div className="hidden md:flex items-center gap-4">
-        <nav data-component="nav-desktop" aria-label="Primary">
+        <nav data-component="nav-desktop" aria-label={t.header.navAriaLabel}>
           <ul className="flex items-center gap-6 lg:gap-8 list-none m-0 p-0 text-base">
             {nav.map((item) => (
               <li key={item.label}>
@@ -68,7 +68,7 @@ export function Header() {
       </div>
 
       {/* Mobile: Theme Toggle + Nav Toggle */}
-      <nav data-component="nav-mobile" className="flex md:hidden items-center gap-1" aria-label="Primary">
+      <nav data-component="nav-mobile" className="flex md:hidden items-center gap-1" aria-label={t.header.navMobileAriaLabel}>
         <button
           type="button"
           data-component="theme-toggle"

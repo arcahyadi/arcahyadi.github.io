@@ -1,5 +1,4 @@
-// src/i18n/content-helpers.ts — merge raw content with locale overrides
-
+// src/i18n/content-helpers.ts — merge raw content with locale overrides (strict parity)
 import type { Locale } from "./config";
 import { blogsIdBySlug, cvId, portfolioIdBySlug, type BlogSlug, type PortfolioSlug, type LocalizedContent } from "./content.id";
 
@@ -11,30 +10,28 @@ export type LocalizedBlog = Omit<BlogRaw, "title" | "excerpt" | "content"> & Loc
 export type LocalizedPortfolio = Omit<PortfolioRaw, "title" | "excerpt" | "content"> & LocalizedContent;
 
 export function getLocalizedBlogs(locale: Locale, raw: readonly BlogRaw[]): readonly LocalizedBlog[] {
-  if (locale === "en") return raw as unknown as readonly LocalizedBlog[];
+  if (locale === "en") return raw as readonly LocalizedBlog[];
   return raw.map((b) => {
-    const override: LocalizedContent | undefined = blogsIdBySlug[b.slug as BlogSlug];
-    if (!override) return b as unknown as LocalizedBlog;
+    const override = blogsIdBySlug[b.slug as BlogSlug];
     return {
       ...b,
       title: override.title,
       excerpt: override.excerpt,
       content: override.content,
-    } as LocalizedBlog;
+    };
   });
 }
 
 export function getLocalizedPortfolio(locale: Locale, raw: readonly PortfolioRaw[]): readonly LocalizedPortfolio[] {
-  if (locale === "en") return raw as unknown as readonly LocalizedPortfolio[];
+  if (locale === "en") return raw as readonly LocalizedPortfolio[];
   return raw.map((p) => {
-    const override: LocalizedContent | undefined = portfolioIdBySlug[p.slug as PortfolioSlug];
-    if (!override) return p as unknown as LocalizedPortfolio;
+    const override = portfolioIdBySlug[p.slug as PortfolioSlug];
     return {
       ...p,
       title: override.title,
       excerpt: override.excerpt,
       content: override.content,
-    } as LocalizedPortfolio;
+    };
   });
 }
 
@@ -48,8 +45,8 @@ export type LocalizedCV = Omit<CVRaw, "headline" | "summary" | "education" | "ex
   interests: (typeof cvId)["interests"];
 };
 
-export function getLocalizedCV(locale: Locale, raw: CVRaw): CVRaw | LocalizedCV {
-  if (locale === "en") return raw;
+export function getLocalizedCV(locale: Locale, raw: CVRaw): LocalizedCV {
+  if (locale === "en") return raw as unknown as LocalizedCV;
   return {
     ...raw,
     headline: cvId.headline,
@@ -59,10 +56,11 @@ export function getLocalizedCV(locale: Locale, raw: CVRaw): CVRaw | LocalizedCV 
     skills: cvId.skills,
     certifications: cvId.certifications,
     interests: cvId.interests,
-  } as unknown as CVRaw | LocalizedCV;
+  };
 }
 
-// Parity validation — call from tests or dev checks
+// Parity validation — reflects strict Record parity (every EN slug has an ID entry).
+// For build-safe runtime checks, use scripts/validate-parity.ts for fence/heading/URL depth.
 export function getContentParityReport(
   blogsRaw: readonly BlogRaw[],
   portfolioRaw: readonly PortfolioRaw[]

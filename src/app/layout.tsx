@@ -16,8 +16,6 @@ const { site } = siteConfig;
 
 // Inline script anti-FOUC — runs before hydration
 const themeScript = `var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark")t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.classList.toggle("light",t==="light");document.documentElement.setAttribute("data-theme",t)`;
-// Prepaint: set <html lang> from persisted locale (and sync to cookie). Reads both storage and cookie so inline script and React initializer agree.
-const localeScript = `try{var l=null;try{l=localStorage.getItem("locale")}catch(e){}if(l!=="en"&&l!=="id"){var m=document.cookie.match(/(?:^|; )locale=([^;]*)/);l=m?decodeURIComponent(m[1]):null}if(l==="en"||l==="id")document.documentElement.lang=l;}catch(e){}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -46,7 +44,6 @@ export default function RootLayout({
     <html lang="en" className={`${ibmPlexMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <script dangerouslySetInnerHTML={{ __html: localeScript }} />
       </head>
       <body className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] font-mono antialiased selection:bg-[var(--color-background-interactive)] selection:text-[var(--color-text-strong)]">
         <LocaleProvider>

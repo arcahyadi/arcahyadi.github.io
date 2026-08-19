@@ -641,7 +641,7 @@ sudo -v ; curl https://rclone.org/install.sh | sudo bash
 Atau manual:
 
 \`\`\`bash
-# Download versi terbaru
+# Download the latest version
 curl -O https://downloads.rclone.org/current/rclone-current-linux-amd64.zip
 
 # Extract
@@ -956,21 +956,35 @@ log() {
 
 log "========== Backup started =========="
 
+# Back up each directory
 for DIR in "\${BACKUP_DIRS[@]}"; do
     if [ -d "$DIR" ]; then
-        log "Backing up $DIR..."
-        rclone copy "$DIR" "$RCLONE_REMOTE:$(basename "$DIR")" --progress --log-file="$LOG_FILE" --log-level INFO
+        DEST_NAME=$(basename "$DIR")
+        log "Backing up: $DIR -> $RCLONE_REMOTE:$DEST_NAME"
+
+        rclone copy "$DIR" "$RCLONE_REMOTE:$DEST_NAME" \\
+            --log-file="$LOG_FILE" \\
+            --log-level INFO \\
+            --transfers 4 \\
+            --checkers 8 \\
+            --contimeout 60s \\
+            --timeout 300s \\
+            --retries 3 \\
+            --low-level-retries 10 \\
+            --stats 1m
+
         if [ $? -eq 0 ]; then
-            log "Success: $DIR"
+            log "✅ Success: $DIR"
         else
-            log "Failed: $DIR"
+            log "❌ Failed: $DIR"
         fi
     else
-        log "Skipped (not found): $DIR"
+        log "⚠️ Directory not found: $DIR"
     fi
 done
 
 log "========== Backup finished =========="
+log ""
 \`\`\`
 
 Jadikan executable:
