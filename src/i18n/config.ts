@@ -17,6 +17,12 @@ export const localeNativeNames: Record<Locale, string> = {
   id: "Bahasa Indonesia",
 };
 
+// Compact visual labels for the header language picker.
+export const localeFlags: Record<Locale, string> = {
+  en: "🇺🇸",
+  id: "🇮🇩",
+};
+
 export const STORAGE_KEY = "locale";
 
 export function isLocale(v: string | null): v is Locale {

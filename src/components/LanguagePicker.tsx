@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import { ChevronDownIcon } from "./sites/opencode-2d59a23a/shared/icons";
-import { locales, localeLabels } from "@/i18n/config";
+import React, { useEffect, useId, useRef, useState, useCallback } from "react";
+import { localeFlags, localeLabels, localeNativeNames, locales } from "@/i18n/config";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 export function LanguagePicker() {
   const { locale, setLocale, t } = useLocale();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const componentId = useId();
+  const ref = useRef<HTMLSpanElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +44,8 @@ export function LanguagePicker() {
     return () => cancelAnimationFrame(id);
   }, [open, focusSelectedOrFirst, locale]);
 
-  const labelledById = "language-picker-label";
-  const menuId = "language-picker-menu";
+  const labelledById = `${componentId}-label`;
+  const menuId = `${componentId}-menu`;
 
   return (
     <span className="relative inline-block" ref={ref} data-component="language-picker">
@@ -55,12 +55,11 @@ export function LanguagePicker() {
       <button
         ref={triggerRef}
         type="button"
-        id="language-picker-button"
-        aria-label={t.legal.languagePickerAriaLabel}
+        aria-label={`${t.legal.languagePickerAriaLabel}: ${localeNativeNames[locale]}`}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
-        aria-labelledby={`${labelledById} language-picker-button`}
+        title={localeNativeNames[locale]}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
@@ -79,12 +78,9 @@ export function LanguagePicker() {
             triggerRef.current?.focus();
           }
         }}
-        className="flex items-center gap-2 text-[var(--color-text-weak)] hover:text-[var(--color-text)] cursor-pointer text-sm bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded px-1 -mx-1"
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-transparent border-0 text-xl leading-none hover:bg-[var(--color-background-weak)] cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]"
       >
-        <span>{localeLabels[locale]}</span>
-        <span className="mt-0.5" aria-hidden="true">
-          <ChevronDownIcon />
-        </span>
+        <span aria-hidden="true">{localeFlags[locale]}</span>
       </button>
 
       {open ? (
@@ -93,7 +89,7 @@ export function LanguagePicker() {
           ref={listRef}
           role="menu"
           aria-labelledby={labelledById}
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 max-h-60 overflow-y-auto bg-[var(--color-background)] border border-[var(--color-border-weak)] rounded-[6px] shadow-lg py-1.5 z-50"
+          className="absolute top-full right-0 mt-2 flex w-[5.5rem] overflow-hidden bg-[var(--color-background)] border border-[var(--color-border-weak)] rounded-[6px] shadow-lg p-1 z-[60]"
         >
           {locales.map((code) => {
             const selected = code === locale;
@@ -104,6 +100,7 @@ export function LanguagePicker() {
                 role="menuitemradio"
                 aria-checked={selected}
                 aria-label={`${localeLabels[code]}${selected ? ` (${t.common.selected})` : ""}`}
+                title={localeNativeNames[code]}
                 onClick={() => {
                   setLocale(code);
                   setOpen(false);
@@ -143,12 +140,11 @@ export function LanguagePicker() {
                     setOpen(false);
                   }
                 }}
-                className={`w-full text-left px-4 py-1.5 text-xs hover:bg-[var(--color-background-weak)] cursor-pointer transition-colors focus-visible:outline-none focus-visible:bg-[var(--color-background-weak)] focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[var(--color-border)] ${
-                  selected ? "text-[var(--color-text-strong)] font-semibold" : "text-[var(--color-text)]"
+                className={`flex h-9 flex-1 items-center justify-center rounded text-xl leading-none hover:bg-[var(--color-background-weak)] cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-border)] ${
+                  selected ? "bg-[var(--color-background-weak)]" : "bg-transparent"
                 }`}
               >
-                {localeLabels[code]}
-                {selected ? <span className="ml-2" aria-hidden="true">✓</span> : null}
+                <span aria-hidden="true">{localeFlags[code]}</span>
               </button>
             );
           })}
