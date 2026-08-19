@@ -2,13 +2,17 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Sun, Moon } from "lucide-react";
 import { HamburgerIcon, CloseIcon } from "../shared/icons";
 import { siteConfig } from "@/site.config";
+import { useTheme } from "@/components/ThemeProvider";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { nav } = siteConfig.header;
   const { site, author } = siteConfig;
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <section
@@ -23,35 +27,61 @@ export function Header() {
         </Link>
       </div>
 
-      {/* Desktop Nav */}
-      <nav data-component="nav-desktop" className="hidden md:block">
-        <ul className="flex items-center gap-6 lg:gap-8 list-none m-0 p-0 text-base">
-          {nav.map((item) => (
-            <li key={item.label}>
-              {"external" in item && (item as { external?: boolean }).external ? (
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--color-text)] hover:text-[var(--color-text-strong)] hover:underline hover:underline-offset-4 decoration-1 whitespace-nowrap"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  href={item.href}
-                  className="text-[var(--color-text)] hover:text-[var(--color-text-strong)] hover:underline hover:underline-offset-4 decoration-1"
-                >
-                  {item.label}
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Desktop Nav + Theme Toggle */}
+      <div className="hidden md:flex items-center gap-4">
+        <nav data-component="nav-desktop">
+          <ul className="flex items-center gap-6 lg:gap-8 list-none m-0 p-0 text-base">
+            {nav.map((item) => (
+              <li key={item.label}>
+                {"external" in item && (item as { external?: boolean }).external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--color-text)] hover:text-[var(--color-text-strong)] hover:underline hover:underline-offset-4 decoration-1 whitespace-nowrap"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="text-[var(--color-text)] hover:text-[var(--color-text-strong)] hover:underline hover:underline-offset-4 decoration-1"
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <button
+          type="button"
+          data-component="theme-toggle"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          aria-pressed={isDark}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          onClick={toggleTheme}
+          className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] hover:text-[var(--color-text-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] transition-colors"
+        >
+          <span className="sr-only">Toggle theme</span>
+          {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
+        </button>
+      </div>
 
-      {/* Mobile Nav Toggle */}
-      <nav data-component="nav-mobile" className="block md:hidden">
+      {/* Mobile: Theme Toggle + Nav Toggle */}
+      <nav data-component="nav-mobile" className="flex md:hidden items-center gap-1">
+        <button
+          type="button"
+          data-component="theme-toggle"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          aria-pressed={isDark}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          onClick={toggleTheme}
+          className="w-10 h-10 flex items-center justify-center text-[var(--color-icon)] hover:bg-[var(--color-background-weak)] rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]"
+        >
+          <span className="sr-only">Toggle theme</span>
+          {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
+        </button>
         <button
           type="button"
           data-component="nav-mobile-toggle"
