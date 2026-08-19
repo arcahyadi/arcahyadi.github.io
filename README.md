@@ -2,9 +2,58 @@
 
 Template website personal / akademik berbasis **Next.js 16 + React 19 + Tailwind 4 + TypeScript**, desain bold mono ala [opencode.ai](https://opencode.ai) tapi kontennya akademik ala [academicpages.github.io](https://academicpages.github.io) / [arcahyadi.me](https://arcahyadi.me).
 
-Static export ready — deploy ke **GitHub Pages** tanpa server.
+Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/ID** siap pakai (accessible, static-export compatible, tanpa perubahan URL).
 
 **Live structure:** Landing personal `/` + `Portfolio` + `Blogs` + `CV`. Edit konten cukup 1 file TypeScript per koleksi, hot-reload langsung. Header kiri sekarang **teks Your Name** dari config (klik balik ke `/`), avatar hero/sidebar dari `public/avatar.jpg`.
+
+---
+
+## Bilingual EN/ID — Architecture, Editing, Validation
+
+**Arsitektur:** `src/i18n/` adalah single source untuk locale.
+
+- `src/i18n/config.ts` — daftar locale (`en`, `id`), tipe `Locale`, label, `htmlLang`, `STORAGE_KEY="locale"`, helper `isLocale`. Default `en`.
+- `src/i18n/translations.ts` — dictionary type-safe `Dictionary` untuk semua string UI (nav, hero, What I do, featured titles, stack, contact, listing pages, detail fallbacks, CV section headings, ContactForm). `translations.en`/`.id` adalah source of truth; komponen tidak hard-code string.
+- `src/i18n/content.id.ts` — override terjemahan konten publik per `slug` (portfolio/blogs) dan `cv` (headline, summary, education/experience/skills/interests). Properti invarian dipertahankan di `en`: `slug`, `date`, `tags`, `links`/`image`, snippet kode, path file, dan istilah teknis (MikroTik, RouterOS, WireGuard, Proxmox, ZFS, dll.) — hanya prosa user-visible yang diterjemahkan.
+- `src/i18n/content-helpers.ts` — `getLocalizedBlogs/Portfolio/CV(locale, raw)` menggabungkan data mentah `src/content/*` dengan override `id`; fallback ke `en` bila tidak ada override (aman menambah post baru tanpa pecah).
+- `src/i18n/LocaleProvider.tsx` — context client (`LocaleProvider`, `useLocale`) yang menyediakan `locale`, `setLocale`, `t`, `blogs`, `portfolio`, `cv`. Persistensi di `localStorage` + `document.cookie` (`SameSite=Lax, max-age 1y`) dengan handling `try/catch` untuk private mode; sinkronisasi `document.documentElement.lang` (`en`/`id`). Script inline di `src/app/layout.tsx` juga set `lang` sebelum hydration untuk menghindari flicker. Provider membungkus `ThemeProvider` — hydration-safe (default `en` hingga restore).
+- `src/components/LanguagePicker.tsx` — kontrol bahasa yang accessible di `LegalSection` (selalu tampil). Aksesibilitas: `aria-label`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `role="menu"` + `role="menuitemradio"` + `aria-checked`, label terlihat + checkmark untuk state terpilih, keyboard (Enter/Space/ArrowDown buka, ArrowUp/Down/Home/End navigasi, Escape tutup + kembalikan fokus), outside-click tutup, visible focus ring `focus-visible:ring-2`.
+- URL tidak berubah — locale disimpan di browser, kompatibel dengan `output: "export"` (tidak memakai fitur server-only `next/intl` routing, `cookies()` atau `headers()`). Halaman detail (`/blogs/[slug]`, `/portfolio/[slug]`) pakai wrapper `page.tsx` (server, `generateStaticParams`) + `*Client.tsx` (client, `useParams` + `useLocale`) agar static export tetap generate semua path sementara konten diterjemahkan di client.
+
+**Default:** `en`. Browser baru lihat EN; pilihan disimpan dan sudah `lang="en"` sejak HTML awal (script). Menghapus `localStorage` + cookie mengembalikan ke EN.
+
+**Cara edit kedua terjemahan:**
+
+1. **String UI (nav/label/judul section/form/CV heading):** edit `src/i18n/translations.ts` — ubah `en` dan `id` di `Dictionary` yang sama. Type-check memastikan kedua locale ada.
+2. **Konten publik (blog/portfolio/cv prose):** 
+   - `en` tetap di `src/content/blogs.ts` / `portfolio.ts` / `cv.ts` (fakta, link, slug, tanggal, code fence, tag tidak boleh diubah saat menerjemahkan).
+   - `id` hanya di `src/i18n/content.id.ts` (`blogsIdBySlug[slug]`, `portfolioIdBySlug[slug]`, `cvId`). Tambah post baru? Tambah object `en` di `src/content/*` (wajib), lalu tambah entri `id` dengan slug sama kalau mau terjemahan — jika belum ada, halaman otomatis fallback ke EN tanpa error.
+3. **Menambah locale baru (mis. `ja`):** 
+   - `src/i18n/config.ts`: tambah ke `locales`, `localeLabels`, `localeNativeNames`, `htmlLang`, dan `isLocale`.
+   - `src/i18n/translations.ts`: tambah key baru di `translations` (copy `en` lalu terjemahkan — type error akan menandai field yang belum diisi).
+   - Buat `src/i18n/content.ja.ts` dan tambah helper di `content-helpers.ts` atau extend pattern `content.id.ts` (atau buat registry per-locale). Update early `localeScript` di `layout.tsx` untuk whitelist locale baru.
+   - `LanguagePicker` otomatis render daftar `locales`.
+4. Jangan edit langsung text di `Header.tsx`/`HomeSections.tsx`/`ContactForm.tsx` — semua baca dari `useLocale().t`.
+
+**Aksesibilitas picker bahasa:**
+
+- Nama accessible: "Select language" (EN) / "Pilih bahasa" (ID) via `aria-label` + hidden label.
+- State terpilih: `aria-checked="true"` + label "English (selected)" / fokus ring jelas.
+- Keyboard: Tab ke trigger → Enter/Space/ArrowDown buka → ArrowUp/Down/Home/End pindah → Enter pilih → Escape tutup & fokus balik ke trigger. Focus ring `focus-visible:ring-2` di trigger, menuitem, dan link.
+- Hydration-safe: render default EN, lalu reconcile ke locale tersimpan tanpa mismatch.
+
+**Validasi:**
+
+```bash
+npm run lint   # harus 0 error
+npm run build  # static export ke out/ (20 halaman: /, /blogs, /portfolio, /cv, 9 blog detail, 5 portfolio detail)
+# Manual:
+# - Buka /, /blogs, /blogs/<slug>, /portfolio, /portfolio/<slug>, /cv di EN lalu switch ke ID — semua string & post berubah, URL tetap.
+# - Reload di ID — bahasa bertahan (localStorage + cookie + html lang="id").
+# - Keyboard-only: Tab → picker → arrow + enter → fokus kembali → Escape tutup.
+# - Hapus localStorage "locale" → reload → kembali EN.
+# - Inspector: <html lang> ganti en↔id saat switch.
+```
 
 ---
 
