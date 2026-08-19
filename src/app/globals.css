@@ -108,3 +108,35 @@ html.dark ::selection {
     color: var(--color-text-inverted);
   }
 }
+
+html.theme-transition::view-transition-old(root),
+html.theme-transition::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-transition::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-transition::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-circle-reveal 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes theme-circle-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-transition-x) var(--theme-transition-y));
+  }
+
+  to {
+    clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition::view-transition-old(root),
+  html.theme-transition::view-transition-new(root) {
+    animation: none;
+  }
+}
