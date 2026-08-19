@@ -16,8 +16,8 @@ const { site } = siteConfig;
 
 // Inline script anti-FOUC — runs before hydration
 const themeScript = `var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark")t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.classList.toggle("light",t==="light");document.documentElement.setAttribute("data-theme",t)`;
-// Set <html lang> early from persisted locale (avoids flicker; LocaleProvider also syncs post-hydration)
-const localeScript = `try{var l=localStorage.getItem("locale");if(l==="en"||l==="id")document.documentElement.lang=l;}catch(e){}`;
+// Prepaint: set <html lang> from persisted locale (and sync to cookie). Reads both storage and cookie so inline script and React initializer agree.
+const localeScript = `try{var l=null;try{l=localStorage.getItem("locale")}catch(e){}if(l!=="en"&&l!=="id"){var m=document.cookie.match(/(?:^|; )locale=([^;]*)/);l=m?decodeURIComponent(m[1]):null}if(l==="en"||l==="id")document.documentElement.lang=l;}catch(e){}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

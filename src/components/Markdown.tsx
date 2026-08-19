@@ -1,5 +1,9 @@
+"use client";
+
 // Markdown — minimal renderer for blog/portfolio content (no extra deps)
 // Supports: headings, paragraphs, bold, inline code, links, lists, tables, code fences, hr, blockquote, raw HTML (mermaid)
+
+import { useLocale } from "@/i18n/LocaleProvider";
 
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -18,6 +22,8 @@ function inlineToHtml(s: string): string {
 }
 
 export function Markdown({ content }: { content: string }) {
+  const { t } = useLocale();
+  const mermaidLabel = t.markdown.mermaidLabel;
   const lines = content.split("\n");
   const nodes: React.ReactNode[] = [];
   let i = 0;
@@ -93,7 +99,7 @@ export function Markdown({ content }: { content: string }) {
         const mermaidContent = html.replace(/<[^>]+>/g, "").trim();
         push(
           <div key={key++} className="my-4 rounded border border-[var(--color-border-weak)] bg-[var(--color-background-weak)] p-4 overflow-x-auto">
-            <p className="text-[10px] font-mono tracking-widest uppercase text-[var(--color-text-weak)] mb-2">diagram · mermaid</p>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-[var(--color-text-weak)] mb-2">{mermaidLabel}</p>
             <pre className="text-[12px] font-mono leading-relaxed text-[var(--color-text-strong)] whitespace-pre">{mermaidContent}</pre>
           </div>
         );
