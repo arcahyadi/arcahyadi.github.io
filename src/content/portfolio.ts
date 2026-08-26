@@ -8,7 +8,7 @@ export const portfolio = [
     excerpt: "End-to-end upgrade of campus network infrastructure — core router, WiFi, VLANs and monitoring for 500+ users",
     date: "2026-08-19",
     tags: ["Networking", "MikroTik", "UniFi", "Infrastructure", "Institution"],
-    image: "/social-share.png",
+    image: "",
     content: `Lead upgrade and modernization of the campus network system at **Institution** — serving 500+ students, lecturers, and staff.
 
 **Core Router — MikroTik CCR1016 (RouterOS 7):**
@@ -39,7 +39,7 @@ This work complements ongoing development of [example.org](https://example.org) 
     excerpt: "Major updates to example.org — PWP internship module, Admin modernization, and public site improvements",
     date: "2026-08-19",
     tags: ["Institution", "Full-Stack", "Web Development"],
-    image: "/social-share.png",
+    image: "",
     content: `Ongoing development for the official campus platform **[example.org](https://example.org)** — delivered as Programmer & SysAdmin at Institution.
 
 **What I shipped:**
@@ -57,7 +57,7 @@ This work complements ongoing development of [example.org](https://example.org) 
     excerpt: "CCNA NETWORK ENGINEER Introduction to Networks",
     date: "2022-06-01",
     tags: ["Cisco", "CCNA", "Networking"],
-    image: "/social-share.png",
+    image: "",
     content: `This certificate verifies the successful completion of the **CCNA: Introduction to Networks** course, part of the Cisco Networking Academy program.
 
 The course covers the architecture, structure, functions, components, and models of the Internet and other computer networks. It provides a solid foundation in the principles of IP addressing and the fundamentals of Ethernet concepts, media, and operations to build simple LANs, perform basic configurations for routers and switches, and implement IP addressing schemes.`,
@@ -69,7 +69,7 @@ The course covers the architecture, structure, functions, components, and models
     excerpt: "CCNA NETWORK ENGINEER Switching, Routing, and Wireless Essentials",
     date: "2022-07-01",
     tags: ["Cisco", "CCNA", "Switching"],
-    image: "/social-share.png",
+    image: "",
     content: `This certificate verifies the successful completion of the **CCNA: Switching, Routing, and Wireless Essentials** course, part of the Cisco Networking Academy program.
 
 The course focuses on switching technologies and router operations that support small-to-medium business networks, including wireless local area networks (WLANs) and fundamental security concepts. It covers performing basic network configuration and troubleshooting, identifying and mitigating LAN security threats, and configuring and securing a basic WLAN.`,
@@ -81,7 +81,7 @@ The course focuses on switching technologies and router operations that support 
     excerpt: "CCNA NETWORK ENGINEER Enterprise Networking, Security, and Automation",
     date: "2022-08-01",
     tags: ["Cisco", "CCNA", "Enterprise"],
-    image: "/social-share.png",
+    image: "",
     content: `This certificate verifies the successful completion of the **CCNA: Enterprise Networking, Security, and Automation** course, part of the Cisco Networking Academy program.
 
 The course describes the architecture and considerations related to designing, securing, operating, and troubleshooting enterprise networks. It covers wide area network (WAN) technologies and quality of service (QoS) mechanisms used for secure remote access, along with the introduction of software-defined networking, virtualization, and automation concepts that support the digitalization of networks.`,

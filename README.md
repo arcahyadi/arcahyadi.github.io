@@ -134,7 +134,7 @@ author: {
 
 **Avatar bulat (hero + sidebar):** copy foto ke `public/avatar.jpg` (bisa `.png/.jpg/.webp/.svg` — cukup tulis path di `author.avatar`). Kosongkan `author.avatar = ""` untuk sembunyikan. Override khusus hero: `home.hero.avatar = "/avatar-hero.jpg"` atau `""` untuk ikut `author.avatar`.
 
-Ganti `public/avatar.jpg` dengan fotomu sendiri — contoh sudah ada `public/avatar.jpg` (Bumi, 1 MB). `public/social-share.png` tetap ada untuk OG image, tapi tidak lagi dipakai sebagai avatar.
+Ganti `public/avatar.jpg` dengan fotomu sendiri — contoh sudah ada `public/avatar.jpg` (Bumi, 1 MB). Situs tidak memasang OG image, sehingga preview tautan hanya memakai judul dan deskripsi.
 
 ### 2. Edit homepage (landing `/`)
 
@@ -190,7 +190,7 @@ export const portfolio = [
     excerpt: "Ringkasan 1 baris",
     date: "2024-08-01",
     tags: ["Networking", "Go"],
-    image: "/social-share.png",
+    image: "",                        // kosong = tanpa gambar
     content: `Deskripsi panjang pakai **markdown**.
     Bisa heading, list, tabel, code fence, link [PDF](/files/file.pdf).`,
     links: { github: "https://github.com/...", demo: "https://..." },
@@ -249,7 +249,7 @@ Halaman CV ada di `src/app/cv/page.tsx` (render dari `cv` di atas).
 ### 7. File & gambar
 
 - Avatar hero/sidebar → `public/avatar.jpg` (sudah ter-commit; ganti dengan timpa file + `author.avatar = "/avatar.jpg"` di `site.config.ts`; `home.hero.avatar` opsional untuk beda)
-- Favicon / OG / icon → `public/favicon*`, `apple-touch-icon*`, `site.webmanifest`, `social-share.png`
+- Favicon / icon → `public/favicon*`, `apple-touch-icon*`, `site.webmanifest`
 - `public/logo.svg` masih ada tapi **tidak dipakai** (header sekarang teks) — hapus aman, atau edit `Header.tsx` kalau mau pakai gambar lagi
 - PDF sertifikat / CV → `public/files/` lalu link `/files/namafile.pdf`
 - `.nojekyll` sudah ada di `public/.nojekyll` — jangan dihapus (agar `_next/` ke-serve di GitHub Pages)
@@ -299,7 +299,7 @@ src/
 public/
   avatar.jpg              # foto bulat hero + sidebar (baru)
   .nojekyll, CNAME        # Pages + custom domain
-  social-share.png, favicon*, site.webmanifest, files/, logo.svg (legacy header teks)
+  favicon*, site.webmanifest, files/, logo.svg (legacy header teks)
 next.config.ts            # output: "export", images.unoptimized, trailingSlash
 .github/workflows/deploy.yml  # GH Pages: build → upload artifact → deploy
 ```

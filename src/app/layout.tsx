@@ -25,13 +25,11 @@ export const metadata: Metadata = {
     title: site.title,
     description: site.description,
     url: site.url + "/",
-    images: ["/social-share.png"],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: site.shortTitle,
     description: site.description,
-    images: ["/social-share.png"],
   },
 };
 
