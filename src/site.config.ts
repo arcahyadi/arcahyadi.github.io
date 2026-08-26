@@ -71,7 +71,7 @@ export const siteConfig = {
     // Languages are managed via src/i18n (Header renders LanguagePicker directly).
     // Keeping shape for backwards compat / docs; UI no longer reads this list.
     languages: [{ name: "English", code: "en" }, { name: "Indonesia", code: "id" }],
-    defaultLanguage: "English",
+    defaultLanguage: "Indonesia",
   },
 
   // ── Home — personal landing (synced from arcahyadi.me _pages/about.md) ──

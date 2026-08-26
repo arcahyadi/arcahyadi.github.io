@@ -22,17 +22,17 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 /**
  * Hydration-safe locale provider.
  *
- * For `output: "export"` with single-locale HTML (`lang="en"`), the server and
+ * For `output: "export"` with single-locale HTML (`lang="id"`), the server and
  * the first client render MUST match to avoid hydration mismatch. We therefore
- * initialize React state to `defaultLocale` (en) for the initial render —
- * matching the exported HTML and the <html lang="en"> — and apply any persisted
+ * initialize React state to `defaultLocale` (id) for the initial render —
+ * matching the exported HTML and the <html lang="id"> — and apply any persisted
  * locale (localStorage/cookie) in a client effect after hydration.
  *
- * This means a returning visitor with `id` stored will see a brief client-side
- * locale switch after hydration (EN → ID) before settling. The alternative —
- * reading storage during render — causes React hydration errors (server HTML en
- * vs client HTML id). The exported HTML is always English for crawlers; the
- * live DOM reflects the user's chosen locale after mount.
+ * This means a returning visitor with `en` stored can see a brief client-side
+ * locale switch after hydration (ID → EN) before settling. The alternative —
+ * reading storage during render — causes React hydration errors when the stored
+ * locale differs from the exported HTML. The exported HTML is Indonesian for
+ * crawlers; the live DOM reflects the user's chosen locale after mount.
  */
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
@@ -83,7 +83,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const cv = useMemo(() => getLocalizedCV(locale, cvRaw), [locale]);
 
   // Live DOM metadata: update title/description and social meta when locale changes.
-  // Build-time metadata (exported HTML) stays English (siteConfig) for crawlers on the single static URL.
+  // Build-time metadata (exported HTML) stays Indonesian for crawlers on the single static URL.
   useEffect(() => {
     document.title = t.site.title;
     const setMeta = (selector: string, content: string) => {

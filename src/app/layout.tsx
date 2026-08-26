@@ -4,6 +4,8 @@ import { siteConfig } from "@/site.config";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
+import { defaultLocale, htmlLang } from "@/i18n/config";
+import { translations } from "@/i18n/translations";
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
@@ -13,23 +15,24 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 const { site } = siteConfig;
+const defaultTranslation = translations[defaultLocale];
 
 // Inline script anti-FOUC — runs before hydration
-const themeScript = `var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark")t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.classList.toggle("light",t==="light");document.documentElement.setAttribute("data-theme",t)`;
+const themeScript = `var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark")t="light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.classList.toggle("light",t==="light");document.documentElement.setAttribute("data-theme",t)`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: site.title,
-  description: site.description,
+  title: defaultTranslation.site.title,
+  description: defaultTranslation.site.description,
   openGraph: {
-    title: site.title,
-    description: site.description,
+    title: defaultTranslation.site.title,
+    description: defaultTranslation.site.description,
     url: site.url + "/",
   },
   twitter: {
     card: "summary",
     title: site.shortTitle,
-    description: site.description,
+    description: defaultTranslation.site.description,
   },
 };
 
@@ -39,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${ibmPlexMono.variable}`} suppressHydrationWarning>
+    <html lang={htmlLang[defaultLocale]} className={`${ibmPlexMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

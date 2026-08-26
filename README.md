@@ -12,18 +12,18 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 
 **Arsitektur:** `src/i18n/` adalah single source untuk locale.
 
-- `src/i18n/config.ts` — daftar locale (`en`, `id`), tipe `Locale`, label, `htmlLang`, `STORAGE_KEY="locale"`, helper `isLocale`. Default `en`.
+- `src/i18n/config.ts` — daftar locale (`en`, `id`), tipe `Locale`, label, `htmlLang`, `STORAGE_KEY="locale"`, helper `isLocale`. Default `id`.
 - `src/i18n/translations.ts` — dictionary type-safe `Dictionary` untuk semua string UI (nav, hero, What I do, featured titles, stack, contact, listing pages, detail fallbacks, CV section headings, ContactForm, header aria including `navAriaLabel`/`navMobileAriaLabel`, mermaid label, 404). `translations.en`/`.id` adalah source of truth; komponen tidak hard-code string.
 - `src/i18n/content.id.ts` — override terjemahan konten publik per `slug` (portfolio/blogs) dan `cv` (headline, summary, education/experience/skills/interests). Properti invarian dipertahankan di `en`: `slug`, `date`, `tags`, `links`/`image`, seluruh code fence, URL, inline code, fakta numerik, dan struktur blok. Semua 9 blog dan 5 portfolio memiliki entri `Record<Slug, LocalizedContent>` yang lengkap; TypeScript memaksa kelengkapan karena helper memakai strict `Record` (bukan `Partial`).
 - `src/i18n/content-helpers.ts` — `getLocalizedBlogs/Portfolio/CV(locale, raw)` menggabungkan data mentah `src/content/*` dengan override `id`. Karena parity dijamin strict `Record<BlogSlug, LocalizedContent>` / `Record<PortfolioSlug, LocalizedContent>` (lihat `content.id.ts`), tidak ada fallback `Partial` — setiap slug wajib ada terjemahan. Helper tidak memakai `any` maupun type assertion untuk memaksa kompatibilitas. Tersedia `getContentParityReport()` untuk cek slug coverage; validasi struktural ada di `scripts/validate-parity.ts`.
-- `src/i18n/LocaleProvider.tsx` — context client (`LocaleProvider`, `useLocale`) yang menyediakan `locale`, `setLocale`, `t`, `blogs`, `portfolio`, `cv`. **Hydration-safe:** state awal selalu `en` agar cocok dengan HTML export (`<html lang="en">`) dan render server, lalu locale tersimpan (localStorage/cookie) diterapkan di `useEffect` setelah hydration. Ini menghindari mismatch hydration; pengunjung dengan `id` tersimpan akan melihat switch EN→ID client-side setelah mount. Persistensi di `localStorage` + `document.cookie` (`SameSite=Lax, max-age 1y`) dengan `try/catch` untuk private mode. `useEffect` sinkronisasi `document.documentElement.lang` (`en`/`id`) agar selaras dengan locale yang dirender, dan effect terpisah update live DOM metadata (`document.title` + `meta[name="description"]` + `meta[property="og:title/description"]` + `meta[name="twitter:title/description"]`). Build-time metadata (Crawler-visible, `layout.tsx` `metadata`) tetap English karena single static URL; live DOM metadata mengikuti locale terpilih. Provider membungkus `ThemeProvider`.
+- `src/i18n/LocaleProvider.tsx` — context client (`LocaleProvider`, `useLocale`) yang menyediakan `locale`, `setLocale`, `t`, `blogs`, `portfolio`, `cv`. **Hydration-safe:** state awal selalu `id` agar cocok dengan HTML export (`<html lang="id">`) dan render server, lalu locale tersimpan (localStorage/cookie) diterapkan di `useEffect` setelah hydration. Ini menghindari mismatch hydration; pengunjung dengan `en` tersimpan dapat melihat switch ID→EN client-side setelah mount. Persistensi di `localStorage` + `document.cookie` (`SameSite=Lax, max-age 1y`) dengan `try/catch` untuk private mode. `useEffect` sinkronisasi `document.documentElement.lang` (`en`/`id`) agar selaras dengan locale yang dirender, dan effect terpisah update live DOM metadata (`document.title` + `meta[name="description"]` + `meta[property="og:title/description"]` + `meta[name="twitter:title/description"]`). Build-time metadata (crawler-visible, `layout.tsx` `metadata`) memakai Indonesia karena single static URL; live DOM metadata mengikuti locale terpilih. Provider membungkus `ThemeProvider`.
 - `src/components/LanguagePicker.tsx` — kontrol bahasa ringkas di header, tepat di kanan theme toggle, dengan ikon bendera 🇺🇸/🇮🇩 tanpa teks visual. Nama bahasa tetap tersedia lewat `aria-label` dan `title`. Aksesibilitas: `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `role="menu"` + `role="menuitemradio"` + `aria-checked`, keyboard (Enter/Space/ArrowDown/ArrowUp buka dan fokus ke opsi terpilih atau pertama, ArrowUp/Down roving, Home/End, Enter/Space pilih, Escape tutup dan mengembalikan fokus, Tab menutup), outside-click, serta focus ring yang terlihat.
 - `src/components/Markdown.tsx` — label mermaid dari `t.markdown.mermaidLabel`; `Header.tsx` — dua landmark nav dengan `aria-label` lokal (`t.header.navAriaLabel` desktop dan `t.header.navMobileAriaLabel` mobile, bukan duplikat "Primary"), `aria-label` Home, theme toggle, mobile menu semuanya dari `t.header`; `ContactForm.tsx` — error memakai kode netral (`not_configured`/`fallback`/`connection`) yang dirender via `t.contactForm` terkait; `src/app/not-found.tsx` — halaman 404 lokal (`Page not found` / `Halaman tidak ditemukan`) dengan CTA `backHome`.
 - URL tidak berubah — locale disimpan di browser, kompatibel dengan `output: "export"` (tidak memakai fitur server-only `next/intl` routing, `cookies()` atau `headers()`). Halaman detail (`/blogs/[slug]`, `/portfolio/[slug]`) pakai wrapper `page.tsx` (server, `generateStaticParams`) + `*Client.tsx` (client, `useParams` + `useLocale`) agar static export tetap generate semua path sementara konten diterjemahkan di client.
 
-**Hydration & locale limitation (static export, single URL):** Exported HTML selalu `lang="en"` dan konten EN. Locale `id` tersimpan hanya diterapkan client-side setelah hydration via `useEffect` di `LocaleProvider`; tidak ada prepaint `localeScript` yang menyentuh `document.documentElement.lang` sebelum hydration (yang sebelumnya menyebabkan mismatch antara prepaint lang dan React's first render). Konsekuensi: pengunjung returning dengan `id` akan melihat konten EN sesaat lalu switch ke ID setelah mount — ini disengaja untuk menjaga konsistensi hydration. Crawler selalu melihat English default (single static URL).
+**Hydration & locale limitation (static export, single URL):** Exported HTML selalu `lang="id"` dan konten Indonesia. Locale tersimpan yang berbeda hanya diterapkan client-side setelah hydration via `useEffect` di `LocaleProvider`; tidak ada prepaint `localeScript` yang menyentuh `document.documentElement.lang` sebelum hydration. Konsekuensi: pengunjung lama dengan `en` tersimpan dapat melihat konten ID sesaat lalu switch ke EN setelah mount — ini disengaja untuk menjaga konsistensi hydration. Crawler selalu melihat Indonesia sebagai default (single static URL).
 
-**Default:** `en`. Browser baru lihat EN; pilihan disimpan di localStorage+cookie. Menghapus keduanya mengembalikan ke EN. `lang` di-sync ke locale aktif setelah mount via `document.documentElement.lang`.
+**Default:** bahasa `id` dan tema `light`. Browser baru langsung melihat Bahasa Indonesia dalam mode terang; pilihan bahasa/tema berikutnya tetap disimpan. Menghapus preferensi tersimpan mengembalikan ke ID + light. `lang` di-sync ke locale aktif setelah mount via `document.documentElement.lang`.
 
 **Cara edit kedua terjemahan:**
 
@@ -34,7 +34,7 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 3. **Menambah locale baru (mis. `ja`):**
    - `src/i18n/config.ts`: tambah ke `locales`, `localeLabels`, `localeNativeNames`, `htmlLang`, dan `isLocale`.
    - `src/i18n/translations.ts`: tambah key baru di `translations` (copy `en` lalu terjemahkan — type error akan menandai field yang belum diisi).
-   - Buat `src/i18n/content.ja.ts` dan tambah helper di `content-helpers.ts` atau extend pattern `content.id.ts` (atau buat registry per-locale). Karena hydration-safe strategy (EN initial + effect), tidak perlu prepaint `localeScript`; cukup update `LocaleProvider` effect whitelist.
+   - Buat `src/i18n/content.ja.ts` dan tambah helper di `content-helpers.ts` atau extend pattern `content.id.ts` (atau buat registry per-locale). Karena strategi hydration-safe memakai locale default saat initial render lalu menerapkan preferensi tersimpan lewat effect, tidak perlu prepaint `localeScript`; cukup update `LocaleProvider` effect whitelist.
    - `LanguagePicker` otomatis render daftar `locales`.
 4. Jangan edit langsung text di `Header.tsx`/`HomeSections.tsx`/`ContactForm.tsx`/`Markdown.tsx` — semua baca dari `useLocale().t`.
 
@@ -43,7 +43,7 @@ Static export ready — deploy ke **GitHub Pages** tanpa server. **Bilingual EN/
 - Nama accessible: "Select language" (EN) / "Pilih bahasa" (ID) via `aria-label` + hidden label.
 - State terpilih: latar visual berbeda, `aria-checked="true"`, label "English (selected)" / "Indonesia (dipilih)", dan focus ring yang jelas.
 - Keyboard: Tab ke trigger → Enter/Space/ArrowDown/ArrowUp buka dan fokus ke opsi terpilih atau pertama → ArrowUp/Down roving (wrap), Home/End → Enter/Space pilih → Escape tutup & fokus balik ke trigger. Tab dari menu tutup menu. Focus ring `focus-visible:ring-2` di trigger, `focus-visible:ring-1` di menuitem.
-- Hydration-safe: initial render `en` (cocok dengan HTML export), locale tersimpan diterapkan di `useEffect` setelah hydration, `document.documentElement.lang` selalu sinkron dengan locale aktif.
+- Hydration-safe: initial render `id` (cocok dengan HTML export), locale tersimpan diterapkan di `useEffect` setelah hydration, `document.documentElement.lang` selalu sinkron dengan locale aktif.
 
 **Validasi:**
 
@@ -54,10 +54,10 @@ npm run validate:parity   # deterministik: 9 blog + 5 portfolio; cek slug, field
 npm run build             # static export: 7 entri route, 20 halaman statis, 21 file HTML di out/ (termasuk alias 404)
 # Manual:
 # - Buka /, /blogs, /blogs/<slug>, /portfolio, /portfolio/<slug>, /cv di EN lalu switch ke ID — semua string & post berubah, URL tetap.
-# - Reload di ID — bahasa bertahan (localStorage + cookie + html lang) setelah mount (hydration-safe: EN sesaat lalu ID).
+# - Reload di EN — bahasa bertahan (localStorage + cookie + html lang) setelah mount (hydration-safe: ID sesaat lalu EN).
 # - Keyboard-only: Tab → picker → Enter/Space/ArrowDown buka (fokus ke terpilih) → ArrowDown/Up/Home/End pindah → Enter pilih → fokus kembali → Escape tutup.
 # - Kunjungi /not-found-test atau URL tidak ada — tampil 404 lokal (ID/EN sesuai locale).
-# - Hapus localStorage "locale" + cookie locale → reload → kembali EN.
+# - Hapus localStorage "locale" + cookie locale serta localStorage "theme" → reload → kembali ID + light.
 # - Inspector: <html lang> ganti en↔id saat switch; document.title + og:* + twitter:* ikut locale (live DOM).
 # Catatan: lint/type/parity/build bersifat otomatis; screen reader/assistive technology tetap perlu diuji manual di browser dan perangkat target.
 ```
@@ -106,9 +106,9 @@ Edit **`src/site.config.ts`** → bagian `site` dan `author`:
 ```ts
 site: {
   name: "arcahyadi Personal Page",
-  title: "arcahyadi — Networking · SysAdmin · Backend", // dipakai <title> build-time (English); runtime title mengikuti locale via t.site.title di LocaleProvider effect
+  title: "arcahyadi — Networking · SysAdmin · Backend", // sumber identitas EN; metadata build-time memakai locale default dari translations
   shortTitle: "arcahyadi", // Your Name di header kiri (klik → /)
-  description: "Deskripsi untuk SEO / OpenGraph (build-time EN; live DOM description juga ikut locale)",
+  description: "Deskripsi identitas EN; metadata build-time dan live DOM mengikuti locale",
   url: "https://arcahyadi.me",
   // logo file sudah tidak dipakai — header sekarang teks (site.shortTitle || author.name)
   // kalau mau pakai gambar lagi, edit src/components/sites/.../Header.tsx
@@ -262,7 +262,7 @@ Halaman CV ada di `src/app/cv/page.tsx` (render dari `cv` di atas).
 ```
 src/
   site.config.ts          # ← SINGLE SOURCE OF TRUTH (site, author, header, home)
-                          #   site.title/shortTitle → build-time <title> (EN) + runtime locale title
+                          #   site.shortTitle → nama header; metadata title mengikuti locale default
                           #   author.avatar + home.hero.avatar → foto bulat
   content/
     blogs.ts              # ← koleksi Blogs (1 file = semua post, 9 posts)
@@ -273,12 +273,12 @@ src/
     translations.ts       # Dictionary type-safe (nav/hero/whatIDo/featured/stack/contact/blogsPage/portfolioPage/cvPage/contactForm/header/common/markdown/notFound + site.title/description + navAriaLabel)
     content.id.ts         # override ID per slug (BlogSlug/PortfolioSlug union, strict Record — semua slug wajib)
     content-helpers.ts    # getLocalized* (strict, tanpa any) + getContentParityReport (slug coverage)
-    LocaleProvider.tsx    # hydration-safe: EN initial + effect apply persisted locale + lang sync + live DOM metadata (title, description, og/twitter)
+    LocaleProvider.tsx    # hydration-safe: ID initial + effect apply persisted locale + lang sync + live DOM metadata (title, description, og/twitter)
   scripts/
     validate-parity.ts    # cek slug/field, struktur blok, seluruh fence, URL, inline code, angka, dan length guard untuk 9+5
   app/
     page.tsx              # landing / (HomeHero, WhatIDo, Featured, Stack, Contact)
-    layout.tsx            # font mono + metadata (build-time EN via site.title) + inline theme script (no locale prepaint)
+    layout.tsx            # font mono + metadata Indonesia + inline default light theme script
     not-found.tsx         # 404 lokal (client, dari t.notFound)
     globals.css           # design tokens (hsl vars, dark mode)
     blogs/page.tsx        # listing blogs

@@ -1,15 +1,11 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 export type Theme = "light" | "dark";
 
 const STORAGE_KEY = "theme";
-
-function getSystemTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
+const DEFAULT_THEME: Theme = "light";
 
 function getStoredTheme(): Theme | null {
   if (typeof window === "undefined") return null;
@@ -39,9 +35,8 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    return getStoredTheme() ?? getSystemTheme();
+    return getStoredTheme() ?? DEFAULT_THEME;
   });
-  const hasPreference = useRef(getStoredTheme() !== null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -51,28 +46,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
 
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const applySystemTheme = () => {
-      if (hasPreference.current) return;
-      const systemTheme: Theme = media.matches ? "dark" : "light";
-      setThemeState(systemTheme);
-      applyTheme(systemTheme);
-    };
     const onStorage = (e: StorageEvent) => {
       if (e.key !== STORAGE_KEY) return;
       const stored = e.newValue === "light" || e.newValue === "dark" ? e.newValue : null;
-      hasPreference.current = stored !== null;
-      if (stored) {
-        setThemeState(stored);
-        applyTheme(stored);
-      } else {
-        applySystemTheme();
-      }
+      const nextTheme = stored ?? DEFAULT_THEME;
+      setThemeState(nextTheme);
+      applyTheme(nextTheme);
     };
-    media.addEventListener("change", applySystemTheme);
     window.addEventListener("storage", onStorage);
     return () => {
-      media.removeEventListener("change", applySystemTheme);
       window.removeEventListener("storage", onStorage);
     };
     // theme intentionally not in deps: initial sync only
@@ -80,7 +62,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
-    hasPreference.current = true;
     setThemeState(t);
     applyTheme(t);
     try {
@@ -120,7 +101,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // avoid passing stale closure value directly
   const value: ThemeContextValue = {
-    theme: mounted ? theme : "light",
+    theme: mounted ? theme : DEFAULT_THEME,
     resolvedTheme: theme,
     toggleTheme,
     setTheme,
