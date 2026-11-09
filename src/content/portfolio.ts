@@ -10,7 +10,7 @@ export const portfolio = [
     date: "2026-08-19",
     tags: ["Networking", "MikroTik", "UniFi", "Monitoring"],
     image: "",
-    content: `**Scope.** Upgrade and modernization of a campus network serving 500+ students, lecturers and staff. The institution and installation identifiers are omitted.
+    content: `Campus network upgrade for 500+ students, lecturers, and staff.
 
 **Work delivered.**
 - Configured multi-WAN failover and load distribution on MikroTik RouterOS with gateway health checks
@@ -31,7 +31,7 @@ export const portfolio = [
     date: "2026-08-19",
     tags: ["Backend", "PHP", "MySQL", "Internal tools"],
     image: "",
-    content: `**Scope.** Development of an internship management module within an institutional web platform. The institution and application address are omitted.
+    content: `An internship management module within an institutional web platform.
 
 **Work delivered.**
 - Internship placements and supervisor assignments
@@ -45,18 +45,18 @@ export const portfolio = [
     slug: "monitoring-and-config-backup",
     title: "Monitoring and configuration backup for network devices",
     excerpt:
-      "LibreNMS and Uptime Kuma for visibility, plus scheduled configuration exports to off-device storage, so a failed device is a restore instead of a rebuild.",
+      "Network monitoring with LibreNMS and Uptime Kuma, with scheduled configuration exports to off-device storage.",
     date: "2026-08-19",
     tags: ["Operations", "LibreNMS", "Proxmox", "Backup"],
     image: "",
-    content: `**Scope.** Monitoring and backup work within the campus network upgrade, not a separate client engagement.
+    content: `Monitoring and backup work for the campus network upgrade. This is part of the same project, not a separate client engagement.
 
 **Work delivered.**
 - LibreNMS and Uptime Kuma for real-time monitoring and alerting
 - Scheduled binary backups and text configuration exports from the core router to off-device storage over SFTP
 - Topology, address-plan and operating-procedure documentation
 
-**Technical notes.** The [RouterOS guide](/blogs/mikrotik-multi-wan-bonding/) describes the backup approach using documentation addresses instead of installation details.`,
+**Technical notes.** The backup setup is described in the [RouterOS guide](/blogs/mikrotik-multi-wan-bonding/).`,
     links: { github: "", demo: "" },
   },
   {
@@ -68,7 +68,7 @@ export const portfolio = [
     image: "",
     content: `Certificate of completion for the **CCNA: Introduction to Networks** course in the Cisco Networking Academy program.
 
-The course covers network architecture and models, IP addressing, Ethernet concepts and media, and the basic configuration needed to build a small LAN. It is the foundation the rest of the CCNA path builds on.`,
+The course covers network architecture and models, IP addressing, Ethernet concepts and media, and basic router and switch configuration for a small LAN.`,
     links: { github: "https://github.com/arcahyadi", demo: "" },
   },
   {
@@ -80,7 +80,7 @@ The course covers network architecture and models, IP addressing, Ethernet conce
     image: "",
     content: `Certificate of completion for the **CCNA: Switching, Routing, and Wireless Essentials** course in the Cisco Networking Academy program.
 
-The course covers switching technologies, router operations in small to medium networks, WLAN configuration and fundamental LAN security. The lab work is where the material sticks: VLANs, trunking and wireless configuration fail in ways a slide cannot show.`,
+The course covers switching technologies, router operations in small to medium networks, WLAN configuration and fundamental LAN security.`,
     links: { github: "https://github.com/arcahyadi", demo: "" },
   },
   {

@@ -1,8 +1,8 @@
 # arcahyadi.github.io
 
-Halaman pribadi: showcase layanan jaringan, server, backend dan otomasi, plus catatan teknis.
+Situs layanan jaringan, server, backend, dan otomasi, beserta portofolio dan catatan teknis.
 Dibangun dengan **Next.js 16 + React 19 + Tailwind 4 + TypeScript**, static export untuk GitHub Pages.
-Bilingual EN/ID, URL tetap, konten dari file TypeScript.
+Tersedia dalam bahasa Indonesia dan Inggris pada URL yang sama. Konten disimpan dalam file TypeScript.
 
 ## Struktur
 
@@ -59,6 +59,12 @@ Konfigurasi jaringan di catatan memakai rentang alamat dokumentasi.
 Workflow GitHub Pages ada di `.github/workflows/deploy.yml`: `npm ci` lalu `npm run build`, hasil `out/` diunggah sebagai artifact. Di GitHub, set **Settings → Pages → Source: GitHub Actions**.
 
 `public/CNAME` berisi domain kustom. Jangan hapus `.nojekyll` agar `_next/` dapat disajikan.
+
+### HTTPS
+
+Redirect HTTP ke HTTPS diatur di Cloudflare khusus untuk `arcahyadi.me` dan `www.arcahyadi.me`. Respons HTTP harus berstatus `301` dengan path dan query string yang sama pada URL HTTPS. Subdomain lain tidak termasuk aturan ini.
+
+GitHub Pages belum mengizinkan opsi **Enforce HTTPS** karena sertifikat untuk domain kustom belum tersedia di origin. HTTPS publik dan redirect ditangani oleh Cloudflare; pengaturan sertifikat origin perlu ditinjau terpisah. Redirect di `next.config.ts` tidak berlaku untuk static export.
 
 ## Kredit
 

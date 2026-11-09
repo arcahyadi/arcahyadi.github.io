@@ -109,9 +109,9 @@ export type Dictionary = {
 export const translations: Record<Locale, Dictionary> = {
   en: {
     site: {
-      title: "arcahyadi — Network, Server & Automation",
+      title: "arcahyadi | Networks, Servers & Automation",
       description:
-        "Networking, servers and backend automation: MikroTik, UniFi, Proxmox, Docker, Go and n8n. Independent consulting and hands-on implementation.",
+        "Help with MikroTik and UniFi networks, Proxmox and Docker servers, backend applications, and n8n automation.",
     },
     nav: {
       services: "Services",
@@ -128,15 +128,15 @@ export const translations: Record<Locale, Dictionary> = {
     home: {
       hero: {
         eyebrow: "Network · Server · Automation",
-        title: "Networks that hold up. Servers that stay up.",
+        title: "Help with networks, servers, and automation.",
         subtitle:
-          "Hands-on help with routing and wireless, Proxmox and Docker infrastructure, backend systems, and workflow automation. Clear scope, working systems, documented handover.",
+          "I help configure MikroTik and UniFi networks, manage Proxmox and Docker servers, build backend applications, and automate workflows with n8n.",
         ctaPrimary: "See services",
         ctaSecondary: "Read case studies",
       },
       services: {
         title: "Services",
-        subtitle: "Small, well-scoped engagements. You get the fix and the notes to run it.",
+        subtitle: "The areas I can help with.",
         items: [
           {
             title: "Network design & hardening",
@@ -146,30 +146,30 @@ export const translations: Record<Locale, Dictionary> = {
           {
             title: "Server & virtualization",
             description:
-              "Proxmox VE, ZFS storage, Docker workloads and monitoring with LibreNMS and Uptime Kuma. Built for recovery, not just uptime.",
+              "Proxmox VE, ZFS storage, Docker, and monitoring with LibreNMS and Uptime Kuma.",
           },
           {
             title: "Backend & internal tools",
             description:
-              "PHP, Go and MySQL applications that replace spreadsheets: forms, approvals, reporting and PDF exports, with migration of existing data.",
+              "Backend applications with PHP, Go, and MySQL for forms, approvals, reports, PDF exports, and migration of existing data.",
           },
           {
             title: "Automation & local AI",
             description:
-              "n8n workflows that connect the tools you already use, plus local LLM setups for work that cannot leave your network.",
+              "n8n workflows to connect existing applications, and local LLM setup with LM Studio.",
           },
         ],
       },
       featured: {
         portfolioTitle: "Selected work",
-        portfolioSubtitle: "Anonymized case studies: problem, approach, result.",
-        blogsTitle: "Field notes",
-        blogsSubtitle: "Configuration write-ups and lessons from real deployments.",
+        portfolioSubtitle: "Selected network and application work. Client names and installation details are omitted.",
+        blogsTitle: "Technical notes",
+        blogsSubtitle: "Configuration guides for networks, servers, and automation.",
         seeAll: "All work →",
         browseAll: "All notes →",
       },
       stack: {
-        title: "Toolkit",
+        title: "Tools and technologies",
         groups: [
           { label: "Networking", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLANs", "QoS"] },
           { label: "Infrastructure", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
@@ -178,23 +178,23 @@ export const translations: Record<Locale, Dictionary> = {
         ],
       },
       contact: {
-        title: "Start a conversation",
+        title: "Discuss a project",
         subtitle:
-          "Describe the setup and what is not working. You will get a straight answer on scope, approach and whether I am the right fit.",
+          "Describe what you need help with or the technical issue you're facing.",
         ctaLabel: "Email me",
       },
     },
     blogsPage: {
-      title: "Field notes",
-      subtitle: "Networking, servers and automation, written from real deployments",
-      readMore: "Read more →",
+      title: "Technical notes",
+      subtitle: "Configuration guides for networks, servers, and automation",
+      readMore: "Read note",
       backToBlogs: "← Back to notes",
       notFoundTitle: "Not found",
       notFoundSubtitle: "Note not found.",
     },
     portfolioPage: {
       title: "Work",
-      subtitle: "Anonymized case studies: problem, approach, result",
+      subtitle: "Selected network and application work. Client names and installation details are omitted.",
       backToPortfolio: "← Back to work",
       notFoundTitle: "Not found",
       notFoundSubtitle: "Case study not found.",
@@ -211,7 +211,7 @@ export const translations: Record<Locale, Dictionary> = {
       submit: "Send message",
       sending: "Sending...",
       orEmail: "or email directly ↓",
-      success: "Thanks! Message sent — I will reply as soon as possible.",
+      success: "Message sent. Thank you.",
       errorFallback: "Failed to send. Please try again or email directly.",
       errorConnection: "Connection failed. Please try again or email directly.",
     },
@@ -240,9 +240,9 @@ export const translations: Record<Locale, Dictionary> = {
   },
   id: {
     site: {
-      title: "arcahyadi — Jaringan, Server & Otomasi",
+      title: "arcahyadi | Jaringan, Server & Otomasi",
       description:
-        "Jaringan, server dan otomasi backend: MikroTik, UniFi, Proxmox, Docker, Go dan n8n. Konsultasi dan implementasi langsung.",
+        "Bantuan untuk jaringan MikroTik dan UniFi, server Proxmox dan Docker, aplikasi backend, serta otomasi n8n.",
     },
     nav: {
       services: "Layanan",
@@ -259,48 +259,48 @@ export const translations: Record<Locale, Dictionary> = {
     home: {
       hero: {
         eyebrow: "Jaringan · Server · Otomasi",
-        title: "Jaringan yang tahan. Server yang tetap hidup.",
+        title: "Bantuan untuk jaringan, server, dan otomasi.",
         subtitle:
-          "Bantuan langsung untuk routing dan wireless, infrastruktur Proxmox dan Docker, sistem backend, serta otomasi workflow. Lingkup jelas, sistem berjalan, serah terima terdokumentasi.",
+          "Saya membantu konfigurasi jaringan MikroTik dan UniFi, pengelolaan server Proxmox dan Docker, pengembangan backend, serta otomasi dengan n8n.",
         ctaPrimary: "Lihat layanan",
         ctaSecondary: "Baca studi kasus",
       },
       services: {
         title: "Layanan",
-        subtitle: "Pekerjaan kecil dengan lingkup jelas. Kamu dapat perbaikannya dan catatan untuk menjalankannya.",
+        subtitle: "Pekerjaan yang bisa saya bantu.",
         items: [
           {
-            title: "Desain & penguatan jaringan",
+            title: "Desain & keamanan jaringan",
             description:
-              "Segmentasi VLAN, kebijakan firewall, failover multi-WAN, QoS dan rollout wireless di MikroTik dan UniFi. Termasuk dokumentasi topologi dan rencana IP.",
+              "Segmentasi VLAN, aturan firewall, failover multi-WAN, QoS, dan pemasangan jaringan Wi-Fi dengan MikroTik dan UniFi. Termasuk dokumentasi topologi dan pengalamatan IP.",
           },
           {
             title: "Server & virtualisasi",
             description:
-              "Proxmox VE, storage ZFS, workload Docker dan monitoring dengan LibreNMS serta Uptime Kuma. Dibangun untuk pemulihan, bukan hanya uptime.",
+              "Proxmox VE, penyimpanan ZFS, Docker, serta monitoring dengan LibreNMS dan Uptime Kuma.",
           },
           {
-            title: "Backend & tools internal",
+            title: "Backend & aplikasi internal",
             description:
-              "Aplikasi PHP, Go dan MySQL untuk menggantikan spreadsheet: form, persetujuan, laporan dan ekspor PDF, dengan migrasi data yang sudah ada.",
+              "Aplikasi backend dengan PHP, Go, dan MySQL untuk formulir, persetujuan, laporan, ekspor PDF, dan migrasi data yang sudah ada.",
           },
           {
             title: "Otomasi & AI lokal",
             description:
-              "Workflow n8n yang menghubungkan tools yang sudah dipakai, plus setup LLM lokal untuk pekerjaan yang tidak boleh keluar dari jaringanmu.",
+              "Workflow n8n untuk menghubungkan aplikasi yang sudah digunakan, serta penyiapan LLM lokal dengan LM Studio.",
           },
         ],
       },
       featured: {
         portfolioTitle: "Karya pilihan",
-        portfolioSubtitle: "Studi kasus anonim: masalah, pendekatan, hasil.",
-        blogsTitle: "Catatan lapangan",
-        blogsSubtitle: "Panduan konfigurasi dan pelajaran dari deployment nyata.",
+        portfolioSubtitle: "Pilihan pekerjaan jaringan dan pengembangan aplikasi. Nama klien dan detail instalasi tidak ditampilkan.",
+        blogsTitle: "Catatan teknis",
+        blogsSubtitle: "Panduan konfigurasi jaringan, server, dan otomasi.",
         seeAll: "Semua karya →",
         browseAll: "Semua catatan →",
       },
       stack: {
-        title: "Perangkat",
+        title: "Teknologi yang digunakan",
         groups: [
           { label: "Jaringan", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLAN", "QoS"] },
           { label: "Infrastruktur", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
@@ -309,23 +309,23 @@ export const translations: Record<Locale, Dictionary> = {
         ],
       },
       contact: {
-        title: "Mulai dari obrolan",
+        title: "Diskusikan kebutuhan",
         subtitle:
-          "Ceritakan setup dan bagian yang bermasalah. Kamu akan dapat jawaban langsung soal lingkup, pendekatan, dan apakah saya cocok untuk itu.",
+          "Ceritakan kebutuhan atau masalah teknis yang ingin dibahas.",
         ctaLabel: "Email saya",
       },
     },
     blogsPage: {
-      title: "Catatan lapangan",
-      subtitle: "Jaringan, server dan otomasi, ditulis dari deployment nyata",
-      readMore: "Baca selengkapnya →",
+      title: "Catatan teknis",
+      subtitle: "Panduan konfigurasi jaringan, server, dan otomasi",
+      readMore: "Baca catatan",
       backToBlogs: "← Kembali ke catatan",
       notFoundTitle: "Tidak ditemukan",
       notFoundSubtitle: "Catatan tidak ditemukan.",
     },
     portfolioPage: {
       title: "Karya",
-      subtitle: "Studi kasus anonim: masalah, pendekatan, hasil",
+      subtitle: "Pilihan pekerjaan jaringan dan pengembangan aplikasi. Nama klien dan detail instalasi tidak ditampilkan.",
       backToPortfolio: "← Kembali ke karya",
       notFoundTitle: "Tidak ditemukan",
       notFoundSubtitle: "Studi kasus tidak ditemukan.",
@@ -342,9 +342,9 @@ export const translations: Record<Locale, Dictionary> = {
       submit: "Kirim pesan",
       sending: "Mengirim...",
       orEmail: "atau email langsung ↓",
-      success: "Terima kasih! Pesan terkirim — saya akan balas secepatnya.",
-      errorFallback: "Gagal mengirim. Coba lagi atau email langsung.",
-      errorConnection: "Gagal koneksi. Coba lagi atau email langsung.",
+      success: "Pesan terkirim. Terima kasih.",
+      errorFallback: "Pesan belum terkirim. Coba lagi atau kirim lewat email.",
+      errorConnection: "Pesan belum terkirim. Periksa koneksi, lalu coba lagi atau kirim lewat email.",
     },
     header: {
       homeAriaLabel: "Beranda",

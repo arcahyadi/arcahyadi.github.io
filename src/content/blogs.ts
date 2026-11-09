@@ -8,7 +8,7 @@ export const blogs = [
     date: "2026-06-23",
     excerpt: "Set up RustDesk signal and relay services on Linux, configure the firewall, and connect clients using the server's public key.",
     tags: ["rustdesk", "self-hosting", "linux"],
-    content: `RustDesk is an open-source remote desktop application. A self-hosted server lets you operate the signal and relay services instead of using the public servers. This guide uses example names, not installation details.
+    content: `RustDesk is an open-source remote desktop application. With a self-hosted server, you run the signal and relay services yourself.
 
 ## Prerequisites
 
@@ -75,7 +75,7 @@ Test a connection from outside the server's local network as well as from inside
     date: "2026-06-26",
     excerpt: "Create a Linux virtual server, configure S3-compatible object storage, and give an application a dedicated Spaces access key.",
     tags: ["digitalocean", "cloud", "vps", "storage", "tutorial"],
-    content: `DigitalOcean Droplets are virtual servers. Spaces provides S3-compatible object storage for assets and backups. This guide covers provisioning both through the control panel, without publishing account details or credentials.
+    content: `DigitalOcean Droplets are virtual servers. Spaces provides S3-compatible object storage for assets and backups. This guide covers setting up both through the control panel.
 
 ## Create a Droplet
 
@@ -125,9 +125,9 @@ The Droplet runs the application; Spaces stores objects independently of the ser
     title: "Multi-WAN failover and link aggregation on RouterOS",
     date: "2026-06-23",
     excerpt:
-      "A single uplink is the usual single point of failure in a small network. Here is a RouterOS layout for provider failover, bonded distribution links and management access that does not depend on the LAN being healthy.",
+      "RouterOS configuration notes for multi-WAN failover, link aggregation, management access, and scheduled backups.",
     tags: ["mikrotik", "networking", "routeros", "high-availability"],
-    content: `A single uplink is the most common single point of failure in a small network. RouterOS can fail over between providers and aggregate internal links without extra hardware. The example below uses documentation addresses; replace them with your own plan.
+    content: `This example covers provider failover and internal link aggregation with RouterOS. It uses documentation addresses; replace them with addresses from your own network plan.
 
 ## Design
 
@@ -154,7 +154,7 @@ add dst-address=0.0.0.0/0 gateway=192.0.2.2 check-gateway=ping
 add dst-address=0.0.0.0/0 gateway=192.0.2.3 check-gateway=ping
 \`\`\`
 
-Documentation ranges such as \`192.0.2.0/24\` are reserved for examples, which makes configs safe to share in a write-up.
+The \`192.0.2.0/24\` range is reserved for documentation examples.
 
 ## Bonding
 
@@ -188,7 +188,7 @@ Keep a second way in, such as a serial console or a documented physical procedur
 
 ## Backups and monitoring
 
-Schedule a configuration export and keep it off the device. A backup that only lives on the router is lost exactly when you need it.
+Schedule configuration exports to off-device storage so they remain available if the router fails.
 
 \`\`\`routeros
 /system scheduler
@@ -210,18 +210,16 @@ Export SNMP to a monitoring host on the management VLAN for interface and health
 2. Confirm the bond carries traffic with one member cable removed
 3. Check that management access still works from the VPN with the LAN default route broken
 4. Restore a configuration export on a spare device and confirm it boots
-5. Write down the rollback steps and keep the previous config on hand
-
-The goal is not a clever configuration. It is a network where the failure modes are known before they happen.`,
+5. Write down the rollback steps and keep the previous config on hand`,
   },
   {
     slug: "proxmox-ve-storage-and-backups",
     title: "Proxmox VE for small production: storage, snapshots and recovery",
     date: "2026-06-23",
     excerpt:
-      "Virtualization is easy to start and hard to recover. This is a practical layout for a small Proxmox VE deployment: storage choices, snapshot limits, backups and the checks that matter after a failure.",
+      "Storage options, snapshot limits, backup schedules, and restore checks for a small Proxmox VE deployment.",
     tags: ["proxmox", "virtualization", "zfs", "backup"],
-    content: `Virtualization is easy to start and hard to recover. A small Proxmox VE deployment does not need a cluster, but it does need storage that survives a disk failure and backups that have been restored at least once.
+    content: `For a small Proxmox VE deployment, plan the storage layout and backup destination before creating guests. Test a restore before relying on the backups.
 
 ## Nodes and storage
 
@@ -235,13 +233,13 @@ ZFS is a good default for local storage because checksums catch silent corruptio
 | ZFS single disk | Scratch, ISO images | No redundancy, rebuild means restore |
 | NFS share | Templates, backups | Depends on the network and the NAS |
 
-Do not put the only copy of a VM on a single disk and call it storage. Treat it as cache.
+Keep a separate backup of any VM stored on a single disk.
 
 ## Snapshots are not backups
 
-A snapshot lives on the same pool as the data. It is fast, useful before an upgrade, and useless if the pool is lost. Keep snapshots for hours or days, and keep backups somewhere else.
+A snapshot lives on the same pool as the data and cannot protect against losing that pool. Use snapshots before changes and store backups separately.
 
-A simple scheme that works:
+Example backup schedule:
 
 - Nightly backups of every VM and container to a separate host or NAS
 - Weekly backup copy to off-site storage, encrypted
@@ -256,7 +254,7 @@ vzdump 101 --storage backup-nfs --mode snapshot --compress zstd
 pvesm list backup-nfs
 \`\`\`
 
-Test the restore path on a spare VMID first. Restoring over a running guest is the wrong time to discover that the backup is incomplete.
+Test the restore on a spare VMID before restoring over an existing guest.
 
 ## Networking
 
@@ -266,7 +264,7 @@ For internal service discovery, a simple SDN zone or a dedicated bridge is enoug
 
 ## Monitoring and access
 
-Monitor the things that fail first: disk health, pool usage, backup job status and temperature. A dashboard that only shows CPU is decoration.
+Monitor disk health, pool usage, backup job status, and temperature alongside CPU usage.
 
 - SMART checks on every physical disk
 - ZFS pool health and scrub results
@@ -281,9 +279,7 @@ Access should be limited to a management network and a VPN. Use per-user account
 2. Check that the network bridge configuration matches the documentation
 3. Restore one guest and verify it starts and serves traffic
 4. Confirm monitoring and backups resumed
-5. Record what failed, what was restored, and what changed
-
-A homelab and a production deployment use the same tools. The difference is whether the recovery steps exist before the incident.`,
+5. Record what failed, what was restored, and what changed`,
   },
   {
     slug: "unifi-os-on-proxmox",
@@ -296,7 +292,7 @@ A homelab and a production deployment use the same tools. The difference is whet
 
 ## Before you install
 
-UniFi OS depends on Podman and slirp4netns. Check the host distribution and kernel first; an unsupported base image usually fails during install with a message that does not mention the real cause.
+UniFi OS depends on Podman and slirp4netns. Check the supported host distributions, kernel, and dependency versions before installation.
 
 - A Linux distribution and dependency versions supported by the current installer
 - Static IP on the VM, outside the DHCP pool
@@ -306,8 +302,6 @@ UniFi OS depends on Podman and slirp4netns. Check the host distribution and kern
 ## Sizing
 
 Use the hardware recommendations in the official guide for your device and client count. Account for statistics retention and monitor disk usage after deployment.
-
-Disk grows with retained statistics. Give it more than the minimum and monitor it.
 
 ## Install in a VM
 
@@ -347,18 +341,16 @@ Watch VM CPU and memory, disk usage of the statistics database, and device adopt
 2. Automatic backups verified by restoring one
 3. Management access limited to the management VLAN and VPN
 4. Firmware update policy agreed before rollout
-5. Fallback access path written down
-
-The controller is infrastructure. Treat it with the same backup and access rules as the rest of the network.`,
+5. Fallback access path written down`,
   },
   {
     slug: "docker-dockge-setup",
     title: "Managing Docker Compose stacks with Dockge",
     date: "2026-06-25",
     excerpt:
-      "Dockge is a focused Compose stack manager: edit, start, stop and update stacks from a browser. Here is how to run it safely and which habits keep a small Docker host maintainable.",
+      "Install Dockge to manage Docker Compose stacks from a browser, with notes on access control, directory layout, backups, and updates.",
     tags: ["docker", "containers", "operations", "dockge"],
-    content: `Dockge is a focused Compose stack manager: edit, start, stop and update stacks from a browser. It is a good fit when the host runs a handful of Compose projects and you want less SSH, not a full orchestration platform.
+    content: `Dockge lets you edit, start, stop, and update Docker Compose stacks from a browser. It can be useful for managing several Compose projects on a single host.
 
 ## What it does well
 
@@ -392,7 +384,7 @@ Mounting the Docker socket gives the container control of the host. Put Dockge b
 
 ## Stack layout
 
-A predictable directory layout makes backup and recovery simple:
+Keep each stack's files in a separate directory:
 
 \`\`\`text
 /opt/stacks/
@@ -434,18 +426,16 @@ Keep secrets in the environment file, not in the compose file, and make sure the
 3. Restart policy set on every service
 4. Log rotation configured on the host
 5. A documented way to start a stack without the UI
-6. Monitoring for stopped containers and failed health checks
-
-Dockge makes routine stack work faster. The backup and access rules are still your responsibility.`,
+6. Monitoring for stopped containers and failed health checks`,
   },
   {
     slug: "rclone-encrypted-backup-google-drive",
     title: "Encrypted off-site backups with Rclone",
     date: "2026-07-11",
     excerpt:
-      "Rclone can encrypt files before they leave the host, so the storage provider only sees opaque names and data. Here is a complete setup: remote, crypt layer, script, schedule and restore test.",
+      "Configure an encrypted Rclone remote, schedule file copies, and test restoring the backup.",
     tags: ["backup", "rclone", "encryption", "operations"],
-    content: `Rclone can encrypt files before they leave the host, so the storage provider only sees opaque names and data. That makes ordinary object storage usable for backups without trusting the provider with the contents.
+    content: `Rclone's crypt remote encrypts files before uploading them to the storage provider. This guide covers the remote configuration, a backup script, scheduling, and a restore test.
 
 ## How the layers fit
 
@@ -456,7 +446,7 @@ There are two remotes: the storage remote and a crypt remote layered on top of i
 - Optional second password for the salt
 - The crypt password is not stored in the remote provider
 
-Lose the crypt password and the data is gone. Store it in a password manager and in an offline copy.
+You need the crypt password to decrypt the backup. Keep it in a password manager and retain an offline copy.
 
 ## Install
 
@@ -493,7 +483,7 @@ rclone ls backup-crypt:test/
 
 ## Backup script
 
-Keep the script small and let it fail loudly. A backup job that hides errors is worse than no job, because it creates false confidence.
+Keep the script short, record its errors, and check the exit status of each scheduled run.
 
 \`\`\`bash
 #!/bin/bash
@@ -518,7 +508,7 @@ Schedule it with a systemd timer or cron, and alert on a non-zero exit code. Kee
 
 ## Restore test
 
-A backup that has never been restored is a hypothesis. Once a month, restore a sample into a temporary directory and compare checksums.
+Test backup restoration regularly. Once a month, restore a sample into a temporary directory and compare checksums.
 
 \`\`\`bash
 mkdir -p /tmp/restore-test
@@ -526,9 +516,9 @@ rclone copy backup-crypt:host-a /tmp/restore-test --progress
 diff -r /srv/data /tmp/restore-test
 \`\`\`
 
-Record the date, the file count and the result. If the restore takes longer than your recovery target, the target is wrong or the backup is.
+Record the date, file count, result, and restore duration. Compare the duration with your recovery target.
 
-## Practices that prevent surprises
+## Backup checks
 
 - Exclude caches and temporary files, not data directories
 - Use \`copy\` by default; \`sync\` deletes files that are missing at the source
@@ -543,9 +533,9 @@ Encryption protects the data at rest. It does not replace access control on the 
     title: "Running local LLMs with LM Studio",
     date: "2026-06-24",
     excerpt:
-      "LM Studio runs open models on a laptop and exposes an OpenAI-compatible server. Here is what to expect from model sizes, quantization and throughput on Apple Silicon, and how to integrate it without sending data out.",
+      "Run a local model with LM Studio, start its OpenAI-compatible server, and connect a Python client.",
     tags: ["ai", "llm", "lmstudio", "local"],
-    content: `LM Studio runs open models on a laptop and exposes an OpenAI-compatible server. For work that cannot leave the network, that combination is often enough: no API key, no data egress, and a predictable cost.
+    content: `LM Studio runs language models locally and provides a chat interface and an OpenAI-compatible server.
 
 ## What it provides
 
@@ -554,32 +544,11 @@ Encryption protects the data at rest. It does not replace access control on the 
 - A local server compatible with the OpenAI API
 - Apple Silicon acceleration through MLX and Metal
 
-The trade-off is scale. A laptop runs models that fit in unified memory, which means smaller models and shorter context than a hosted service.
-
-## Reference machine
-
-The numbers below come from a reference machine, not a server:
-
-| Component | Specification |
-|---|---|
-| Chip | Apple M4 |
-| Unified memory | 16 GB |
-| Storage | 512 GB SSD |
-
-Memory is the constraint. A model plus its context has to fit alongside the operating system and the applications you are actually using.
+Available memory limits the model size and context length. Leave room for the operating system and other applications.
 
 ## Model sizes and quantization
 
-Quantization trades quality for memory. For most evaluation work, a 4-bit or 6-bit quantized model is the right starting point; move up only when the task needs it.
-
-| Model size | Quantization | Approximate speed |
-|---|---|---|
-| 2B | Q8_0 | 60+ tokens per second |
-| 7B | Q8_0 | 25 to 30 tokens per second |
-| 9B | Q8_0 | 20 to 25 tokens per second |
-| 12B | Q8_0 | 15 to 20 tokens per second |
-
-These are interactive-use figures with a short context. Long prompts and large context windows reduce throughput, sometimes by half.
+Quantization reduces memory use at the cost of precision. Try a 4-bit or 6-bit model and check its output on your own tasks.
 
 ## Install and serve
 
@@ -610,16 +579,14 @@ The API key is a placeholder that the local server accepts; it is not a secret. 
 - A coding assistant on a machine without reliable internet
 - Prototyping before paying for a hosted model
 
-They are a poor fit for long-context reasoning, high-throughput batch jobs, or anything where a wrong answer is expensive and unverified.
+Evaluate long-context tasks and batch jobs on the hardware you plan to use. Verify outputs before using them for decisions where an error would be costly.
 
 ## Operational notes
 
 - Pin model versions and record the quantization used for each result
 - Evaluate on your own examples, not only public benchmarks
 - Keep prompts and outputs out of logs if they contain sensitive data
-- Monitor memory pressure; swapping destroys throughput
-- Have a fallback path when the model server is unavailable
-
-Local inference is a privacy and cost decision first, and a performance decision second. Size the model to the machine, and the workflow to the model.`,
+- Monitor memory pressure and swapping when evaluating performance
+- Have a fallback path when the model server is unavailable`,
   },
 ] as const;

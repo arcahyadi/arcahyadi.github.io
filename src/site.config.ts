@@ -9,11 +9,11 @@ export const siteConfig = {
   // ── Global / Site ──
   site: {
     name: "arcahyadi.dev",
-    title: "arcahyadi — Network, Server & Automation",
+    title: "arcahyadi | Networks, Servers & Automation",
     shortTitle: "arcahyadi",
     author: "arcahyadi",
     description:
-      "Networking, servers and backend automation: MikroTik, UniFi, Proxmox, Docker, Go and n8n. Independent consulting and hands-on implementation.",
+      "Help with MikroTik and UniFi networks, Proxmox and Docker servers, backend applications, and n8n automation.",
     url: "https://arcahyadi.me",
   },
 
@@ -49,15 +49,15 @@ export const siteConfig = {
   home: {
     hero: {
       eyebrow: "Network · Server · Automation",
-      title: "Networks that hold up. Servers that stay up.",
+      title: "Help with networks, servers, and automation.",
       subtitle:
-        "Hands-on help with routing and wireless, Proxmox and Docker infrastructure, backend systems, and workflow automation. Clear scope, working systems, documented handover.",
+        "I help configure MikroTik and UniFi networks, manage Proxmox and Docker servers, build backend applications, and automate workflows with n8n.",
       ctaPrimary: { label: "See services", href: "#services" },
       ctaSecondary: { label: "Read case studies", href: "/portfolio" },
     },
     services: {
       title: "Services",
-      subtitle: "Small, well-scoped engagements. You get the fix and the notes to run it.",
+      subtitle: "The areas I can help with.",
       items: [
         {
           title: "Network design & hardening",
@@ -67,30 +67,30 @@ export const siteConfig = {
         {
           title: "Server & virtualization",
           description:
-            "Proxmox VE clusters, ZFS storage, Docker workloads and monitoring with LibreNMS and Uptime Kuma. Built for recovery, not just uptime.",
+            "Proxmox VE, ZFS storage, Docker, and monitoring with LibreNMS and Uptime Kuma.",
         },
         {
           title: "Backend & internal tools",
           description:
-            "PHP, Go and MySQL applications that replace spreadsheets: forms, approvals, reporting and PDF exports, with migration of existing data.",
+            "Backend applications with PHP, Go, and MySQL for forms, approvals, reports, PDF exports, and migration of existing data.",
         },
         {
           title: "Automation & local AI",
           description:
-            "n8n workflows that connect the tools you already use, plus local LLM setups for work that cannot leave your network.",
+            "n8n workflows to connect existing applications, and local LLM setup with LM Studio.",
         },
       ],
     },
     featured: {
       portfolioTitle: "Selected work",
-      portfolioSubtitle: "Anonymized case studies: problem, approach, result.",
-      blogsTitle: "Field notes",
-      blogsSubtitle: "Configuration write-ups and lessons from real deployments.",
+      portfolioSubtitle: "Selected network and application work. Client names and installation details are omitted.",
+      blogsTitle: "Technical notes",
+      blogsSubtitle: "Configuration guides for networks, servers, and automation.",
       seeAll: "All work →",
       browseAll: "All notes →",
     },
     stack: {
-      title: "Toolkit",
+      title: "Tools and technologies",
       groups: [
         { label: "Networking", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLANs", "QoS"] },
         { label: "Infrastructure", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
@@ -99,9 +99,9 @@ export const siteConfig = {
       ],
     },
     contact: {
-      title: "Start a conversation",
+      title: "Discuss a project",
       subtitle:
-        "Describe the setup and what is not working. You will get a straight answer on scope, approach and whether I am the right fit.",
+        "Describe what you need help with or the technical issue you're facing.",
       email: "arcahyadi.dev@gmail.com",
       ctaLabel: "Email me",
       // Web3Forms access key is public by design (an alias for the inbox, not a secret).

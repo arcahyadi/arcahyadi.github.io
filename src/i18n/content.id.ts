@@ -21,7 +21,7 @@ export const portfolioIdBySlug = {
     title: "Modernisasi jaringan kampus 500 pengguna",
     excerpt:
       "Peningkatan jaringan kampus meliputi routing multi-WAN, segmentasi VLAN, wireless terkelola dan monitoring untuk 500+ pengguna.",
-    content: `**Lingkup.** Peningkatan dan modernisasi jaringan kampus yang melayani 500+ mahasiswa, dosen dan staf. Nama institusi dan pengenal instalasi tidak ditampilkan.
+    content: `Peningkatan jaringan kampus untuk 500+ mahasiswa, dosen, dan staf.
 
 **Pekerjaan yang diselesaikan.**
 - Mengonfigurasi failover multi-WAN dan distribusi beban di MikroTik RouterOS dengan health check gateway
@@ -36,11 +36,11 @@ export const portfolioIdBySlug = {
   "internship-management-platform": {
     title: "Modul manajemen magang",
     excerpt:
-      "Modul magang untuk penempatan, assignment pembimbing, penilaian, rekap PDF dan impor massal CSV.",
-    content: `**Lingkup.** Pengembangan modul manajemen magang dalam platform web institusi. Nama institusi dan alamat aplikasi tidak ditampilkan.
+      "Modul magang untuk penempatan peserta, penugasan pembimbing, penilaian, rekap PDF, dan impor massal CSV.",
+    content: `Modul manajemen magang dalam platform web institusi.
 
 **Pekerjaan yang diselesaikan.**
-- Penempatan magang dan assignment pembimbing
+- Penempatan magang dan penugasan pembimbing
 - Penilaian dan rekap PDF
 - Impor massal CSV
 
@@ -49,29 +49,29 @@ export const portfolioIdBySlug = {
   "monitoring-and-config-backup": {
     title: "Monitoring dan backup konfigurasi perangkat jaringan",
     excerpt:
-      "LibreNMS dan Uptime Kuma untuk visibilitas, plus ekspor konfigurasi terjadwal ke storage di luar perangkat, agar perangkat gagal cukup dipulihkan bukan dibangun ulang.",
-    content: `**Lingkup.** Pekerjaan monitoring dan backup dalam peningkatan jaringan kampus, bukan proyek klien terpisah.
+      "Monitoring jaringan dengan LibreNMS dan Uptime Kuma, disertai ekspor konfigurasi terjadwal ke penyimpanan di luar perangkat.",
+    content: `Pekerjaan monitoring dan backup untuk peningkatan jaringan kampus. Pekerjaan ini bagian dari proyek yang sama, bukan proyek klien terpisah.
 
 **Pekerjaan yang diselesaikan.**
 - LibreNMS dan Uptime Kuma untuk monitoring dan alerting real-time
 - Backup biner dan ekspor konfigurasi teks terjadwal dari core router ke storage di luar perangkat melalui SFTP
 - Dokumentasi topologi, rencana alamat dan prosedur operasional
 
-**Catatan teknis.** [Panduan RouterOS](/blogs/mikrotik-multi-wan-bonding/) menjelaskan pendekatan backup dengan alamat dokumentasi sebagai pengganti detail instalasi.`,
+**Catatan teknis.** Konfigurasi backup dibahas di [panduan RouterOS](/blogs/mikrotik-multi-wan-bonding/).`,
   },
   "cisco-ccna-introduction-to-networks": {
     title: "CCNA: Introduction to Networks",
     excerpt: "Sertifikat Cisco Networking Academy tentang pengalamatan IP, Ethernet dan konfigurasi dasar router serta switch.",
     content: `Sertifikat kelulusan kursus **CCNA: Introduction to Networks** dalam program Cisco Networking Academy.
 
-Kursus ini mencakup arsitektur dan model jaringan, pengalamatan IP, konsep dan media Ethernet, serta konfigurasi dasar untuk membangun LAN kecil. Ini fondasi bagi sisa jalur CCNA.`,
+Kursus ini mencakup arsitektur dan model jaringan, pengalamatan IP, konsep dan media Ethernet, serta konfigurasi dasar router dan switch untuk LAN kecil.`,
   },
   "cisco-ccna-switching-and-wireless": {
     title: "CCNA: Switching, Routing, and Wireless Essentials",
     excerpt: "Sertifikat Cisco Networking Academy tentang switching, konfigurasi WLAN dan dasar keamanan LAN.",
     content: `Sertifikat kelulusan kursus **CCNA: Switching, Routing, and Wireless Essentials** dalam program Cisco Networking Academy.
 
-Kursus ini mencakup teknologi switching, operasi router pada jaringan kecil hingga menengah, konfigurasi WLAN dan dasar keamanan LAN. Pekerjaan lab adalah tempat materi menempel: VLAN, trunking dan konfigurasi wireless gagal dengan cara yang tidak bisa ditunjukkan slide.`,
+Kursus ini mencakup teknologi switching, pengoperasian router pada jaringan kecil hingga menengah, konfigurasi WLAN, dan dasar keamanan LAN.`,
   },
   "cisco-ccna-enterprise-networking": {
     title: "CCNA: Enterprise Networking, Security, and Automation",
@@ -88,7 +88,7 @@ export const blogsIdBySlug = {
   "rustdesk-server-setup": {
     title: "Self-hosting server RustDesk",
     excerpt: "Pasang layanan sinyal dan relay RustDesk di Linux, atur firewall, lalu hubungkan client menggunakan public key server.",
-    content: `RustDesk adalah aplikasi remote desktop open-source. Server self-hosted memungkinkan layanan sinyal dan relay dikelola sendiri, bukan memakai server publik. Panduan ini menggunakan nama contoh, bukan detail instalasi.
+    content: `RustDesk adalah aplikasi remote desktop open-source. Dengan server self-hosted, layanan sinyal dan relay dijalankan di server sendiri.
 
 ## Prasyarat
 
@@ -152,7 +152,7 @@ Uji koneksi dari luar jaringan lokal server serta dari dalamnya. Koneksi LAN yan
   "digitalocean-droplet-spaces-setup": {
     title: "Menyiapkan DigitalOcean Droplets dan Spaces",
     excerpt: "Buat server virtual Linux, atur object storage kompatibel S3, dan berikan access key Spaces khusus untuk aplikasi.",
-    content: `DigitalOcean Droplets adalah server virtual. Spaces menyediakan object storage kompatibel S3 untuk aset dan backup. Panduan ini membahas penyiapan keduanya melalui control panel, tanpa memublikasikan detail akun atau kredensial.
+    content: `DigitalOcean Droplets adalah server virtual. Spaces menyediakan object storage kompatibel S3 untuk aset dan backup. Panduan ini membahas penyiapan keduanya melalui control panel.
 
 ## Buat Droplet
 
@@ -200,17 +200,17 @@ Droplet menjalankan aplikasi; Spaces menyimpan objek secara terpisah dari disk s
   "mikrotik-multi-wan-bonding": {
     title: "Failover multi-WAN dan link aggregation di RouterOS",
     excerpt:
-      "Satu uplink adalah titik kegagalan tunggal yang paling umum di jaringan kecil. Berikut tata letak RouterOS untuk failover penyedia, link distribusi ter-bonding dan akses manajemen yang tidak bergantung pada kesehatan LAN.",
-    content: `Satu uplink adalah titik kegagalan tunggal yang paling umum di jaringan kecil. RouterOS bisa failover antar penyedia dan menggabungkan link internal tanpa hardware tambahan. Contoh di bawah memakai alamat dokumentasi; ganti dengan rencanamu sendiri.
+      "Catatan konfigurasi RouterOS untuk failover multi-WAN, link aggregation, akses manajemen, dan backup terjadwal.",
+    content: `Contoh ini membahas failover antarpenyedia internet dan penggabungan link internal dengan RouterOS. Alamat yang digunakan adalah alamat dokumentasi; ganti sesuai rencana pengalamatan jaringanmu.
 
 ## Desain
 
-Mulai dari apa yang harus dipertahankan jaringan:
+Tentukan gangguan yang perlu diantisipasi:
 
-- Kehilangan satu penyedia tanpa intervensi manual
-- Switch distribusi yang bisa kehilangan satu kabel tanpa kehilangan link
+- Koneksi tetap berjalan saat salah satu penyedia internet terputus
+- Link ke switch distribusi tetap aktif saat salah satu kabel dilepas
 - Akses manajemen yang tetap bekerja saat LAN salah konfigurasi
-- Backup konfigurasi yang tidak bergantung pada ingatan seseorang
+- Backup konfigurasi berjalan sesuai jadwal
 
 ## Uplink dan failover
 
@@ -228,11 +228,11 @@ add dst-address=0.0.0.0/0 gateway=192.0.2.2 check-gateway=ping
 add dst-address=0.0.0.0/0 gateway=192.0.2.3 check-gateway=ping
 \`\`\`
 
-Rentang dokumentasi seperti \`192.0.2.0/24\` disediakan untuk contoh, sehingga konfigurasi aman dibagikan dalam tulisan.
+Rentang \`192.0.2.0/24\` dikhususkan untuk contoh dalam dokumentasi.
 
 ## Bonding
 
-Untuk link ke switch distribusi, LACP memberi throughput lebih besar sekaligus redundansi. Kedua ujung harus sepakat soal mode, dan port switch harus dikonfigurasi sebelum bond diaktifkan.
+Untuk link ke switch distribusi, LACP menyediakan agregasi bandwidth dan redundansi. Mode di kedua ujung harus sesuai. Konfigurasikan port switch sebelum mengaktifkan bond.
 
 \`\`\`routeros
 /interface bonding
@@ -262,7 +262,7 @@ Siapkan jalur masuk kedua, seperti console serial atau prosedur fisik yang terdo
 
 ## Backup dan monitoring
 
-Jadwalkan ekspor konfigurasi dan simpan di luar perangkat. Backup yang hanya ada di router hilang tepat saat dibutuhkan.
+Jadwalkan ekspor konfigurasi ke penyimpanan di luar perangkat agar salinannya tetap tersedia jika router rusak.
 
 \`\`\`routeros
 /system scheduler
@@ -276,7 +276,7 @@ add name=config-backup policy=ftp,read,write,sensitive source={
 }
 \`\`\`
 
-Ekspor SNMP ke host monitoring di VLAN manajemen untuk counter interface dan kesehatan. Beri alert pada link state dan packet loss, bukan hanya ping.
+Pantau counter interface dan kondisi perangkat melalui SNMP dari host monitoring di VLAN manajemen. Atur alert untuk perubahan status link dan packet loss selain pemeriksaan ping.
 
 ## Yang harus diverifikasi sebelum cutover
 
@@ -284,15 +284,13 @@ Ekspor SNMP ke host monitoring di VLAN manajemen untuk counter interface dan kes
 2. Pastikan bond membawa trafik saat satu kabel anggota dilepas
 3. Cek akses manajemen tetap bekerja dari VPN saat default route LAN rusak
 4. Pulihkan ekspor konfigurasi di perangkat cadangan dan pastikan ia boot
-5. Tulis langkah rollback dan simpan konfigurasi sebelumnya
-
-Tujuannya bukan konfigurasi yang pintar. Tujuannya jaringan yang mode kegagalannya sudah diketahui sebelum terjadi.`,
+5. Tulis langkah rollback dan simpan konfigurasi sebelumnya`,
   },
   "proxmox-ve-storage-and-backups": {
-    title: "Proxmox VE untuk produksi kecil: storage, snapshot dan pemulihan",
+    title: "Proxmox VE skala kecil: storage, snapshot, dan pemulihan",
     excerpt:
-      "Virtualisasi mudah dimulai dan sulit dipulihkan. Berikut tata letak praktis Proxmox VE skala kecil: pilihan storage, batas snapshot, backup dan pemeriksaan yang penting setelah kegagalan.",
-    content: `Virtualisasi mudah dimulai dan sulit dipulihkan. Deployment Proxmox VE kecil tidak butuh cluster, tetapi butuh storage yang bertahan saat disk gagal dan backup yang sudah pernah dipulihkan setidaknya sekali.
+      "Pilihan storage, batas penggunaan snapshot, jadwal backup, dan pengujian pemulihan untuk Proxmox VE skala kecil.",
+    content: `Rencanakan tata letak storage dan tujuan backup sebelum membuat VM atau container di Proxmox VE. Uji pemulihannya sebelum mengandalkan backup tersebut.
 
 ## Node dan storage
 
@@ -306,13 +304,13 @@ ZFS adalah default yang baik untuk storage lokal karena checksum menangkap korup
 | ZFS single disk | Scratch, image ISO | Tanpa redundansi, rebuild berarti restore |
 | Share NFS | Template, backup | Bergantung pada jaringan dan NAS |
 
-Jangan menaruh satu-satunya salinan VM di satu disk lalu menyebutnya storage. Perlakukan itu sebagai cache.
+Simpan backup terpisah untuk setiap VM yang berada di satu disk.
 
 ## Snapshot bukan backup
 
-Snapshot tinggal di pool yang sama dengan data. Cepat, berguna sebelum upgrade, dan tidak berguna jika pool hilang. Simpan snapshot untuk jam atau hari, dan simpan backup di tempat lain.
+Snapshot berada di pool yang sama dengan data, sehingga tidak melindungi data jika pool tersebut hilang. Gunakan snapshot sebelum perubahan dan simpan backup secara terpisah.
 
-Skema sederhana yang bekerja:
+Contoh jadwal backup:
 
 - Backup malam untuk setiap VM dan container ke host atau NAS terpisah
 - Salinan backup mingguan ke storage off-site, terenkripsi
@@ -327,34 +325,32 @@ vzdump 101 --storage backup-nfs --mode snapshot --compress zstd
 pvesm list backup-nfs
 \`\`\`
 
-Uji jalur restore di VMID cadangan dulu. Memulihkan di atas guest yang berjalan adalah waktu yang salah untuk menemukan backup tidak lengkap.
+Uji restore ke VMID cadangan sebelum menimpa guest yang sudah ada.
 
 ## Jaringan
 
 Pisahkan trafik manajemen, storage dan guest ke bridge atau VLAN berbeda bila memungkinkan. Jaringan storage yang jenuh tidak boleh membuat interface manajemen tidak terjangkau saat insiden.
 
-Untuk penemuan layanan internal, zona SDN sederhana atau bridge khusus sudah cukup. Hindari merutekan trafik guest melalui satu VM kecuali VM itu dimonitor dan bisa di-restart.
+Untuk service discovery internal, gunakan zona SDN sederhana atau bridge khusus. Hindari merutekan trafik guest melalui satu VM kecuali VM tersebut dipantau dan dapat dijalankan ulang.
 
 ## Monitoring dan akses
 
-Pantau hal yang gagal lebih dulu: kesehatan disk, penggunaan pool, status job backup dan suhu. Dashboard yang hanya menampilkan CPU adalah hiasan.
+Pantau kondisi disk, penggunaan pool, status job backup, dan suhu selain penggunaan CPU.
 
 - Pemeriksaan SMART di setiap disk fisik
 - Kesehatan pool ZFS dan hasil scrub
-- Keberhasilan job backup dan usia backup baik terakhir
+- Keberhasilan job backup dan waktu backup terakhir yang berhasil
 - Status UPS jika ada
 
 Akses harus dibatasi ke jaringan manajemen dan VPN. Pakai akun per pengguna dengan autentikasi dua faktor bila platform mendukung, dan simpan salinan offline kunci pemulihan.
 
 ## Checklist pemulihan
 
-1. Boot node dan pastikan pool terimpor bersih
+1. Boot node dan pastikan pool berhasil diimpor tanpa error
 2. Cek konfigurasi bridge jaringan sesuai dokumentasi
-3. Pulihkan satu guest dan pastikan ia start serta melayani trafik
+3. Pulihkan satu guest dan pastikan dapat berjalan serta melayani trafik
 4. Pastikan monitoring dan backup berjalan lagi
-5. Catat apa yang gagal, apa yang dipulihkan, dan apa yang berubah
-
-Homelab dan deployment produksi memakai tools yang sama. Bedanya adalah apakah langkah pemulihan sudah ada sebelum insiden.`,
+5. Catat apa yang gagal, apa yang dipulihkan, dan apa yang berubah`,
   },
   "unifi-os-on-proxmox": {
     title: "Menjalankan UniFi OS Server di Proxmox",
@@ -364,18 +360,16 @@ Homelab dan deployment produksi memakai tools yang sama. Bedanya adalah apakah l
 
 ## Sebelum memasang
 
-UniFi OS bergantung pada Podman dan slirp4netns. Periksa distribusi dan kernel host lebih dulu; base image yang tidak didukung biasanya gagal saat instalasi dengan pesan yang tidak menyebut penyebab sebenarnya.
+UniFi OS membutuhkan Podman dan slirp4netns. Periksa distribusi host, kernel, dan versi dependensi yang didukung sebelum instalasi.
 
 - Distribusi Linux dan versi dependensi yang didukung installer terkini
 - IP statis di VM, di luar pool DHCP
 - DNS dan NTP bekerja dari dalam VM
 - Target backup di luar VM
 
-## Ukuran
+## Kebutuhan resource
 
 Gunakan rekomendasi hardware dalam panduan resmi sesuai jumlah perangkat dan client. Perhitungkan retensi statistik dan pantau penggunaan disk setelah deployment.
-
-Disk tumbuh mengikuti statistik yang disimpan. Beri lebih dari minimum dan pantau.
 
 ## Pasang dalam VM
 
@@ -390,7 +384,7 @@ Periksa persyaratan distribusi dan dependensi terkini sebelum memilih image VM. 
 
 ## Tata letak jaringan
 
-Beri controller alamat statis dan tempatkan di VLAN manajemen bersama perangkat yang dikelolanya. Access point butuh alamat stabil untuk menemukan controller setelah peristiwa daya.
+Beri controller alamat statis dan tempatkan di VLAN manajemen bersama perangkat yang dikelolanya. Access point memerlukan alamat controller yang tetap agar dapat terhubung kembali setelah listrik padam.
 
 - VLAN manajemen untuk controller dan interface manajemen perangkat
 - SSID tamu dan staf di VLAN terpisah dengan kebijakan firewall di antaranya
@@ -412,20 +406,18 @@ Pantau CPU dan memori VM, penggunaan disk database statistik, dan status adopsi 
 ## Checklist
 
 1. Alamat statis terdokumentasi dan direservasi
-2. Backup otomatis diverifikasi dengan memulihkan satu
+2. Hasil backup otomatis sudah diuji pemulihannya
 3. Akses manajemen dibatasi ke VLAN manajemen dan VPN
 4. Kebijakan update firmware disepakati sebelum rollout
-5. Jalur akses fallback ditulis
-
-Controller adalah infrastruktur. Perlakukan dengan aturan backup dan akses yang sama seperti jaringan lainnya.`,
+5. Jalur akses fallback ditulis`,
   },
   "docker-dockge-setup": {
     title: "Mengelola stack Docker Compose dengan Dockge",
     excerpt:
-      "Dockge adalah manajer stack Compose yang fokus: edit, start, stop dan update stack dari browser. Berikut cara menjalankannya dengan aman dan kebiasaan yang menjaga host Docker kecil tetap terawat.",
-    content: `Dockge adalah manajer stack Compose yang fokus: edit, start, stop dan update stack dari browser. Cocok ketika host menjalankan beberapa proyek Compose dan kamu ingin mengurangi SSH, bukan platform orkestrasi penuh.
+      "Pasang Dockge untuk mengelola stack Docker Compose dari browser, dengan catatan tentang akses, direktori, backup, dan pembaruan.",
+    content: `Dockge menyediakan antarmuka browser untuk mengedit, menjalankan, menghentikan, dan memperbarui stack Docker Compose. Dockge dapat digunakan untuk mengelola beberapa proyek Compose pada satu host.
 
-## Yang dikerjakannya dengan baik
+## Fitur
 
 - Satu direktori per stack, berisi file compose dan file environment bersama
 - Editor browser dengan validasi sebelum stack dibuat ulang
@@ -436,7 +428,7 @@ Ia tidak menggantikan orkestrasi container. Jika butuh penjadwalan, service disc
 
 ## Instalasi
 
-Dockge berjalan sebagai container dan butuh akses ke Docker socket plus direktori yang menyimpan stack. Buat keduanya eksplisit.
+Dockge berjalan sebagai container dan memerlukan akses ke Docker socket serta direktori stack. Cantumkan keduanya pada konfigurasi volume.
 
 \`\`\`yaml
 services:
@@ -453,11 +445,11 @@ services:
       - DOCKGE_STACKS_DIR=/opt/stacks
 \`\`\`
 
-Me-mount Docker socket memberi container kendali atas host. Taruh Dockge di belakang reverse proxy dengan autentikasi dan jangan ekspos langsung ke internet.
+Akses ke Docker socket memberi container kendali atas host. Tempatkan Dockge di belakang reverse proxy dengan autentikasi dan jangan buka akses langsung dari internet.
 
 ## Tata letak stack
 
-Tata letak direktori yang konsisten membuat backup dan pemulihan sederhana:
+Simpan file setiap stack dalam direktori terpisah:
 
 \`\`\`text
 /opt/stacks/
@@ -476,11 +468,11 @@ Simpan secret di file environment, bukan di file compose, dan pastikan direktori
 
 ## Kebiasaan update
 
-- Pin tag image mayor dan baca release notes sebelum lompat versi
-- Update satu stack setiap kali dan cek log setelahnya
+- Tetapkan tag versi mayor image dan baca release notes sebelum berpindah versi
+- Perbarui satu stack dalam satu waktu, lalu periksa log
 - Simpan file compose sebelumnya di version control
 - Ambil backup volume sebelum upgrade database
-- Jadwalkan update di jendela waktu saat kamu bisa merespons
+- Jadwalkan pembaruan saat tersedia waktu untuk menangani masalah
 
 ## Perbandingan dengan Portainer
 
@@ -490,7 +482,7 @@ Simpan secret di file environment, bukan di file compose, dan pastikan direktori
 | Kompleksitas | Rendah | Lebih tinggi |
 | Edit Compose | Native, per stack | Didukung, kurang terpusat |
 | Penggunaan resource | Kecil | Lebih besar |
-| Kurva belajar | Pendek | Moderat |
+| Kurva belajar | Pendek | Sedang |
 
 ## Checklist operasional
 
@@ -499,26 +491,24 @@ Simpan secret di file environment, bukan di file compose, dan pastikan direktori
 3. Restart policy di setiap service
 4. Rotasi log dikonfigurasi di host
 5. Cara terdokumentasi untuk start stack tanpa UI
-6. Monitoring container berhenti dan health check gagal
-
-Dockge mempercepat pekerjaan stack rutin. Aturan backup dan akses tetap tanggung jawabmu.`,
+6. Monitoring untuk container yang berhenti dan health check yang gagal`,
   },
   "rclone-encrypted-backup-google-drive": {
     title: "Backup off-site terenkripsi dengan Rclone",
     excerpt:
-      "Rclone bisa mengenkripsi file sebelum meninggalkan host, sehingga penyedia storage hanya melihat nama dan data buram. Berikut setup lengkap: remote, lapisan crypt, skrip, jadwal dan uji restore.",
-    content: `Rclone bisa mengenkripsi file sebelum meninggalkan host, sehingga penyedia storage hanya melihat nama dan data buram. Itu membuat object storage biasa layak untuk backup tanpa mempercayakan isinya ke penyedia.
+      "Konfigurasikan remote Rclone terenkripsi, jadwalkan penyalinan file, lalu uji pemulihan backup.",
+    content: `Remote crypt Rclone mengenkripsi file sebelum mengunggahnya ke penyedia storage. Panduan ini membahas konfigurasi remote, skrip backup, penjadwalan, dan uji pemulihan.
 
-## Bagaimana lapisannya bekerja
+## Cara kerja remote crypt
 
-Ada dua remote: remote storage dan remote crypt di atasnya. Baca dan tulis melewati remote crypt; penyedia menyimpan objek terenkripsi.
+Ada dua remote: remote storage dan remote crypt yang menggunakan remote storage tersebut. Operasi baca dan tulis dilakukan melalui remote crypt; penyedia menyimpan objek terenkripsi.
 
 - Nama dienkripsi dengan mode filename standar
 - Isi dienkripsi dengan NaCl SecretBox
 - Password kedua opsional untuk salt
 - Password crypt tidak disimpan di penyedia remote
 
-Kehilangan password crypt berarti data hilang. Simpan di password manager dan di salinan offline.
+Password crypt diperlukan untuk mendekripsi backup. Simpan di password manager dan buat salinan offline.
 
 ## Instalasi
 
@@ -555,7 +545,7 @@ rclone ls backup-crypt:test/
 
 ## Skrip backup
 
-Jaga skrip tetap kecil dan biarkan gagal dengan jelas. Job backup yang menyembunyikan error lebih buruk daripada tanpa job, karena menciptakan keyakinan palsu.
+Buat skrip singkat, catat error, dan periksa status keluar setiap kali skrip dijalankan sesuai jadwal.
 
 \`\`\`bash
 #!/bin/bash
@@ -576,11 +566,11 @@ rclone copy "$SRC" "$DEST" \\
 rclone check "$SRC" "$DEST" --one-way --log-file "$LOG"
 \`\`\`
 
-Jadwalkan dengan systemd timer atau cron, dan beri alert saat exit code bukan nol. Simpan status run terakhir di tempat yang benar-benar kamu lihat.
+Jadwalkan dengan systemd timer atau cron dan atur alert jika exit code bukan nol. Tampilkan status eksekusi terakhir di tempat yang rutin diperiksa.
 
 ## Uji restore
 
-Backup yang belum pernah dipulihkan adalah hipotesis. Sebulan sekali, pulihkan sampel ke direktori sementara dan bandingkan checksum.
+Uji pemulihan backup secara berkala. Sebulan sekali, pulihkan sampel ke direktori sementara dan bandingkan checksum.
 
 \`\`\`bash
 mkdir -p /tmp/restore-test
@@ -588,9 +578,9 @@ rclone copy backup-crypt:host-a /tmp/restore-test --progress
 diff -r /srv/data /tmp/restore-test
 \`\`\`
 
-Catat tanggal, jumlah file dan hasilnya. Jika restore lebih lama dari target pemulihanmu, targetnya salah atau backupnya.
+Catat tanggal, jumlah file, hasil, dan durasi pemulihan. Bandingkan durasinya dengan target pemulihan.
 
-## Praktik yang mencegah kejutan
+## Pemeriksaan backup
 
 - Kecualikan cache dan file sementara, bukan direktori data
 - Pakai \`copy\` secara default; \`sync\` menghapus file yang tidak ada di sumber
@@ -598,13 +588,13 @@ Catat tanggal, jumlah file dan hasilnya. Jika restore lebih lama dari target pem
 - Uji restore di mesin berbeda, bukan mesin yang membuat backup
 - Pantau usia backup, bukan hanya keberhasilan job
 
-Enkripsi melindungi data saat istirahat. Ia tidak menggantikan kontrol akses pada akun storage, jadi pakai key khusus dengan izin paling sempit yang masih memungkinkan job berjalan.`,
+Enkripsi melindungi data yang tersimpan. Tetap batasi akses akun storage dengan key khusus yang hanya memiliki izin yang diperlukan untuk backup.`,
   },
   "lmstudio-local-llm": {
     title: "Menjalankan LLM lokal dengan LM Studio",
     excerpt:
-      "LM Studio menjalankan model terbuka di laptop dan menyediakan server kompatibel OpenAI. Berikut ekspektasi ukuran model, kuantisasi dan throughput di Apple Silicon, serta cara integrasi tanpa mengirim data keluar.",
-    content: `LM Studio menjalankan model terbuka di laptop dan menyediakan server kompatibel OpenAI. Untuk pekerjaan yang tidak boleh keluar dari jaringan, kombinasi itu sering cukup: tanpa API key, tanpa data keluar, dan biaya yang bisa diprediksi.
+      "Jalankan model lokal dengan LM Studio, aktifkan server kompatibel OpenAI, lalu hubungkan client Python.",
+    content: `LM Studio menjalankan model bahasa secara lokal dan menyediakan antarmuka chat serta server yang kompatibel dengan OpenAI API.
 
 ## Yang disediakan
 
@@ -613,32 +603,11 @@ Enkripsi melindungi data saat istirahat. Ia tidak menggantikan kontrol akses pad
 - Server lokal yang kompatibel dengan OpenAI API
 - Akselerasi Apple Silicon lewat MLX dan Metal
 
-Trade-off-nya skala. Laptop menjalankan model yang muat di unified memory, artinya model lebih kecil dan konteks lebih pendek dibanding layanan hosted.
-
-## Mesin referensi
-
-Angka di bawah berasal dari mesin referensi, bukan server:
-
-| Komponen | Spesifikasi |
-|---|---|
-| Chip | Apple M4 |
-| Unified memory | 16 GB |
-| Storage | 512 GB SSD |
-
-Memori adalah batasannya. Model plus konteksnya harus muat bersama sistem operasi dan aplikasi yang benar-benar kamu pakai.
+Memori yang tersedia membatasi ukuran model dan panjang konteks. Sisakan memori untuk sistem operasi dan aplikasi lain.
 
 ## Ukuran model dan kuantisasi
 
-Kuantisasi menukar kualitas dengan memori. Untuk sebagian besar evaluasi, model terkuantisasi 4-bit atau 6-bit adalah titik awal yang tepat; naik hanya saat tugas membutuhkannya.
-
-| Ukuran model | Kuantisasi | Kecepatan perkiraan |
-|---|---|---|
-| 2B | Q8_0 | 60+ token per detik |
-| 7B | Q8_0 | 25 hingga 30 token per detik |
-| 9B | Q8_0 | 20 hingga 25 token per detik |
-| 12B | Q8_0 | 15 hingga 20 token per detik |
-
-Ini angka penggunaan interaktif dengan konteks pendek. Prompt panjang dan jendela konteks besar menurunkan throughput, kadang hingga setengah.
+Kuantisasi mengurangi penggunaan memori dengan mengurangi presisi. Coba model 4-bit atau 6-bit, lalu periksa hasilnya pada tugas yang ingin dikerjakan.
 
 ## Pasang dan jalankan
 
@@ -669,17 +638,14 @@ API key adalah placeholder yang diterima server lokal; itu bukan secret. Jangan 
 - Asisten coding di mesin tanpa internet andal
 - Prototyping sebelum membayar model hosted
 
-Mereka kurang cocok untuk penalaran konteks panjang, job batch throughput tinggi, atau apa pun yang jawaban salahnya mahal dan tidak terverifikasi.
+Uji tugas berkonteks panjang dan pemrosesan batch pada perangkat yang akan digunakan. Verifikasi hasilnya sebelum dipakai untuk keputusan yang berisiko jika salah.
 
 ## Catatan operasional
 
-- Pin versi model dan catat kuantisasi untuk setiap hasil
+- Tetapkan versi model dan catat kuantisasi untuk setiap hasil
 - Evaluasi dengan contohmu sendiri, bukan hanya benchmark publik
-- Jaga prompt dan output keluar dari log jika berisi data sensitif
-- Pantau tekanan memori; swapping menghancurkan throughput
-- Siapkan jalur fallback saat server model tidak tersedia
-
-Inferensi lokal adalah keputusan privasi dan biaya lebih dulu, keputusan performa kedua. Sesuaikan ukuran model dengan mesin, dan workflow dengan model.
-`,
+- Jangan catat prompt atau output yang berisi data sensitif
+- Pantau penggunaan memori dan swapping saat mengukur performa
+- Siapkan jalur fallback saat server model tidak tersedia`,
   },
 } as const satisfies Record<BlogSlug, LocalizedContent>;
