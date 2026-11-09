@@ -58,6 +58,8 @@ Konfigurasi jaringan di catatan memakai rentang alamat dokumentasi.
 
 Workflow GitHub Pages ada di `.github/workflows/deploy.yml`: `npm ci` lalu `npm run build`, hasil `out/` diunggah sebagai artifact. Di GitHub, set **Settings → Pages → Source: GitHub Actions**.
 
+Cloudflare Workers Builds juga mengikuti branch `main` dari repo ini untuk `arcahyadi.my.id`. Proses tersebut menjalankan `npm run build`, lalu mengunggah `out/` dengan Wrangler. Nama Worker, compatibility date, dan direktori aset ditentukan oleh perintah deploy di Workers Builds. `wrangler.jsonc` menetapkan `preview_urls: false` agar deploy tidak membuka kembali URL versi lama yang masih berisi konten pribadi.
+
 `public/CNAME` berisi domain kustom. Jangan hapus `.nojekyll` agar `_next/` dapat disajikan.
 
 ### HTTPS
