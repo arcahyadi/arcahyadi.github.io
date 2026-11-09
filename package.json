@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "validate:parity": "npx --yes tsx scripts/validate-parity.ts"
+    "validate:parity": "npx --yes tsx scripts/validate-parity.ts",
+    "validate:export": "node --test scripts/validate-export.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

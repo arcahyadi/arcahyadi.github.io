@@ -1,9 +1,13 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/site.config";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 export function FooterSection() {
   const { links } = siteConfig.footer;
+  const { t } = useLocale();
   return (
     <footer
       data-component="footer"
@@ -33,7 +37,7 @@ export function FooterSection() {
                 href={link.href}
                 className="block py-8 w-full text-[var(--color-text-strong)] hover:bg-[var(--color-background-weak)] hover:underline hover:underline-offset-4 decoration-1 no-underline transition-colors"
               >
-                {link.label}
+                {link.href === "/portfolio" ? t.nav.work : link.label}
               </Link>
             )}
           </div>

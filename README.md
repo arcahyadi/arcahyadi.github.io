@@ -41,6 +41,7 @@ src/
 | `npm run build` | Build static export ke `out/` |
 | `npm run lint` | ESLint |
 | `npm run validate:parity` | Validasi parity EN/ID: slug, field, struktur blok, code fence, URL, inline code, angka |
+| `npm run validate:export` | Setelah build: cek URL artikel lama, label footer Indonesia dan satu tombol email di bagian kontak |
 
 ## Privasi
 

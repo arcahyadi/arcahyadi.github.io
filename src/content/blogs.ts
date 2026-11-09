@@ -3,6 +3,124 @@
 
 export const blogs = [
   {
+    slug: "rustdesk-server-setup",
+    title: "Self-hosting a RustDesk server",
+    date: "2026-06-23",
+    excerpt: "Set up RustDesk signal and relay services on Linux, configure the firewall, and connect clients using the server's public key.",
+    tags: ["rustdesk", "self-hosting", "linux"],
+    content: `RustDesk is an open-source remote desktop application. A self-hosted server lets you operate the signal and relay services instead of using the public servers. This guide uses example names, not installation details.
+
+## Prerequisites
+
+- A Linux server or VM supported by the installation method you choose
+- Administrative access through sudo or root
+- A static public address or a domain pointing to the server for access from outside the network
+
+The [official installation guide](https://rustdesk.com/docs/en/self-host/rustdesk-server-oss/install/) covers Docker, a community install script and Debian packages. The script method below sets up native services.
+
+## Firewall and port forwarding
+
+Allow TCP ports 21115, 21116 and 21117, plus UDP port 21116, through the host firewall and any upstream NAT device.
+
+Ports 21118 and 21119 serve the web client. Keep them closed if you do not use it. If you do, follow the official reverse-proxy guidance and restrict these ports to the proxy, rather than exposing them directly.
+
+## Install with the community script
+
+The Techahold script downloads the signal service and relay service, then sets them up for startup with systemd. Download and review the script before running it with administrative privileges.
+
+1. Connect to the server over SSH
+2. Download the script
+
+\`\`\`bash
+wget https://raw.githubusercontent.com/techahold/rustdeskinstall/master/install.sh
+\`\`\`
+
+3. Review its contents, then make it executable
+
+\`\`\`bash
+chmod +x install.sh
+\`\`\`
+
+4. Run it and follow the prompts for the server address
+
+\`\`\`bash
+./install.sh
+\`\`\`
+
+Keep the server address and public key shown at the end. Check that both services start after reboot and review the firewall changes made by the installer.
+
+## Retrieve the public key
+
+The key files are stored in the installation directory. With this script, the public key is typically available at the following path; check the installer output if it differs.
+
+\`\`\`bash
+cat /opt/rustdesk/id_ed25519.pub
+\`\`\`
+
+Copy only the public key into client settings. Keep the private key on the server and include it in protected backups.
+
+## Configure clients
+
+1. Open RustDesk and go to Settings, then Network
+2. Unlock the network settings if needed
+3. Set ID Server to your server address, such as \`rustdesk.example.com\`
+4. Paste the public key into Key; leave Relay Server blank unless your deployment uses a separate relay
+5. Apply the settings and check that the client reports Ready
+
+Test a connection from outside the server's local network as well as from inside it. A working LAN connection alone does not verify the public firewall and port forwarding.`,
+  },
+  {
+    slug: "digitalocean-droplet-spaces-setup",
+    title: "Setting up DigitalOcean Droplets and Spaces",
+    date: "2026-06-26",
+    excerpt: "Create a Linux virtual server, configure S3-compatible object storage, and give an application a dedicated Spaces access key.",
+    tags: ["digitalocean", "cloud", "vps", "storage", "tutorial"],
+    content: `DigitalOcean Droplets are virtual servers. Spaces provides S3-compatible object storage for assets and backups. This guide covers provisioning both through the control panel, without publishing account details or credentials.
+
+## Create a Droplet
+
+1. Sign in to the DigitalOcean control panel and choose Create, then Droplets
+2. Choose a region close to the application users and any services it depends on
+3. Select a supported Linux image, such as a current Ubuntu LTS release
+4. Choose a plan for the workload and check current pricing before creating it
+5. Add an SSH public key for login; keep its private key on your own machine
+6. Choose backup, monitoring and IPv6 options according to the deployment requirements
+7. Set a descriptive hostname, review the configuration and create the Droplet
+
+Once the public address is available, connect over SSH. Verify administrative access before restricting the firewall, and open only the ports the application needs.
+
+## Create a Spaces bucket
+
+1. Open Spaces Object Storage in the control panel and create a bucket
+2. Choose a region; using the same region as the Droplet can simplify application access
+3. Choose a unique bucket name and assign the project
+4. Review file-listing and object-access permissions before uploading data
+5. Enable the CDN if the bucket will serve public assets; it is not a replacement for access control
+
+Do not publish backup files or private uploads as public assets. Use separate buckets or explicit access rules when the data has different audiences.
+
+## Generate an application access key
+
+Follow the [Spaces access-key documentation](https://docs.digitalocean.com/products/spaces/how-to/manage-access/) for the current control-panel steps and permission limits.
+
+1. Open Spaces Object Storage, then Access Keys, and choose Create Access Key
+2. Choose limited access for the required buckets and operations when compatible with your bucket policy
+3. Give the key a name that identifies the application using it
+4. Create the key and store its secret securely; it is shown only once
+5. Configure the application or S3-compatible client with the bucket endpoint and credentials
+
+Keep secrets out of source control, browser bundles and screenshots. Use a dedicated key per application so rotation does not affect unrelated workloads.
+
+## Verify before use
+
+- Upload a non-sensitive test file through the application's credentials
+- Read it back and confirm access behaves as intended
+- Check that an unauthenticated request cannot retrieve private objects
+- Confirm the key cannot access buckets outside its assigned scope
+
+The Droplet runs the application; Spaces stores objects independently of the server disk. Neither replaces a tested backup and restore process.`,
+  },
+  {
     slug: "mikrotik-multi-wan-bonding",
     title: "Multi-WAN failover and link aggregation on RouterOS",
     date: "2026-06-23",
@@ -79,8 +197,8 @@ add name=config-backup interval=2d on-event=config-backup start-time=02:00:00
 /system script
 add name=config-backup policy=ftp,read,write,sensitive source={
   /export file=config-backup
-  /tool fetch address=192.0.2.50 src-path=config-backup.rsc \\
-    user=backup password=change-me mode=ftp upload=yes
+  /tool fetch url="sftp://192.0.2.50" src-path=config-backup.rsc \\
+    dst-path=config-backup.rsc user=backup password=change-me upload=yes
 }
 \`\`\`
 
@@ -172,45 +290,35 @@ A homelab and a production deployment use the same tools. The difference is whet
     title: "Running UniFi OS Server on Proxmox",
     date: "2026-06-24",
     excerpt:
-      "UniFi OS Server replaces the legacy Network Application and runs well as a container on Proxmox. Here is how to size it, install it, and avoid the mistakes that make the controller unreachable after a reboot.",
+      "Run UniFi OS Server in a Linux VM on Proxmox, using the official installer, a stable management address and off-VM backups.",
     tags: ["networking", "unifi", "proxmox", "self-hosting"],
-    content: `UniFi OS Server replaces the legacy Network Application and runs well as a container on Proxmox. It gives you a single dashboard for access points, switches and gateways without buying dedicated hardware.
+    content: `UniFi OS Server replaces the legacy Network Application and can run in a Linux VM on Proxmox. It provides centralized management for compatible access points, switches and independent gateways.
 
 ## Before you install
 
 UniFi OS depends on Podman and slirp4netns. Check the host distribution and kernel first; an unsupported base image usually fails during install with a message that does not mention the real cause.
 
-- Debian 12 or a current Ubuntu LTS
-- Static IP on the container, outside the DHCP pool
-- DNS and NTP working from inside the container
-- A backup target that is not the same disk as the container
+- A Linux distribution and dependency versions supported by the current installer
+- Static IP on the VM, outside the DHCP pool
+- DNS and NTP working from inside the VM
+- A backup target outside the VM
 
 ## Sizing
 
-The controller is light until you enable more applications. Size for the number of devices and the retention you want, not for the current device count.
-
-| Deployment | Devices | vCPU | RAM |
-|---|---|---|---|
-| Home or small office | up to 30 | 2 | 2 GB |
-| Branch office | up to 100 | 2 | 4 GB |
-| Multi-site | 100+ | 4 | 8 GB |
+Use the hardware recommendations in the official guide for your device and client count. Account for statistics retention and monitor disk usage after deployment.
 
 Disk grows with retained statistics. Give it more than the minimum and monitor it.
 
-## Install as a container
+## Install in a VM
 
-Create a privileged LXC container with nesting enabled, then run the official installer inside it. The exact steps change between releases, so follow the current Ubiquiti documentation and pin the version you install.
+Use a Linux VM on Proxmox and follow the [official UniFi OS Server installation guide](https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi). Container-specific setup is not covered here.
 
-\`\`\`bash
-# Inside the container: check dependencies before the installer
-podman --version
-slirp4netns --version
+1. Install the dependencies listed in the official guide, including Podman and slirp4netns
+2. Download the installer for your architecture from the Ubiquiti Downloads page linked in that guide
+3. Make the downloaded file executable and run that file with sudo, using its actual filename
+4. Complete the initial admin setup and keep the installer output for troubleshooting
 
-# Keep the installer output; it names the port and the initial admin setup
-bash uniFi-os-server-install.sh
-\`\`\`
-
-If the installer fails silently, check that the container can reach the internet and that \`/dev/net/tun\` exists. Both are common causes.
+Check the current distribution and dependency requirements before choosing a VM image. UniFi OS Server needs host services; a standalone Docker or Podman container is not a substitute for the installer.
 
 ## Network layout
 
@@ -225,13 +333,13 @@ Do not manage the controller through the same link you are changing. Keep a cons
 
 ## Backups and upgrades
 
-Enable automatic backups and store a copy outside the container. A controller backup contains the device configuration and the local admin accounts; losing it means re-adopting every device.
+Enable automatic backups and store a copy outside the VM. Verify that you can restore the controller configuration before relying on those backups.
 
-Upgrade in a maintenance window, keep the previous container snapshot, and check that devices re-adopt before you delete the snapshot. Read the release notes for the supported upgrade path; skipping major versions can leave the controller in a state that needs a reinstall.
+Upgrade in a maintenance window, keep the previous VM snapshot, and check that devices reconnect before you delete the snapshot. Read the release notes for the supported upgrade path; skipping major versions can leave the controller in a state that needs a reinstall.
 
 ## Monitoring
 
-Watch container CPU and memory, disk usage of the statistics database, and device adoption status. A controller that is up but cannot reach its access points looks healthy on a basic ping check.
+Watch VM CPU and memory, disk usage of the statistics database, and device adoption status. A controller that is up but cannot reach its access points looks healthy on a basic ping check.
 
 ## Checklist
 
@@ -244,7 +352,7 @@ Watch container CPU and memory, disk usage of the statistics database, and devic
 The controller is infrastructure. Treat it with the same backup and access rules as the rest of the network.`,
   },
   {
-    slug: "docker-dockge-stacks",
+    slug: "docker-dockge-setup",
     title: "Managing Docker Compose stacks with Dockge",
     date: "2026-06-25",
     excerpt:
@@ -331,7 +439,7 @@ Keep secrets in the environment file, not in the compose file, and make sure the
 Dockge makes routine stack work faster. The backup and access rules are still your responsibility.`,
   },
   {
-    slug: "rclone-encrypted-backup",
+    slug: "rclone-encrypted-backup-google-drive",
     title: "Encrypted off-site backups with Rclone",
     date: "2026-07-11",
     excerpt:

@@ -20,52 +20,44 @@ export const portfolioIdBySlug = {
   "multi-site-network-modernization": {
     title: "Modernisasi jaringan kampus 500 pengguna",
     excerpt:
-      "Mengganti jaringan datar tanpa monitoring dengan VLAN tersegmentasi, edge multi-WAN redundan dan armada wireless terkelola, tanpa downtime menyeluruh.",
-    content: `**Konteks.** Jaringan kampus untuk sekitar 500 mahasiswa dan staf tumbuh satu switch setiap kali. Semua perangkat berbagi satu ruang alamat datar, edge router hanya punya satu uplink, dan monitoring sebatas ping.
+      "Peningkatan jaringan kampus meliputi routing multi-WAN, segmentasi VLAN, wireless terkelola dan monitoring untuk 500+ pengguna.",
+    content: `**Lingkup.** Peningkatan dan modernisasi jaringan kampus yang melayani 500+ mahasiswa, dosen dan staf. Nama institusi dan pengenal instalasi tidak ditampilkan.
 
-**Masalah.** Trafik broadcast dan satu perangkat salah konfigurasi bisa memengaruhi seluruh situs. Saat uplink gagal, pemulihan bergantung pada seseorang yang menyadarinya lalu mengganti rute secara manual. Cakupan wireless ditambal dengan access point konsumer yang tidak bisa roaming.
+**Pekerjaan yang diselesaikan.**
+- Mengonfigurasi failover multi-WAN dan distribusi beban di MikroTik RouterOS dengan health check gateway
+- Mengonfigurasi link aggregation LACP untuk distribusi wireless
+- Mendesain ulang firewall, NAT, segmentasi VLAN dan QoS
+- Memigrasikan controller wireless ke UniFi OS Server self-hosted di Proxmox dengan kebijakan RF dan SSID terpusat
+- Men-deploy LibreNMS dan Uptime Kuma untuk monitoring dan alerting
+- Mendokumentasikan topologi, rencana alamat dan prosedur operasional
 
-**Pendekatan.**
-- Mendokumentasikan topologi dan rencana alamat yang ada sebelum mengubah apa pun
-- Memisahkan jaringan menjadi VLAN staf, mahasiswa, tamu dan manajemen dengan kebijakan firewall eksplisit di antaranya
-- Mengonfigurasi failover penyedia di edge router dengan health check gateway dan QoS untuk uplink bersama
-- Mengonsolidasikan wireless ke controller self-hosted dengan SSID dan kebijakan roaming yang konsisten
-- Menambahkan monitoring interface, link-state dan latensi dengan alert ke tim operasional
-
-**Hasil.** Penyedia yang gagal kini failover tanpa intervensi. Akses manajemen dibatasi ke VLAN khusus dan VPN, jadi perubahan buruk di jaringan pengguna tidak lagi mengunci administrator. Rencana alamat, topologi dan langkah rollback ditulis dan diserahterimakan.`,
+**Catatan teknis.** Setup routing dan controller dibahas di [panduan RouterOS](/blogs/mikrotik-multi-wan-bonding/) dan [panduan UniFi](/blogs/unifi-os-on-proxmox/).`,
   },
   "internship-management-platform": {
-    title: "Platform manajemen magang pengganti spreadsheet",
+    title: "Modul manajemen magang",
     excerpt:
-      "Modul PHP dan MySQL untuk penempatan, assignment pembimbing, penilaian dan rekap PDF, dengan impor massal dari alur spreadsheet sebelumnya.",
-    content: `**Konteks.** Sebuah program studi mengelola magang di spreadsheet yang diemail antar koordinator. Setiap semester baris yang sama diketik ulang, dan rekap akhir disusun manual.
+      "Modul magang untuk penempatan, assignment pembimbing, penilaian, rekap PDF dan impor massal CSV.",
+    content: `**Lingkup.** Pengembangan modul manajemen magang dalam platform web institusi. Nama institusi dan alamat aplikasi tidak ditampilkan.
 
-**Masalah.** Tidak ada satu sumber kebenaran. Dua koordinator bisa mengedit salinan berbeda, status penempatan tidak jelas, dan membuat laporan akhir butuh berhari-hari. Assignment pembimbing dan nilai tersimpan di file terpisah.
+**Pekerjaan yang diselesaikan.**
+- Penempatan magang dan assignment pembimbing
+- Penilaian dan rekap PDF
+- Impor massal CSV
 
-**Pendekatan.**
-- Memodelkan penempatan, pembimbing, periode dan nilai sebagai tabel relasional dengan foreign key
-- Membuat layar admin berbasis peran dengan validasi sisi server
-- Menambahkan impor CSV agar baris lama bisa dimigrasikan tanpa mengetik ulang
-- Menghasilkan PDF rekap dari record yang sama, bukan menyusunnya manual
-
-**Hasil.** Satu record per penempatan. Rekap dibuat saat dibutuhkan, dan koordinator bisa melihat penempatan yang belum punya pembimbing atau nilai. Baris historis diimpor dari CSV, bukan diketik ulang setiap semester.`,
+**Pekerjaan platform terkait.** Memodernisasi panel admin, menambahkan maintenance mode, memperbaiki alur reset password, serta memperbarui navigasi publik dan tautan footer.`,
   },
   "monitoring-and-config-backup": {
     title: "Monitoring dan backup konfigurasi perangkat jaringan",
     excerpt:
       "LibreNMS dan Uptime Kuma untuk visibilitas, plus ekspor konfigurasi terjadwal ke storage di luar perangkat, agar perangkat gagal cukup dipulihkan bukan dibangun ulang.",
-    content: `**Konteks.** Perangkat jaringan dikelola satu per satu. Perubahan konfigurasi tidak dilacak, dan switch yang gagal harus dibangun ulang dari ingatan.
+    content: `**Lingkup.** Pekerjaan monitoring dan backup dalam peningkatan jaringan kampus, bukan proyek klien terpisah.
 
-**Masalah.** Gangguan dilaporkan pengguna, bukan monitoring. Tidak ada yang bisa menyebut perangkat mana yang berubah sebelum insiden, dan tidak ada salinan konfigurasi di luar perangkat itu sendiri.
+**Pekerjaan yang diselesaikan.**
+- LibreNMS dan Uptime Kuma untuk monitoring dan alerting real-time
+- Backup biner dan ekspor konfigurasi teks terjadwal dari core router ke storage di luar perangkat melalui SFTP
+- Dokumentasi topologi, rencana alamat dan prosedur operasional
 
-**Pendekatan.**
-- Men-deploy LibreNMS untuk metrik interface, CPU, memori dan link-state, dengan aturan alert terhubung ke VLAN manajemen
-- Menambahkan pengecekan Uptime Kuma untuk layanan yang benar-benar terasa: DNS, intranet, email dan endpoint VPN
-- Menjadwalkan ekspor konfigurasi dari router dan switch ke host backup terpisah
-- Menyimpan ekspor sebelumnya di perangkat untuk rollback cepat, dan salinan di luar perangkat untuk rebuild penuh
-- Menulis prosedur pemulihan satu halaman untuk diikuti di unit cadangan
-
-**Hasil.** Alert datang sebelum pengguna menelepon. Setiap perangkat punya ekspor konfigurasi di luar perangkat itu sendiri, dan langkah pemulihan ditulis, bukan disimpan di ingatan.`,
+**Catatan teknis.** [Panduan RouterOS](/blogs/mikrotik-multi-wan-bonding/) menjelaskan pendekatan backup dengan alamat dokumentasi sebagai pengganti detail instalasi.`,
   },
   "cisco-ccna-introduction-to-networks": {
     title: "CCNA: Introduction to Networks",
@@ -93,6 +85,118 @@ Kursus ini mencakup desain jaringan enterprise, teknologi WAN, QoS, akses remote
 // Blogs overrides: keyed by slug, only translated fields
 // Preserve: slug, date, tags, code fences, links, markdown structure, technical terminology
 export const blogsIdBySlug = {
+  "rustdesk-server-setup": {
+    title: "Self-hosting server RustDesk",
+    excerpt: "Pasang layanan sinyal dan relay RustDesk di Linux, atur firewall, lalu hubungkan client menggunakan public key server.",
+    content: `RustDesk adalah aplikasi remote desktop open-source. Server self-hosted memungkinkan layanan sinyal dan relay dikelola sendiri, bukan memakai server publik. Panduan ini menggunakan nama contoh, bukan detail instalasi.
+
+## Prasyarat
+
+- Server Linux atau VM yang didukung metode instalasi pilihanmu
+- Akses administratif melalui sudo atau root
+- Alamat publik statis atau domain yang mengarah ke server untuk akses dari luar jaringan
+
+[Panduan instalasi resmi](https://rustdesk.com/docs/en/self-host/rustdesk-server-oss/install/) membahas Docker, skrip instalasi komunitas dan paket Debian. Metode skrip di bawah menyiapkan layanan native.
+
+## Firewall dan port forwarding
+
+Izinkan port TCP 21115, 21116 dan 21117, serta port UDP 21116, di firewall host dan perangkat NAT di depannya.
+
+Port 21118 dan 21119 melayani web client. Biarkan tertutup bila tidak digunakan. Jika digunakan, ikuti panduan reverse proxy resmi dan batasi port ini untuk proxy, bukan mengeksposnya langsung.
+
+## Pasang dengan skrip komunitas
+
+Skrip Techahold mengunduh layanan sinyal dan relay, lalu mengaturnya agar dijalankan saat startup oleh systemd. Unduh dan periksa skrip sebelum menjalankannya dengan hak administratif.
+
+1. Hubungkan ke server melalui SSH
+2. Unduh skrip
+
+\`\`\`bash
+wget https://raw.githubusercontent.com/techahold/rustdeskinstall/master/install.sh
+\`\`\`
+
+3. Periksa isinya, lalu jadikan executable
+
+\`\`\`bash
+chmod +x install.sh
+\`\`\`
+
+4. Jalankan dan ikuti prompt untuk alamat server
+
+\`\`\`bash
+./install.sh
+\`\`\`
+
+Simpan alamat server dan public key yang ditampilkan di akhir. Pastikan kedua layanan berjalan setelah reboot dan periksa perubahan firewall yang dibuat installer.
+
+## Ambil public key
+
+File key berada di direktori instalasi. Dengan skrip ini, public key biasanya tersedia di path berikut; periksa output installer bila berbeda.
+
+\`\`\`bash
+cat /opt/rustdesk/id_ed25519.pub
+\`\`\`
+
+Salin hanya public key ke pengaturan client. Simpan private key di server dan sertakan dalam backup yang terlindungi.
+
+## Konfigurasi client
+
+1. Buka RustDesk dan masuk ke Settings, lalu Network
+2. Buka kunci pengaturan jaringan bila diperlukan
+3. Isi ID Server dengan alamat servermu, seperti \`rustdesk.example.com\`
+4. Tempel public key ke Key; kosongkan Relay Server kecuali deployment memakai relay terpisah
+5. Terapkan pengaturan dan pastikan client menampilkan Ready
+
+Uji koneksi dari luar jaringan lokal server serta dari dalamnya. Koneksi LAN yang berhasil saja belum memverifikasi firewall publik dan port forwarding.`,
+  },
+  "digitalocean-droplet-spaces-setup": {
+    title: "Menyiapkan DigitalOcean Droplets dan Spaces",
+    excerpt: "Buat server virtual Linux, atur object storage kompatibel S3, dan berikan access key Spaces khusus untuk aplikasi.",
+    content: `DigitalOcean Droplets adalah server virtual. Spaces menyediakan object storage kompatibel S3 untuk aset dan backup. Panduan ini membahas penyiapan keduanya melalui control panel, tanpa memublikasikan detail akun atau kredensial.
+
+## Buat Droplet
+
+1. Masuk ke control panel DigitalOcean dan pilih Create, lalu Droplets
+2. Pilih region dekat pengguna aplikasi dan layanan yang dibutuhkannya
+3. Pilih image Linux yang didukung, seperti rilis Ubuntu LTS terkini
+4. Pilih paket sesuai workload dan periksa harga terkini sebelum membuatnya
+5. Tambahkan SSH public key untuk login; simpan private key di mesinmu sendiri
+6. Pilih opsi backup, monitoring dan IPv6 sesuai kebutuhan deployment
+7. Beri hostname yang jelas, tinjau konfigurasi dan buat Droplet
+
+Setelah alamat publik tersedia, hubungkan melalui SSH. Verifikasi akses administratif sebelum membatasi firewall, dan buka hanya port yang dibutuhkan aplikasi.
+
+## Buat bucket Spaces
+
+1. Buka Spaces Object Storage di control panel dan buat bucket
+2. Pilih region; region yang sama dengan Droplet dapat menyederhanakan akses aplikasi
+3. Pilih nama bucket unik dan tentukan proyek
+4. Tinjau izin daftar file dan akses objek sebelum mengunggah data
+5. Aktifkan CDN bila bucket akan melayani aset publik; CDN bukan pengganti kontrol akses
+
+Jangan publikasikan file backup atau unggahan pribadi sebagai aset publik. Gunakan bucket terpisah atau aturan akses eksplisit bila audiens datanya berbeda.
+
+## Buat access key aplikasi
+
+Ikuti [dokumentasi access key Spaces](https://docs.digitalocean.com/products/spaces/how-to/manage-access/) untuk langkah control panel dan batas izin terkini.
+
+1. Buka Spaces Object Storage, lalu Access Keys, dan pilih Create Access Key
+2. Pilih akses terbatas ke bucket dan operasi yang dibutuhkan bila kompatibel dengan kebijakan bucket
+3. Beri nama key yang menunjukkan aplikasi pemakainya
+4. Buat key dan simpan secret dengan aman; secret hanya ditampilkan sekali
+5. Konfigurasikan aplikasi atau client kompatibel S3 dengan endpoint bucket dan kredensial
+
+Jangan masukkan secret ke source control, bundle browser atau screenshot. Gunakan key khusus per aplikasi agar rotasi tidak mengganggu workload lain.
+
+## Verifikasi sebelum dipakai
+
+- Unggah file uji yang tidak sensitif melalui kredensial aplikasi
+- Baca kembali dan pastikan akses sesuai harapan
+- Pastikan request tanpa autentikasi tidak dapat mengambil objek privat
+- Pastikan key tidak dapat mengakses bucket di luar lingkup izinnya
+
+Droplet menjalankan aplikasi; Spaces menyimpan objek secara terpisah dari disk server. Keduanya bukan pengganti proses backup dan pemulihan yang sudah diuji.`,
+  },
   "mikrotik-multi-wan-bonding": {
     title: "Failover multi-WAN dan link aggregation di RouterOS",
     excerpt:
@@ -167,8 +271,8 @@ add name=config-backup interval=2d on-event=config-backup start-time=02:00:00
 /system script
 add name=config-backup policy=ftp,read,write,sensitive source={
   /export file=config-backup
-  /tool fetch address=192.0.2.50 src-path=config-backup.rsc \\
-    user=backup password=change-me mode=ftp upload=yes
+  /tool fetch url="sftp://192.0.2.50" src-path=config-backup.rsc \\
+    dst-path=config-backup.rsc user=backup password=change-me upload=yes
 }
 \`\`\`
 
@@ -255,44 +359,34 @@ Homelab dan deployment produksi memakai tools yang sama. Bedanya adalah apakah l
   "unifi-os-on-proxmox": {
     title: "Menjalankan UniFi OS Server di Proxmox",
     excerpt:
-      "UniFi OS Server menggantikan Network Application lama dan berjalan baik sebagai container di Proxmox. Berikut cara menentukan ukuran, memasang, dan menghindari kesalahan yang membuat controller tidak terjangkau setelah reboot.",
-    content: `UniFi OS Server menggantikan Network Application lama dan berjalan baik sebagai container di Proxmox. Ia memberi satu dashboard untuk access point, switch dan gateway tanpa membeli hardware khusus.
+      "Jalankan UniFi OS Server dalam VM Linux di Proxmox, menggunakan installer resmi, alamat manajemen tetap dan backup di luar VM.",
+    content: `UniFi OS Server menggantikan Network Application lama dan dapat berjalan dalam VM Linux di Proxmox. Ia menyediakan manajemen terpusat untuk access point, switch dan gateway independen yang kompatibel.
 
 ## Sebelum memasang
 
 UniFi OS bergantung pada Podman dan slirp4netns. Periksa distribusi dan kernel host lebih dulu; base image yang tidak didukung biasanya gagal saat instalasi dengan pesan yang tidak menyebut penyebab sebenarnya.
 
-- Debian 12 atau Ubuntu LTS terbaru
-- IP statis di container, di luar pool DHCP
-- DNS dan NTP bekerja dari dalam container
-- Target backup yang bukan disk yang sama dengan container
+- Distribusi Linux dan versi dependensi yang didukung installer terkini
+- IP statis di VM, di luar pool DHCP
+- DNS dan NTP bekerja dari dalam VM
+- Target backup di luar VM
 
 ## Ukuran
 
-Controller ringan sampai kamu mengaktifkan lebih banyak aplikasi. Ukur berdasarkan jumlah perangkat dan retensi yang diinginkan, bukan jumlah perangkat saat ini.
-
-| Deployment | Perangkat | vCPU | RAM |
-|---|---|---|---|
-| Rumah atau kantor kecil | hingga 30 | 2 | 2 GB |
-| Kantor cabang | hingga 100 | 2 | 4 GB |
-| Multi-site | 100+ | 4 | 8 GB |
+Gunakan rekomendasi hardware dalam panduan resmi sesuai jumlah perangkat dan client. Perhitungkan retensi statistik dan pantau penggunaan disk setelah deployment.
 
 Disk tumbuh mengikuti statistik yang disimpan. Beri lebih dari minimum dan pantau.
 
-## Pasang sebagai container
+## Pasang dalam VM
 
-Buat container LXC privileged dengan nesting aktif, lalu jalankan installer resmi di dalamnya. Langkah persisnya berubah antar rilis, jadi ikuti dokumentasi Ubiquiti terbaru dan pin versi yang dipasang.
+Gunakan VM Linux di Proxmox dan ikuti [panduan instalasi resmi UniFi OS Server](https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi). Setup khusus container tidak dibahas di sini.
 
-\`\`\`bash
-# Inside the container: check dependencies before the installer
-podman --version
-slirp4netns --version
+1. Pasang dependensi yang tercantum di panduan resmi, termasuk Podman dan slirp4netns
+2. Unduh installer sesuai arsitektur dari halaman Ubiquiti Downloads yang ditautkan dalam panduan tersebut
+3. Jadikan file unduhan executable lalu jalankan file itu dengan sudo, menggunakan nama file sebenarnya
+4. Selesaikan setup admin awal dan simpan output installer untuk troubleshooting
 
-# Keep the installer output; it names the port and the initial admin setup
-bash uniFi-os-server-install.sh
-\`\`\`
-
-Jika installer gagal diam-diam, cek container bisa mencapai internet dan \`/dev/net/tun\` ada. Keduanya penyebab umum.
+Periksa persyaratan distribusi dan dependensi terkini sebelum memilih image VM. UniFi OS Server membutuhkan layanan host; container Docker atau Podman mandiri bukan pengganti installer.
 
 ## Tata letak jaringan
 
@@ -307,13 +401,13 @@ Jangan mengelola controller melalui link yang sedang kamu ubah. Siapkan jalur co
 
 ## Backup dan upgrade
 
-Aktifkan backup otomatis dan simpan salinan di luar container. Backup controller berisi konfigurasi perangkat dan akun admin lokal; kehilangannya berarti mengadopsi ulang setiap perangkat.
+Aktifkan backup otomatis dan simpan salinan di luar VM. Pastikan konfigurasi controller bisa dipulihkan sebelum mengandalkan backup tersebut.
 
-Upgrade di jendela maintenance, simpan snapshot container sebelumnya, dan pastikan perangkat diadopsi ulang sebelum menghapus snapshot. Baca release notes untuk jalur upgrade yang didukung; melewati versi mayor bisa meninggalkan controller dalam kondisi yang butuh instalasi ulang.
+Upgrade di jendela maintenance, simpan snapshot VM sebelumnya, dan pastikan perangkat terhubung kembali sebelum menghapus snapshot. Baca release notes untuk jalur upgrade yang didukung; melewati versi mayor bisa meninggalkan controller dalam kondisi yang butuh instalasi ulang.
 
 ## Monitoring
 
-Pantau CPU dan memori container, penggunaan disk database statistik, dan status adopsi perangkat. Controller yang hidup tetapi tidak bisa mencapai access point terlihat sehat pada pengecekan ping dasar.
+Pantau CPU dan memori VM, penggunaan disk database statistik, dan status adopsi perangkat. Controller yang hidup tetapi tidak bisa mencapai access point terlihat sehat pada pengecekan ping dasar.
 
 ## Checklist
 
@@ -325,7 +419,7 @@ Pantau CPU dan memori container, penggunaan disk database statistik, dan status 
 
 Controller adalah infrastruktur. Perlakukan dengan aturan backup dan akses yang sama seperti jaringan lainnya.`,
   },
-  "docker-dockge-stacks": {
+  "docker-dockge-setup": {
     title: "Mengelola stack Docker Compose dengan Dockge",
     excerpt:
       "Dockge adalah manajer stack Compose yang fokus: edit, start, stop dan update stack dari browser. Berikut cara menjalankannya dengan aman dan kebiasaan yang menjaga host Docker kecil tetap terawat.",
@@ -409,7 +503,7 @@ Simpan secret di file environment, bukan di file compose, dan pastikan direktori
 
 Dockge mempercepat pekerjaan stack rutin. Aturan backup dan akses tetap tanggung jawabmu.`,
   },
-  "rclone-encrypted-backup": {
+  "rclone-encrypted-backup-google-drive": {
     title: "Backup off-site terenkripsi dengan Rclone",
     excerpt:
       "Rclone bisa mengenkripsi file sebelum meninggalkan host, sehingga penyedia storage hanya melihat nama dan data buram. Berikut setup lengkap: remote, lapisan crypt, skrip, jadwal dan uji restore.",

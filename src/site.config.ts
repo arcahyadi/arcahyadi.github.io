@@ -23,7 +23,6 @@ export const siteConfig = {
     email: "arcahyadi.dev@gmail.com",
     links: [
       { label: "GitHub", href: "https://github.com/arcahyadi", icon: "github" },
-      { label: "Email", href: "mailto:arcahyadi.dev@gmail.com", icon: "email" },
     ],
   },
 
