@@ -1,7 +1,7 @@
 import { Header } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/Header";
 import { FooterSection } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/FooterSection";
 import { LegalSection } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/LegalSection";
-import { HomeHero, WhatIDo, FeaturedPortfolio, RecentBlogs, TechStack, ContactCTA } from "@/components/home/HomeSections";
+import { HomeHero, Services, FeaturedPortfolio, RecentBlogs, TechStack, ContactCTA } from "@/components/home/HomeSections";
 
 export default function HomePage() {
   return (
@@ -13,7 +13,7 @@ export default function HomePage() {
         <Header />
         <div data-component="content">
           <HomeHero />
-          <WhatIDo />
+          <Services />
           <FeaturedPortfolio />
           <RecentBlogs />
           <TechStack />

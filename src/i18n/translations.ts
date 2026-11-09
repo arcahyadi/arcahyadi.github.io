@@ -1,5 +1,5 @@
 // src/i18n/translations.ts — Type-safe en/id dictionaries for every UI string.
-// Public content (blogs/portfolio/cv) lives in src/i18n/content.ts; UI copy lives here.
+// Public content (blogs/portfolio) lives in src/content/*; UI copy lives here.
 
 import type { Locale } from "./config";
 
@@ -9,17 +9,14 @@ export type Dictionary = {
     description: string;
   };
   nav: {
-    portfolio: string;
-    blogs: string;
-    cv: string;
-  };
-  footer: {
-    // footer labels are largely proper nouns; keep but centralize if needed
-    cv: string;
+    services: string;
+    work: string;
+    notes: string;
+    contact: string;
   };
   legal: {
     copyright: string;
-    links: { portfolio: string; blogs: string; cv: string };
+    links: { work: string; notes: string };
     languageLabel: string; // accessible name for picker
     languagePickerAriaLabel: string;
   };
@@ -31,8 +28,9 @@ export type Dictionary = {
       ctaPrimary: string;
       ctaSecondary: string;
     };
-    whatIDo: {
+    services: {
       title: string;
+      subtitle: string;
       items: Array<{ title: string; description: string }>;
     };
     featured: {
@@ -70,17 +68,6 @@ export type Dictionary = {
     github: string;
     liveDemo: string;
   };
-  cvPage: {
-    title: string;
-    // headline is per-locale from content, but section headings here:
-    download: string;
-    education: string;
-    experience: string;
-    skills: string;
-    skillsLabels: { programming: string; networking: string; infra: string; automation: string };
-    certifications: string;
-    interests: string;
-  };
   contactForm: {
     nameLabel: string;
     namePlaceholder: string;
@@ -92,10 +79,8 @@ export type Dictionary = {
     sending: string;
     orEmail: string;
     success: string;
-    errorNotConfigured: string;
     errorFallback: string;
     errorConnection: string;
-    web3formsHint: string;
   };
   header: {
     homeAriaLabel: string;
@@ -124,107 +109,97 @@ export type Dictionary = {
 export const translations: Record<Locale, Dictionary> = {
   en: {
     site: {
-      title: "arcahyadi — Networking · SysAdmin · Backend",
+      title: "arcahyadi — Network, Server & Automation",
       description:
-        "Network Technician, SysAdmin and homelab enthusiast — I like Backend, Networking and Automation. Based in Location omitted, Indonesia.",
+        "Networking, servers and backend automation: MikroTik, UniFi, Proxmox, Docker, Go and n8n. Independent consulting and hands-on implementation.",
     },
     nav: {
-      portfolio: "Portfolio",
-      blogs: "Blogs",
-      cv: "CV",
-    },
-    footer: {
-      cv: "CV",
+      services: "Services",
+      work: "Work",
+      notes: "Notes",
+      contact: "Contact",
     },
     legal: {
       copyright: "©2026",
-      links: { portfolio: "Portfolio", blogs: "Blogs", cv: "CV" },
+      links: { work: "Work", notes: "Notes" },
       languageLabel: "Language",
       languagePickerAriaLabel: "Select language",
     },
     home: {
       hero: {
-        eyebrow: "Network Technician · SysAdmin · Homelab enthusiast",
-        title: "Hi, I'm arcahyadi",
+        eyebrow: "Network · Server · Automation",
+        title: "Networks that hold up. Servers that stay up.",
         subtitle:
-          "I like Backend, Networking and Automation — building systems that just work, and running my own mini data center at home in Location omitted.",
-        ctaPrimary: "View Portfolio",
-        ctaSecondary: "View CV",
+          "Hands-on help with routing and wireless, Proxmox and Docker infrastructure, backend systems, and workflow automation. Clear scope, working systems, documented handover.",
+        ctaPrimary: "See services",
+        ctaSecondary: "Read case studies",
       },
-      whatIDo: {
-        title: "What I do",
+      services: {
+        title: "Services",
+        subtitle: "Small, well-scoped engagements. You get the fix and the notes to run it.",
         items: [
           {
-            title: "Campus Network",
+            title: "Network design & hardening",
             description:
-              "Design & maintain Ubiquiti UniFi + MikroTik CCR network for Institution — VLANs, firewall, traffic shaping for 500+ users.",
+              "VLAN segmentation, firewall policy, multi-WAN failover, QoS and wireless rollout on MikroTik and UniFi. Includes topology and IP plan documentation.",
           },
           {
-            title: "SysAdmin & Homelab",
+            title: "Server & virtualization",
             description:
-              "Two Proxmox VE nodes (node-a/node-b), ZFS RAID1, SDN — Jellyfin, LibreNMS, n8n, Dockge, Uptime Kuma, UniFi OS.",
+              "Proxmox VE, ZFS storage, Docker workloads and monitoring with LibreNMS and Uptime Kuma. Built for recovery, not just uptime.",
           },
           {
-            title: "Backend",
+            title: "Backend & internal tools",
             description:
-              "Internal web apps with PHP, Go, MySQL — campus operations from admission to graduation.",
+              "PHP, Go and MySQL applications that replace spreadsheets: forms, approvals, reporting and PDF exports, with migration of existing data.",
           },
           {
-            title: "Automation & Local AI",
+            title: "Automation & local AI",
             description:
-              "n8n workflows + LM Studio on MacBook Air M4 (MLX/Metal) — Gemma 4, Qwen 3.5, privacy-first.",
+              "n8n workflows that connect the tools you already use, plus local LLM setups for work that cannot leave your network.",
           },
         ],
       },
       featured: {
-        portfolioTitle: "Featured work",
-        portfolioSubtitle: "Certificates and projects — see all in Portfolio.",
-        blogsTitle: "Recent writing",
-        blogsSubtitle: "Real-world setups from homelab and campus — browse all in Blogs.",
-        seeAll: "See all →",
-        browseAll: "Browse all →",
+        portfolioTitle: "Selected work",
+        portfolioSubtitle: "Anonymized case studies: problem, approach, result.",
+        blogsTitle: "Field notes",
+        blogsSubtitle: "Configuration write-ups and lessons from real deployments.",
+        seeAll: "All work →",
+        browseAll: "All notes →",
       },
       stack: {
-        title: "Tech stack",
+        title: "Toolkit",
         groups: [
-          { label: "Programming", items: ["Go", "PHP", "MySQL", "SQL"] },
-          { label: "Networking", items: ["Cisco", "Mikrotik", "Ubiquiti UniFi", "WireGuard", "Tailscale", "OpenVPN", "VLANs"] },
-          { label: "Infra", items: ["Proxmox VE", "Docker", "Linux (Debian, Ubuntu)", "DigitalOcean", "ZFS", "SDN", "NFS"] },
-          { label: "Automation", items: ["n8n", "LM Studio", "MLX", "Metal"] },
+          { label: "Networking", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLANs", "QoS"] },
+          { label: "Infrastructure", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
+          { label: "Backend", items: ["Go", "PHP", "MySQL", "SQL"] },
+          { label: "Automation", items: ["n8n", "LM Studio", "Bash", "Rclone"] },
         ],
       },
       contact: {
-        title: "Let's talk",
-        subtitle: "Open to collaboration on networking, infra and backend. Reach me via email or the links below.",
+        title: "Start a conversation",
+        subtitle:
+          "Describe the setup and what is not working. You will get a straight answer on scope, approach and whether I am the right fit.",
         ctaLabel: "Email me",
       },
     },
     blogsPage: {
-      title: "Blogs",
-      subtitle: "Notes on networking, homelab, automation and backend",
+      title: "Field notes",
+      subtitle: "Networking, servers and automation, written from real deployments",
       readMore: "Read more →",
-      backToBlogs: "← Back to Blogs",
+      backToBlogs: "← Back to notes",
       notFoundTitle: "Not found",
-      notFoundSubtitle: "Blog post not found.",
+      notFoundSubtitle: "Note not found.",
     },
     portfolioPage: {
-      title: "Portfolio",
-      subtitle: "Projects, homelab and infrastructure",
-      backToPortfolio: "← Back to Portfolio",
+      title: "Work",
+      subtitle: "Anonymized case studies: problem, approach, result",
+      backToPortfolio: "← Back to work",
       notFoundTitle: "Not found",
-      notFoundSubtitle: "Portfolio item not found.",
+      notFoundSubtitle: "Case study not found.",
       github: "GitHub",
       liveDemo: "Live Demo",
-    },
-    cvPage: {
-      title: "CV",
-      download: "Download CV (PDF)",
-      education: "Education",
-      experience: "Experience",
-      skills: "Skills",
-      skillsLabels: { programming: "Programming:", networking: "Networking:", infra: "Infra:", automation: "Automation:" },
-      certifications: "Certifications",
-      interests: "Interests",
     },
     contactForm: {
       nameLabel: "Name",
@@ -232,17 +207,13 @@ export const translations: Record<Locale, Dictionary> = {
       emailLabel: "Email",
       emailPlaceholder: "you@email.com",
       messageLabel: "Message",
-      messagePlaceholder: "Hello arcahyadi, ...",
+      messagePlaceholder: "What are you working on?",
       submit: "Send message",
       sending: "Sending...",
       orEmail: "or email directly ↓",
-      success: "Thanks! Message sent — I'll reply as soon as possible. You can also reach me directly via Email below.",
-      errorNotConfigured:
-        "Form not configured. Create an Access Key at web3forms.com then set src/site.config.ts → home.contact.web3formsKey",
+      success: "Thanks! Message sent — I will reply as soon as possible.",
       errorFallback: "Failed to send. Please try again or email directly.",
       errorConnection: "Connection failed. Please try again or email directly.",
-      web3formsHint:
-        "Form is ready but needs a Web3Forms Access Key. Sign up for free at web3forms.com then set home.contact.web3formsKey in src/site.config.ts. Alternative without signup: change fetch URL to https://formsubmit.co/arcahyadi.dev@gmail.com.",
     },
     header: {
       homeAriaLabel: "Home",
@@ -269,107 +240,97 @@ export const translations: Record<Locale, Dictionary> = {
   },
   id: {
     site: {
-      title: "arcahyadi — Jaringan · SysAdmin · Backend",
+      title: "arcahyadi — Jaringan, Server & Otomasi",
       description:
-        "Teknisi Jaringan, SysAdmin dan penggemar homelab — saya suka Backend, Jaringan dan Otomasi. Berbasis di Location omitted, Indonesia.",
+        "Jaringan, server dan otomasi backend: MikroTik, UniFi, Proxmox, Docker, Go dan n8n. Konsultasi dan implementasi langsung.",
     },
     nav: {
-      portfolio: "Portofolio",
-      blogs: "Blog",
-      cv: "CV",
-    },
-    footer: {
-      cv: "CV",
+      services: "Layanan",
+      work: "Karya",
+      notes: "Catatan",
+      contact: "Kontak",
     },
     legal: {
       copyright: "©2026",
-      links: { portfolio: "Portofolio", blogs: "Blog", cv: "CV" },
+      links: { work: "Karya", notes: "Catatan" },
       languageLabel: "Bahasa",
       languagePickerAriaLabel: "Pilih bahasa",
     },
     home: {
       hero: {
-        eyebrow: "Teknisi Jaringan · SysAdmin · Penggemar Homelab",
-        title: "Halo, saya arcahyadi",
+        eyebrow: "Jaringan · Server · Otomasi",
+        title: "Jaringan yang tahan. Server yang tetap hidup.",
         subtitle:
-          "Saya suka Backend, Jaringan dan Otomasi — membangun sistem yang andal, dan menjalankan mini data center sendiri di rumah di Location omitted.",
-        ctaPrimary: "Lihat Portofolio",
-        ctaSecondary: "Lihat CV",
+          "Bantuan langsung untuk routing dan wireless, infrastruktur Proxmox dan Docker, sistem backend, serta otomasi workflow. Lingkup jelas, sistem berjalan, serah terima terdokumentasi.",
+        ctaPrimary: "Lihat layanan",
+        ctaSecondary: "Baca studi kasus",
       },
-      whatIDo: {
-        title: "Yang saya kerjakan",
+      services: {
+        title: "Layanan",
+        subtitle: "Pekerjaan kecil dengan lingkup jelas. Kamu dapat perbaikannya dan catatan untuk menjalankannya.",
         items: [
           {
-            title: "Jaringan Kampus",
+            title: "Desain & penguatan jaringan",
             description:
-              "Merancang & memelihara jaringan Ubiquiti UniFi + MikroTik CCR untuk Institution — VLAN, firewall, traffic shaping untuk 500+ pengguna.",
+              "Segmentasi VLAN, kebijakan firewall, failover multi-WAN, QoS dan rollout wireless di MikroTik dan UniFi. Termasuk dokumentasi topologi dan rencana IP.",
           },
           {
-            title: "SysAdmin & Homelab",
+            title: "Server & virtualisasi",
             description:
-              "Dua node Proxmox VE (node-a/node-b), ZFS RAID1, SDN — Jellyfin, LibreNMS, n8n, Dockge, Uptime Kuma, UniFi OS.",
+              "Proxmox VE, storage ZFS, workload Docker dan monitoring dengan LibreNMS serta Uptime Kuma. Dibangun untuk pemulihan, bukan hanya uptime.",
           },
           {
-            title: "Backend",
+            title: "Backend & tools internal",
             description:
-              "Aplikasi web internal dengan PHP, Go, MySQL — operasional kampus dari penerimaan hingga kelulusan.",
+              "Aplikasi PHP, Go dan MySQL untuk menggantikan spreadsheet: form, persetujuan, laporan dan ekspor PDF, dengan migrasi data yang sudah ada.",
           },
           {
-            title: "Otomasi & AI Lokal",
+            title: "Otomasi & AI lokal",
             description:
-              "Workflow n8n + LM Studio di MacBook Air M4 (MLX/Metal) — Gemma 4, Qwen 3.5, mengutamakan privasi.",
+              "Workflow n8n yang menghubungkan tools yang sudah dipakai, plus setup LLM lokal untuk pekerjaan yang tidak boleh keluar dari jaringanmu.",
           },
         ],
       },
       featured: {
         portfolioTitle: "Karya pilihan",
-        portfolioSubtitle: "Sertifikat dan proyek — lihat semua di Portofolio.",
-        blogsTitle: "Tulisan terbaru",
-        blogsSubtitle: "Setup nyata dari homelab dan kampus — jelajahi semua di Blog.",
-        seeAll: "Lihat semua →",
-        browseAll: "Jelajahi semua →",
+        portfolioSubtitle: "Studi kasus anonim: masalah, pendekatan, hasil.",
+        blogsTitle: "Catatan lapangan",
+        blogsSubtitle: "Panduan konfigurasi dan pelajaran dari deployment nyata.",
+        seeAll: "Semua karya →",
+        browseAll: "Semua catatan →",
       },
       stack: {
-        title: "Tech stack",
+        title: "Perangkat",
         groups: [
-          { label: "Pemrograman", items: ["Go", "PHP", "MySQL", "SQL"] },
-          { label: "Jaringan", items: ["Cisco", "Mikrotik", "Ubiquiti UniFi", "WireGuard", "Tailscale", "OpenVPN", "VLAN"] },
-          { label: "Infra", items: ["Proxmox VE", "Docker", "Linux (Debian, Ubuntu)", "DigitalOcean", "ZFS", "SDN", "NFS"] },
-          { label: "Otomasi", items: ["n8n", "LM Studio", "MLX", "Metal"] },
+          { label: "Jaringan", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLAN", "QoS"] },
+          { label: "Infrastruktur", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
+          { label: "Backend", items: ["Go", "PHP", "MySQL", "SQL"] },
+          { label: "Otomasi", items: ["n8n", "LM Studio", "Bash", "Rclone"] },
         ],
       },
       contact: {
-        title: "Mari ngobrol",
-        subtitle: "Terbuka untuk kolaborasi di jaringan, infra dan backend. Hubungi via email atau tautan di bawah.",
+        title: "Mulai dari obrolan",
+        subtitle:
+          "Ceritakan setup dan bagian yang bermasalah. Kamu akan dapat jawaban langsung soal lingkup, pendekatan, dan apakah saya cocok untuk itu.",
         ctaLabel: "Email saya",
       },
     },
     blogsPage: {
-      title: "Blog",
-      subtitle: "Catatan tentang jaringan, homelab, otomasi dan backend",
+      title: "Catatan lapangan",
+      subtitle: "Jaringan, server dan otomasi, ditulis dari deployment nyata",
       readMore: "Baca selengkapnya →",
-      backToBlogs: "← Kembali ke Blog",
+      backToBlogs: "← Kembali ke catatan",
       notFoundTitle: "Tidak ditemukan",
-      notFoundSubtitle: "Artikel tidak ditemukan.",
+      notFoundSubtitle: "Catatan tidak ditemukan.",
     },
     portfolioPage: {
-      title: "Portofolio",
-      subtitle: "Proyek, homelab dan infrastruktur",
-      backToPortfolio: "← Kembali ke Portofolio",
+      title: "Karya",
+      subtitle: "Studi kasus anonim: masalah, pendekatan, hasil",
+      backToPortfolio: "← Kembali ke karya",
       notFoundTitle: "Tidak ditemukan",
-      notFoundSubtitle: "Item portofolio tidak ditemukan.",
+      notFoundSubtitle: "Studi kasus tidak ditemukan.",
       github: "GitHub",
       liveDemo: "Demo Langsung",
-    },
-    cvPage: {
-      title: "CV",
-      download: "Unduh CV (PDF)",
-      education: "Pendidikan",
-      experience: "Pengalaman",
-      skills: "Keahlian",
-      skillsLabels: { programming: "Pemrograman:", networking: "Jaringan:", infra: "Infra:", automation: "Otomasi:" },
-      certifications: "Sertifikasi",
-      interests: "Minat",
     },
     contactForm: {
       nameLabel: "Nama",
@@ -377,17 +338,13 @@ export const translations: Record<Locale, Dictionary> = {
       emailLabel: "Email",
       emailPlaceholder: "kamu@email.com",
       messageLabel: "Pesan",
-      messagePlaceholder: "Halo arcahyadi, ...",
+      messagePlaceholder: "Sedang mengerjakan apa?",
       submit: "Kirim pesan",
       sending: "Mengirim...",
       orEmail: "atau email langsung ↓",
-      success: "Terima kasih! Pesan terkirim — saya akan balas secepatnya. Bisa juga hubungi langsung via Email di bawah.",
-      errorNotConfigured:
-        "Form belum dikonfigurasi. Buat Access Key di web3forms.com lalu isi di src/site.config.ts → home.contact.web3formsKey",
+      success: "Terima kasih! Pesan terkirim — saya akan balas secepatnya.",
       errorFallback: "Gagal mengirim. Coba lagi atau email langsung.",
       errorConnection: "Gagal koneksi. Coba lagi atau email langsung.",
-      web3formsHint:
-        "Form siap tapi butuh Web3Forms Access Key. Daftar gratis di web3forms.com lalu isi home.contact.web3formsKey di src/site.config.ts. Alternatif tanpa daftar: ganti fetch URL ke https://formsubmit.co/arcahyadi.dev@gmail.com.",
     },
     header: {
       homeAriaLabel: "Beranda",

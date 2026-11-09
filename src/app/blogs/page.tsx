@@ -8,7 +8,7 @@ export default function BlogsPage() {
   const { blogs, t } = useLocale();
   const sorted = [...blogs].sort((a, b) => (a.date < b.date ? 1 : -1));
   return (
-    <AcademicShell withSidebar={false} title={t.blogsPage.title} subtitle={t.blogsPage.subtitle}>
+    <AcademicShell title={t.blogsPage.title} subtitle={t.blogsPage.subtitle}>
       <div className="grid gap-6">
         {sorted.map((post) => (
           <Link

@@ -14,7 +14,7 @@ export default function BlogDetailClient() {
 
   if (!post)
     return (
-      <AcademicShell withSidebar={false} title={t.blogsPage.notFoundTitle} subtitle={t.blogsPage.notFoundSubtitle}>
+      <AcademicShell title={t.blogsPage.notFoundTitle} subtitle={t.blogsPage.notFoundSubtitle}>
         <Link href="/blogs" className="text-[var(--color-text-strong)] underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
           {t.blogsPage.backToBlogs}
         </Link>
@@ -22,7 +22,7 @@ export default function BlogDetailClient() {
     );
 
   return (
-    <AcademicShell withSidebar={false} title={post.title} subtitle={`${post.date} · ${post.tags.join(" · ")}`}>
+    <AcademicShell title={post.title} subtitle={`${post.date} · ${post.tags.join(" · ")}`}>
       <Link href="/blogs" className="inline-flex items-center gap-2 text-sm text-[var(--color-text-weak)] hover:text-[var(--color-text-strong)] hover:underline mb-6 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
         {t.blogsPage.backToBlogs}
       </Link>

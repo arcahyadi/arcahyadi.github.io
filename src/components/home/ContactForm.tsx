@@ -5,7 +5,7 @@ import { siteConfig } from "@/site.config";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 type Status = "idle" | "loading" | "success" | "error";
-type ErrorCode = "not_configured" | "fallback" | "connection" | null;
+type ErrorCode = "fallback" | "connection" | null;
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -14,23 +14,16 @@ export function ContactForm() {
   const cf = t.contactForm;
 
   const errorMessage =
-    errorCode === "not_configured"
-      ? cf.errorNotConfigured
-      : errorCode === "connection"
-        ? cf.errorConnection
-        : errorCode === "fallback"
-          ? cf.errorFallback
-          : "";
+    errorCode === "connection" ? cf.errorConnection : errorCode === "fallback" ? cf.errorFallback : "";
 
   const accessKey: string = siteConfig.home.contact.web3formsKey || "";
-
-  const isConfigured = accessKey && accessKey !== "YOUR_WEB3FORMS_ACCESS_KEY";
+  const isConfigured = Boolean(accessKey);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!isConfigured) {
       setStatus("error");
-      setErrorCode("not_configured");
+      setErrorCode("fallback");
       return;
     }
     const form = e.currentTarget;
@@ -53,7 +46,7 @@ export function ContactForm() {
         method: "POST",
         body: data,
       });
-      const json: { success?: boolean; message?: string } = await res.json();
+      const json: { success?: boolean } = await res.json();
       if (json.success) {
         setStatus("success");
         setErrorCode(null);
@@ -70,7 +63,7 @@ export function ContactForm() {
   }
 
   return (
-    <div className="mt-8 max-w-[42rem]">
+    <div className="max-w-[42rem]">
       <form onSubmit={onSubmit} className="flex flex-col gap-3" aria-label={cf.messageLabel}>
         {/* honeypot */}
         <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
@@ -120,15 +113,6 @@ export function ContactForm() {
           </button>
           <span className="text-xs font-mono text-[var(--color-text-weak)]">{cf.orEmail}</span>
         </div>
-
-        {!isConfigured ? (
-          <p className="text-xs leading-relaxed text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded px-3 py-2 bg-amber-50 dark:bg-amber-950/30">
-            {cf.web3formsHint}{" "}
-            <a href="https://web3forms.com" target="_blank" rel="noopener noreferrer" className="underline">
-              web3forms.com
-            </a>
-          </p>
-        ) : null}
 
         {status === "success" ? (
           <p role="status" aria-live="polite" className="text-sm text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800 rounded px-3 py-2 bg-green-50 dark:bg-green-950/30">

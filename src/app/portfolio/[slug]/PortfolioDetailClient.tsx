@@ -14,7 +14,7 @@ export default function PortfolioDetailClient() {
 
   if (!item)
     return (
-      <AcademicShell withSidebar={false} title={t.portfolioPage.notFoundTitle} subtitle={t.portfolioPage.notFoundSubtitle}>
+      <AcademicShell title={t.portfolioPage.notFoundTitle} subtitle={t.portfolioPage.notFoundSubtitle}>
         <Link href="/portfolio" className="text-[var(--color-text-strong)] underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
           {t.portfolioPage.backToPortfolio}
         </Link>
@@ -22,7 +22,7 @@ export default function PortfolioDetailClient() {
     );
 
   return (
-    <AcademicShell withSidebar={false} title={item.title} subtitle={`${item.date} · ${item.tags.join(" · ")}`}>
+    <AcademicShell title={item.title} subtitle={`${item.date} · ${item.tags.join(" · ")}`}>
       <Link href="/portfolio" className="inline-flex items-center gap-2 text-sm text-[var(--color-text-weak)] hover:text-[var(--color-text-strong)] hover:underline mb-6 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
         {t.portfolioPage.backToPortfolio}
       </Link>

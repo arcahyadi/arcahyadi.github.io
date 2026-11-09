@@ -1,130 +1,117 @@
 // site.config.ts — SINGLE SOURCE OF TRUTH (aggregate)
-// Edit konten Portfolio/Blogs/CV di src/content/* — file terpisah per koleksi (mirip _portfolio/_posts/_pages di academicpages).
-// Header/hero/landing tetap di sini. Semua halaman hot-reload (npm run dev).
+// Edit konten Portfolio/Blogs di src/content/* — file terpisah per koleksi.
+// Header/hero/services/landing tetap di sini. Semua halaman hot-reload (npm run dev).
 
 import { portfolio } from "./content/portfolio";
 import { blogs } from "./content/blogs";
-import { cv } from "./content/cv";
 
 export const siteConfig = {
-  // ── Global / Site ── (synced from arcahyadi.github.io _config.yml)
+  // ── Global / Site ──
   site: {
-    name: "arcahyadi Personal Page",
-    title: "arcahyadi — Networking · SysAdmin · Backend",
+    name: "arcahyadi.dev",
+    title: "arcahyadi — Network, Server & Automation",
     shortTitle: "arcahyadi",
     author: "arcahyadi",
-    description: "Network Technician, SysAdmin and homelab enthusiast — I like Backend, Networking and Automation. Based in Location omitted, Indonesia.",
+    description:
+      "Networking, servers and backend automation: MikroTik, UniFi, Proxmox, Docker, Go and n8n. Independent consulting and hands-on implementation.",
     url: "https://arcahyadi.me",
-    // Logo header: taruh file logomu di public/logo.svg (atau .png/.webp), ganti path di sini.
-    // Contoh: "/logo.svg", "/logo.png", "/images/my-logo.png". Kosongkan "" untuk pakai teks nama saja.
-    logo: "/logo.svg",
-    logoAlt: "arcahyadi",
   },
 
-  // ── Author (synced — kayak arcahyadi.me sidebar) ──
-  // avatar: taruh file fotomu di public/ (contoh: /avatar.jpg, /avatar.png, /profile.webp) lalu tulis path di sini.
-  // bisa .png .jpg .jpeg .webp .svg — cukup tulis nama file + format, mis. "/avatar.jpg" atau "/foto-profil.png"
+  // ── Author (public identity only) ──
   author: {
     name: "arcahyadi",
-    role: "Network Technician · SysAdmin · Programmer",
-    bio: "I like Backend, Networking and Automation",
-    location: "Earth",
-    avatar: "/avatar.jpg",
     email: "arcahyadi.dev@gmail.com",
     links: [
       { label: "GitHub", href: "https://github.com/arcahyadi", icon: "github" },
-      { label: "Instagram", href: "https://example.org", icon: "instagram" },
-      { label: "LinkedIn", href: "https://example.org", icon: "linkedin" },
       { label: "Email", href: "mailto:arcahyadi.dev@gmail.com", icon: "email" },
     ],
   },
 
-  // ── Header ──
-  header: {
-    nav: [
-      { label: "Portfolio", href: "/portfolio" },
-      { label: "Blogs", href: "/blogs" },
-      { label: "CV", href: "/cv" },
-    ],
-  },
-
-  // ── Footer ── (edit link footer di sini — ngikut config, bukan clone)
+  // ── Footer ──
   footer: {
     links: [
       { label: "GitHub", href: "https://github.com/arcahyadi", external: true },
-      { label: "LinkedIn", href: "https://example.org", external: true },
-      { label: "Instagram", href: "https://example.org", external: true },
       { label: "Email", href: "mailto:arcahyadi.dev@gmail.com" },
-      { label: "CV", href: "/cv" },
+      { label: "Work", href: "/portfolio" },
     ],
   },
 
-  // ── Legal ── (copyright + link bawah footer)
+  // ── Legal ──
   legal: {
     copyright: "©2026",
     company: { label: "arcahyadi", href: "https://arcahyadi.me" },
     links: [
-      { label: "Portfolio", href: "/portfolio" },
-      { label: "Blogs", href: "/blogs" },
-      { label: "CV", href: "/cv" },
+      { label: "Work", href: "/portfolio" },
+      { label: "Notes", href: "/blogs" },
     ],
-    // Languages are managed via src/i18n (Header renders LanguagePicker directly).
-    // Keeping shape for backwards compat / docs; UI no longer reads this list.
-    languages: [{ name: "English", code: "en" }, { name: "Indonesia", code: "id" }],
-    defaultLanguage: "Indonesia",
   },
 
-  // ── Home — personal landing (synced from arcahyadi.me _pages/about.md) ──
+  // ── Home — service showcase ──
   home: {
     hero: {
-      // avatar: override khusus hero (opsional). Kosongkan "" untuk pakai author.avatar di atas.
-      // contoh: "/avatar.jpg", "/foto-saya.png"
-      avatar: "",
-      eyebrow: "Network Technician · SysAdmin · Homelab enthusiast",
-      title: "Hi, I'm arcahyadi",
-      subtitle: "I like Backend, Networking and Automation — building systems that just work, and running my own mini data center at home in Location omitted.",
-      ctaPrimary: { label: "View Portfolio", href: "/portfolio" },
-      ctaSecondary: { label: "View CV", href: "/cv" },
+      eyebrow: "Network · Server · Automation",
+      title: "Networks that hold up. Servers that stay up.",
+      subtitle:
+        "Hands-on help with routing and wireless, Proxmox and Docker infrastructure, backend systems, and workflow automation. Clear scope, working systems, documented handover.",
+      ctaPrimary: { label: "See services", href: "#services" },
+      ctaSecondary: { label: "Read case studies", href: "/portfolio" },
     },
-    whatIDo: {
-      title: "What I do",
+    services: {
+      title: "Services",
+      subtitle: "Small, well-scoped engagements. You get the fix and the notes to run it.",
       items: [
-        { title: "Campus Network", description: "Design & maintain Ubiquiti UniFi + MikroTik CCR network for Institution — VLANs, firewall, traffic shaping for 500+ users." },
-        { title: "SysAdmin & Homelab", description: "Two Proxmox VE nodes (node-a/node-b), ZFS RAID1, SDN — Jellyfin, LibreNMS, n8n, Dockge, Uptime Kuma, UniFi OS." },
-        { title: "Backend", description: "Internal web apps with PHP, Go, MySQL — campus operations from admission to graduation." },
-        { title: "Automation & Local AI", description: "n8n workflows + LM Studio on MacBook Air M4 (MLX/Metal) — Gemma 4, Qwen 3.5, privacy-first." },
+        {
+          title: "Network design & hardening",
+          description:
+            "VLAN segmentation, firewall policy, multi-WAN failover, QoS and wireless rollout on MikroTik and UniFi. Includes topology and IP plan documentation.",
+        },
+        {
+          title: "Server & virtualization",
+          description:
+            "Proxmox VE clusters, ZFS storage, Docker workloads and monitoring with LibreNMS and Uptime Kuma. Built for recovery, not just uptime.",
+        },
+        {
+          title: "Backend & internal tools",
+          description:
+            "PHP, Go and MySQL applications that replace spreadsheets: forms, approvals, reporting and PDF exports, with migration of existing data.",
+        },
+        {
+          title: "Automation & local AI",
+          description:
+            "n8n workflows that connect the tools you already use, plus local LLM setups for work that cannot leave your network.",
+        },
       ],
     },
     featured: {
-      portfolioTitle: "Featured work",
-      portfolioSubtitle: "Certificates and projects — see all in Portfolio.",
-      blogsTitle: "Recent writing",
-      blogsSubtitle: "Real-world setups from homelab and campus — browse all in Blogs.",
+      portfolioTitle: "Selected work",
+      portfolioSubtitle: "Anonymized case studies: problem, approach, result.",
+      blogsTitle: "Field notes",
+      blogsSubtitle: "Configuration write-ups and lessons from real deployments.",
+      seeAll: "All work →",
+      browseAll: "All notes →",
     },
     stack: {
-      title: "Tech stack",
+      title: "Toolkit",
       groups: [
-        { label: "Programming", items: ["Go", "PHP", "MySQL", "SQL"] },
-        { label: "Networking", items: ["Cisco", "Mikrotik", "Ubiquiti UniFi", "WireGuard", "Tailscale", "OpenVPN", "VLANs"] },
-        { label: "Infra", items: ["Proxmox VE", "Docker", "Linux (Debian, Ubuntu)", "DigitalOcean", "ZFS", "SDN", "NFS"] },
-        { label: "Automation", items: ["n8n", "LM Studio", "MLX", "Metal"] },
+        { label: "Networking", items: ["MikroTik RouterOS", "Ubiquiti UniFi", "Cisco", "WireGuard", "Tailscale", "VLANs", "QoS"] },
+        { label: "Infrastructure", items: ["Proxmox VE", "Docker", "Debian", "ZFS", "NFS", "LibreNMS", "Uptime Kuma"] },
+        { label: "Backend", items: ["Go", "PHP", "MySQL", "SQL"] },
+        { label: "Automation", items: ["n8n", "LM Studio", "Bash", "Rclone"] },
       ],
     },
     contact: {
-      title: "Let's talk",
-      subtitle: "Open to collaboration on networking, infra and backend. Reach me via email or the links below.",
+      title: "Start a conversation",
+      subtitle:
+        "Describe the setup and what is not working. You will get a straight answer on scope, approach and whether I am the right fit.",
       email: "arcahyadi.dev@gmail.com",
       ctaLabel: "Email me",
-      // Web3Forms: daftar gratis di https://web3forms.com -> copy Access Key -> isi di sini.
-      // Biarkan placeholder sampai kamu isi — form akan tampil dengan petunjuk.
+      // Web3Forms access key is public by design (an alias for the inbox, not a secret).
       web3formsKey: "4f2c761d-0e93-4664-a3a2-b750237dd58e",
     },
   },
 
-  // ── Portfolio / Blogs / CV — dari file terpisah (academicpages-style) ──
   portfolio,
   blogs,
-  cv,
 } as const;
 
 export type SiteConfig = typeof siteConfig;

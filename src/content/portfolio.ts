@@ -1,90 +1,106 @@
-// content/portfolio.ts — auto-generated from arcahyadi.github.io/_portfolio
-// Tambah portfolio: tambah object baru, slug jadi URL /portfolio/[slug]
+// content/portfolio.ts — case studies (EN). Indonesian mirrors live in src/i18n/content.id.ts.
+// Client names, hostnames, addresses and internal identifiers stay out of this file.
 
 export const portfolio = [
   {
-    slug: "institution-campus-network-upgrade",
-    title: "Institution — Campus Network System Upgrade",
-    excerpt: "End-to-end upgrade of campus network infrastructure — core router, WiFi, VLANs and monitoring for 500+ users",
-    date: "2026-08-19",
-    tags: ["Networking", "MikroTik", "UniFi", "Infrastructure", "Institution"],
+    slug: "multi-site-network-modernization",
+    title: "Network modernization for a 500-user campus",
+    excerpt:
+      "Replaced a flat, unmonitored network with segmented VLANs, a redundant multi-WAN edge and a managed wireless fleet, without a full downtime window.",
+    date: "2026-06-01",
+    tags: ["Networking", "MikroTik", "UniFi", "Monitoring"],
     image: "",
-    content: `Lead upgrade and modernization of the campus network system at **Institution** — serving 500+ students, lecturers, and staff.
+    content: `**Context.** A campus network serving roughly 500 students and staff had grown one switch at a time. Every device shared a flat address space, the edge router had a single uplink, and there was no monitoring beyond a ping check.
 
-**Core Router — MikroTik CCR1016 (RouterOS 7):**
-- Optimized CCR1016-12G with RouterOS 7.22.1 as campus core gateway
-- Multi-WAN with 3 ISP uplinks (failover + load distribution, \`check-gateway=ping\`)
-- Interface bonding 802.3ad (LACP) for high-throughput WiFi distribution (Bonding port 5-7)
-- Redesigned firewall, NAT, VLAN segmentation and QoS/traffic shaping for stability and fairness
+**Problem.** Broadcast traffic and a single misconfigured device could affect the whole site. When an uplink failed, recovery depended on someone noticing and changing a route by hand. Wireless coverage was patched with consumer access points that could not roam.
 
-**Wireless — UniFi OS Server (self-hosted on Proxmox):**
-- Migrated from legacy UniFi Network Application to **UniFi OS Server**
-- Centralized management of AP fleet: UAP-LR, UAP-AC-Lite, U7 Lite, U6+, U6-LR
-- Improved coverage, seamless roaming, and centralized RF/SSID policy
+**Approach.**
+- Documented the existing topology and address plan before changing anything
+- Split the network into staff, student, guest and management VLANs with explicit firewall policy between them
+- Configured provider failover on the edge router with gateway health checks and QoS for the shared uplink
+- Consolidated wireless onto a self-hosted controller with a consistent SSID and roaming policy
+- Added interface, link-state and latency monitoring with alerts to the operations team
 
-**Monitoring & Operations:**
-- LibreNMS + Uptime Kuma for real-time monitoring and alerting
-- Documentation of topology, IP plan, and SOP for campus IT operations
-
-This work complements ongoing development of [example.org](https://example.org) and is documented in more detail in my blogs:
-- [MikroTik CCR1016 Campus Config](/blogs/mikrotik-ccr-campus-config/)
-- [Self-Hosting UniFi OS on Proxmox](/blogs/unifi-os-proxmox-setup/)
-
-[🌐 Campus Website](https://example.org)`,
-    links: { github: "", demo: "https://example.org" },
+**Result.** A failed provider now fails over without intervention. Management access is limited to a dedicated VLAN and a VPN, so a bad change on the user network no longer locks out the administrator. The address plan, topology and rollback steps are written down and handed over.`,
+    links: { github: "", demo: "" },
   },
   {
-    slug: "institution-ac-id-updates",
-    title: "Institution — Web Platform Updates",
-    excerpt: "Major updates to example.org — PWP internship module, Admin modernization, and public site improvements",
-    date: "2026-08-19",
-    tags: ["Institution", "Full-Stack", "Web Development"],
+    slug: "internship-management-platform",
+    title: "Internship management platform replacing spreadsheets",
+    excerpt:
+      "A PHP and MySQL module that handles placements, supervisor assignments, grading and PDF recaps, with bulk import from the previous spreadsheet workflow.",
+    date: "2026-05-20",
+    tags: ["Backend", "PHP", "MySQL", "Internal tools"],
     image: "",
-    content: `Ongoing development for the official campus platform **[example.org](https://example.org)** — delivered as Programmer & SysAdmin at Institution.
+    content: `**Context.** A study program managed internships in a spreadsheet that was emailed between coordinators. Every semester the same rows were retyped, and the final recap was assembled by hand.
 
-**What I shipped:**
-- **PWP Module (Praktik Kerja Lapangan)** — end-to-end internship management: placements, supervisor assignments, grading, and PDF recaps with CSV bulk import
-- **Admin Modernization** — unified Admin panel to a consistent MonsterAdmin theme for a cleaner, more maintainable UI
-- **Operations & Security** — added maintenance mode and improved user password reset flow
-- **Public Website** — refreshed footer, navigation, and important links for better usability
+**Problem.** There was no single source of truth. Two coordinators could edit different copies, placement status was unclear, and producing the final report took days. Supervisor assignments and grades lived in separate files.
 
-[🌐 Visit Website](https://example.org)`,
-    links: { github: "", demo: "https://example.org" },
+**Approach.**
+- Modelled placements, supervisors, periods and grades as related tables with foreign keys
+- Built role-based admin screens with server-side validation
+- Added CSV import so existing rows could be migrated without retyping
+- Generated the recap PDF from the same records instead of assembling it manually
+
+**Result.** One record per placement. The recap is generated on demand, and the coordinator can see which placements are still missing a supervisor or a grade. Historical rows are imported from CSV instead of being retyped each semester.`,
+    links: { github: "", demo: "" },
   },
   {
-    slug: "portfolio-1",
+    slug: "monitoring-and-config-backup",
+    title: "Monitoring and configuration backup for network devices",
+    excerpt:
+      "LibreNMS and Uptime Kuma for visibility, plus scheduled configuration exports to off-device storage, so a failed device is a restore instead of a rebuild.",
+    date: "2026-05-05",
+    tags: ["Operations", "LibreNMS", "Proxmox", "Backup"],
+    image: "",
+    content: `**Context.** Network devices were managed one at a time. Configuration changes were not tracked, and a failed switch meant rebuilding it from memory.
+
+**Problem.** Outages were reported by users, not by monitoring. Nobody could say which device changed before an incident, and there was no copy of any configuration outside the device itself.
+
+**Approach.**
+- Deployed LibreNMS for interface, CPU, memory and link-state metrics, with alert rules tied to the management VLAN
+- Added Uptime Kuma checks for the services users actually notice: DNS, intranet, mail and the VPN endpoint
+- Scheduled configuration exports from routers and switches to a separate backup host
+- Kept the previous export on the device for a quick rollback, and a copy off-device for a full rebuild
+- Wrote a one-page restore procedure to follow on a spare unit
+
+**Result.** Alerts arrive before users call. Every device has a configuration export outside the device itself, and the restore steps are written down instead of living in memory.`,
+    links: { github: "", demo: "" },
+  },
+  {
+    slug: "cisco-ccna-introduction-to-networks",
     title: "CCNA: Introduction to Networks",
-    excerpt: "CCNA NETWORK ENGINEER Introduction to Networks",
+    excerpt: "Cisco Networking Academy certificate covering IP addressing, Ethernet and basic router and switch configuration.",
     date: "2022-06-01",
     tags: ["Cisco", "CCNA", "Networking"],
     image: "",
-    content: `This certificate verifies the successful completion of the **CCNA: Introduction to Networks** course, part of the Cisco Networking Academy program.
+    content: `Certificate of completion for the **CCNA: Introduction to Networks** course in the Cisco Networking Academy program.
 
-The course covers the architecture, structure, functions, components, and models of the Internet and other computer networks. It provides a solid foundation in the principles of IP addressing and the fundamentals of Ethernet concepts, media, and operations to build simple LANs, perform basic configurations for routers and switches, and implement IP addressing schemes.`,
-    links: { github: "https://github.com/arcahyadi", demo: "#" },
+The course covers network architecture and models, IP addressing, Ethernet concepts and media, and the basic configuration needed to build a small LAN. It is the foundation the rest of the CCNA path builds on.`,
+    links: { github: "https://github.com/arcahyadi", demo: "" },
   },
   {
-    slug: "portfolio-2",
+    slug: "cisco-ccna-switching-and-wireless",
     title: "CCNA: Switching, Routing, and Wireless Essentials",
-    excerpt: "CCNA NETWORK ENGINEER Switching, Routing, and Wireless Essentials",
+    excerpt: "Cisco Networking Academy certificate covering switching, WLAN configuration and LAN security fundamentals.",
     date: "2022-07-01",
     tags: ["Cisco", "CCNA", "Switching"],
     image: "",
-    content: `This certificate verifies the successful completion of the **CCNA: Switching, Routing, and Wireless Essentials** course, part of the Cisco Networking Academy program.
+    content: `Certificate of completion for the **CCNA: Switching, Routing, and Wireless Essentials** course in the Cisco Networking Academy program.
 
-The course focuses on switching technologies and router operations that support small-to-medium business networks, including wireless local area networks (WLANs) and fundamental security concepts. It covers performing basic network configuration and troubleshooting, identifying and mitigating LAN security threats, and configuring and securing a basic WLAN.`,
-    links: { github: "https://github.com/arcahyadi", demo: "#" },
+The course covers switching technologies, router operations in small to medium networks, WLAN configuration and fundamental LAN security. The lab work is where the material sticks: VLANs, trunking and wireless configuration fail in ways a slide cannot show.`,
+    links: { github: "https://github.com/arcahyadi", demo: "" },
   },
   {
-    slug: "portfolio-3",
+    slug: "cisco-ccna-enterprise-networking",
     title: "CCNA: Enterprise Networking, Security, and Automation",
-    excerpt: "CCNA NETWORK ENGINEER Enterprise Networking, Security, and Automation",
+    excerpt: "Cisco Networking Academy certificate covering enterprise routing, WAN, QoS and network automation concepts.",
     date: "2022-08-01",
     tags: ["Cisco", "CCNA", "Enterprise"],
     image: "",
-    content: `This certificate verifies the successful completion of the **CCNA: Enterprise Networking, Security, and Automation** course, part of the Cisco Networking Academy program.
+    content: `Certificate of completion for the **CCNA: Enterprise Networking, Security, and Automation** course in the Cisco Networking Academy program.
 
-The course describes the architecture and considerations related to designing, securing, operating, and troubleshooting enterprise networks. It covers wide area network (WAN) technologies and quality of service (QoS) mechanisms used for secure remote access, along with the introduction of software-defined networking, virtualization, and automation concepts that support the digitalization of networks.`,
-    links: { github: "https://github.com/arcahyadi", demo: "#" },
+The course covers enterprise network design, WAN technologies, QoS, secure remote access, and the automation and virtualization concepts used to operate networks at scale.`,
+    links: { github: "https://github.com/arcahyadi", demo: "" },
   },
 ] as const;

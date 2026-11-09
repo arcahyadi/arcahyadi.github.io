@@ -3,10 +3,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { defaultLocale, htmlLang, isLocale, STORAGE_KEY, type Locale } from "./config";
 import { translations, type Dictionary } from "./translations";
-import { getLocalizedBlogs, getLocalizedPortfolio, getLocalizedCV } from "./content-helpers";
+import { getLocalizedBlogs, getLocalizedPortfolio } from "./content-helpers";
 import { blogs as blogsRaw } from "@/content/blogs";
 import { portfolio as portfolioRaw } from "@/content/portfolio";
-import { cv as cvRaw } from "@/content/cv";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -14,7 +13,6 @@ type LocaleContextValue = {
   t: Dictionary;
   blogs: ReturnType<typeof getLocalizedBlogs>;
   portfolio: ReturnType<typeof getLocalizedPortfolio>;
-  cv: ReturnType<typeof getLocalizedCV>;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -80,7 +78,6 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const t = useMemo(() => translations[locale], [locale]);
   const blogs = useMemo(() => getLocalizedBlogs(locale, blogsRaw), [locale]);
   const portfolio = useMemo(() => getLocalizedPortfolio(locale, portfolioRaw), [locale]);
-  const cv = useMemo(() => getLocalizedCV(locale, cvRaw), [locale]);
 
   // Live DOM metadata: update title/description and social meta when locale changes.
   // Build-time metadata (exported HTML) stays Indonesian for crawlers on the single static URL.
@@ -97,9 +94,9 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     setMeta('meta[name="twitter:description"]', t.site.description);
   }, [t.site.title, t.site.description]);
 
-  const value: LocaleContextValue = useMemo(
-    () => ({ locale, setLocale, t, blogs, portfolio, cv }),
-    [locale, setLocale, t, blogs, portfolio, cv]
+  const value = useMemo(
+    () => ({ locale, setLocale, t, blogs, portfolio }),
+    [locale, setLocale, t, blogs, portfolio]
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

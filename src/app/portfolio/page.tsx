@@ -7,7 +7,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 export default function PortfolioPage() {
   const { portfolio, t } = useLocale();
   return (
-    <AcademicShell title={t.portfolioPage.title} subtitle={t.portfolioPage.subtitle} withSidebar={false}>
+    <AcademicShell title={t.portfolioPage.title} subtitle={t.portfolioPage.subtitle}>
       <div className="grid gap-6 md:gap-8">
         {portfolio.map((item) => (
           <Link

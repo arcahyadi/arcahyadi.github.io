@@ -9,9 +9,8 @@ export function LegalSection() {
   const { copyright, company } = siteConfig.legal;
   const { t } = useLocale();
   const links = [
-    { label: t.legal.links.portfolio, href: "/portfolio" },
-    { label: t.legal.links.blogs, href: "/blogs" },
-    { label: t.legal.links.cv, href: "/cv" },
+    { label: t.legal.links.work, href: "/portfolio" },
+    { label: t.legal.links.notes, href: "/blogs" },
   ];
 
   return (

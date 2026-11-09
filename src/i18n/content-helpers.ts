@@ -2,11 +2,9 @@
 import type { Locale } from "./config";
 import {
   blogsIdBySlug,
-  cvId,
   portfolioIdBySlug,
   type BlogSlug,
   type LocalizedContent,
-  type LocalizedCVFields,
   type PortfolioSlug,
 } from "./content.id";
 
@@ -26,8 +24,6 @@ export type LocalizedPortfolio = LocalizedContent & {
     readonly demo: string;
   };
 };
-
-export type LocalizedCV = LocalizedCVFields & { readonly pdfUrl: string };
 
 export function getLocalizedBlogs(locale: Locale, raw: readonly LocalizedBlog[]): readonly LocalizedBlog[] {
   if (locale === "en") return raw;
@@ -53,20 +49,6 @@ export function getLocalizedPortfolio(locale: Locale, raw: readonly LocalizedPor
       content: override.content,
     };
   });
-}
-
-export function getLocalizedCV(locale: Locale, raw: LocalizedCV): LocalizedCV {
-  if (locale === "en") return raw;
-  return {
-    ...raw,
-    headline: cvId.headline,
-    summary: cvId.summary,
-    education: cvId.education,
-    experience: cvId.experience,
-    skills: cvId.skills,
-    certifications: cvId.certifications,
-    interests: cvId.interests,
-  };
 }
 
 // Parity validation — reflects strict Record parity (every EN slug has an ID entry).

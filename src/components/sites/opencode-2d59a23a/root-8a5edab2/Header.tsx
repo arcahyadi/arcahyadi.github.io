@@ -11,7 +11,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { site, author } = siteConfig;
+  const { site } = siteConfig;
   const { theme, toggleTheme } = useTheme();
   const { t } = useLocale();
   const isDark = theme === "dark";
@@ -20,9 +20,10 @@ export function Header() {
     toggleTheme({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
   };
   const nav = [
-    { label: t.nav.portfolio, href: "/portfolio" },
-    { label: t.nav.blogs, href: "/blogs" },
-    { label: t.nav.cv, href: "/cv" },
+    { label: t.nav.services, href: "/#services" },
+    { label: t.nav.work, href: "/portfolio" },
+    { label: t.nav.notes, href: "/blogs" },
+    { label: t.nav.contact, href: "/#contact" },
   ];
 
   return (
@@ -33,7 +34,7 @@ export function Header() {
       <div>
         <Link href="/" className="block hover:opacity-80 transition-opacity" aria-label={t.header.homeAriaLabel}>
           <span className="text-[15px] md:text-base font-bold tracking-tight text-[var(--color-text-strong)]">
-            {site.shortTitle || author.name || site.name}
+            {site.shortTitle || site.name}
           </span>
         </Link>
       </div>
@@ -43,7 +44,7 @@ export function Header() {
         <nav data-component="nav-desktop" aria-label={t.header.navAriaLabel}>
           <ul className="flex items-center gap-6 lg:gap-8 list-none m-0 p-0 text-base">
             {nav.map((item) => (
-              <li key={item.label}>
+              <li key={item.href}>
                 <Link
                   href={item.href}
                   className="text-[var(--color-text)] hover:text-[var(--color-text-strong)] hover:underline hover:underline-offset-4 decoration-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded"
@@ -104,7 +105,7 @@ export function Header() {
           >
             <ul className="list-none py-5 m-0 px-0">
               {nav.map((item) => (
-                <li key={item.label}>
+                <li key={item.href}>
                   <Link
                     href={item.href}
                     className="block py-5 px-6 text-[var(--color-text-strong)] hover:bg-[var(--color-background-weak)] text-lg no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-border)]"
