@@ -26,7 +26,7 @@ src/
   components/
     Markdown.tsx           # renderer markdown tanpa dependensi
     LanguagePicker.tsx     # pemilih bahasa di header
-    academic/AcademicShell.tsx  # kerangka halaman daftar dan detail
+    PageShell.tsx          # kerangka halaman daftar dan detail
     home/                  # bagian beranda dan form kontak
     sites/...              # header, footer, legal
 ```
@@ -69,4 +69,4 @@ GitHub Pages belum bisa mengaktifkan **Enforce HTTPS** karena sertifikat origin 
 
 ## Kredit
 
-Desain awal mengacu pada [opencode.ai](https://opencode.ai).
+Acuan desain awal: [opencode.ai](https://opencode.ai).

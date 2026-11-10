@@ -3,7 +3,7 @@ import { Header } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/Heade
 import { FooterSection } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/FooterSection";
 import { LegalSection } from "@/components/sites/opencode-2d59a23a/root-8a5edab2/LegalSection";
 
-export function AcademicShell({
+export function PageShell({
   title,
   subtitle,
   children,

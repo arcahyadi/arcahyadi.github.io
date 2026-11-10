@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { AcademicShell } from "@/components/academic/AcademicShell";
+import { PageShell } from "@/components/PageShell";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 export default function BlogsPage() {
   const { blogs, t } = useLocale();
   const sorted = [...blogs].sort((a, b) => (a.date < b.date ? 1 : -1));
   return (
-    <AcademicShell title={t.blogsPage.title} subtitle={t.blogsPage.subtitle}>
+    <PageShell title={t.blogsPage.title} subtitle={t.blogsPage.subtitle}>
       <div className="grid gap-6">
         {sorted.map((post) => (
           <Link
@@ -33,6 +33,6 @@ export default function BlogsPage() {
           </Link>
         ))}
       </div>
-    </AcademicShell>
+    </PageShell>
   );
 }

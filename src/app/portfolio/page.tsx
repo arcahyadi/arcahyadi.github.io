@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { AcademicShell } from "@/components/academic/AcademicShell";
+import { PageShell } from "@/components/PageShell";
 import { useLocale } from "@/i18n/LocaleProvider";
 
 export default function PortfolioPage() {
   const { portfolio, t } = useLocale();
   return (
-    <AcademicShell title={t.portfolioPage.title} subtitle={t.portfolioPage.subtitle}>
+    <PageShell title={t.portfolioPage.title} subtitle={t.portfolioPage.subtitle}>
       <div className="grid gap-6 md:gap-8">
         {portfolio.map((item) => (
           <Link
@@ -30,6 +30,6 @@ export default function PortfolioPage() {
           </Link>
         ))}
       </div>
-    </AcademicShell>
+    </PageShell>
   );
 }

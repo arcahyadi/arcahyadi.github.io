@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { AcademicShell } from "@/components/academic/AcademicShell";
+import { PageShell } from "@/components/PageShell";
 import { Markdown } from "@/components/Markdown";
 import { useLocale } from "@/i18n/LocaleProvider";
 
@@ -14,15 +14,15 @@ export default function PortfolioDetailClient() {
 
   if (!item)
     return (
-      <AcademicShell title={t.portfolioPage.notFoundTitle} subtitle={t.portfolioPage.notFoundSubtitle}>
+      <PageShell title={t.portfolioPage.notFoundTitle} subtitle={t.portfolioPage.notFoundSubtitle}>
         <Link href="/portfolio" className="text-[var(--color-text-strong)] underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
           {t.portfolioPage.backToPortfolio}
         </Link>
-      </AcademicShell>
+      </PageShell>
     );
 
   return (
-    <AcademicShell title={item.title} subtitle={`${item.date} · ${item.tags.join(" · ")}`}>
+    <PageShell title={item.title} subtitle={`${item.date} · ${item.tags.join(" · ")}`}>
       <Link href="/portfolio" className="inline-flex items-center gap-2 text-sm text-[var(--color-text-weak)] hover:text-[var(--color-text-strong)] hover:underline mb-6 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)] rounded">
         {t.portfolioPage.backToPortfolio}
       </Link>
@@ -41,6 +41,6 @@ export default function PortfolioDetailClient() {
           </a>
         ) : null}
       </div>
-    </AcademicShell>
+    </PageShell>
   );
 }
